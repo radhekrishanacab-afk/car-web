@@ -1,0 +1,346 @@
+@import "tailwindcss";
+
+/* ═══════════════════════════════════════════
+   THEME TOKENS
+═══════════════════════════════════════════ */
+@theme inline {
+  --color-primary:       #08A9EE;
+  --color-primary-light: #EAF6FF;
+  --color-navy:          #10264A;
+  --color-navy-950:      #060e1f;
+  --color-navy-900:      #0a1628;
+  --color-navy-800:      #0d1f3c;
+  --color-navy-700:      #112244;
+  --color-navy-600:      #1a3a6b;
+  --color-navy-500:      #1e4080;
+  --color-yellow-500:    #f59e0b;
+  --color-yellow-400:    #fbbf24;
+
+  /* Type scale matching demo site — Inter-based, comfortable reading */
+  --text-xs:   0.75rem;
+  --text-sm:   0.875rem;
+  --text-base: 1rem;
+  --text-lg:   1.125rem;
+  --text-xl:   1.25rem;
+  --text-2xl:  1.5rem;
+  --text-3xl:  1.875rem;
+  --text-4xl:  2.25rem;
+  --text-5xl:  3rem;
+}
+
+/* ═══════════════════════════════════════════
+   FONT
+═══════════════════════════════════════════ */
+:root {
+  --f-sans: var(--font-plus-jakarta, "Plus Jakarta Sans", ui-sans-serif, system-ui,
+               -apple-system, BlinkMacSystemFont, "Segoe UI",
+               Roboto, "Helvetica Neue", Arial, sans-serif);
+  --f-display: var(--font-plus-jakarta, "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif);
+}
+
+/* ═══════════════════════════════════════════
+   BASE RESET
+═══════════════════════════════════════════ */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+body {
+  font-family: var(--f-sans) !important;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.7;
+  color: #374151;
+  background-color: #ffffff;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  letter-spacing: 0.01em;
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+*, *::before, *::after {
+  font-family: inherit !important;
+}
+
+/* ═══════════════════════════════════════════
+   HEADINGS
+═══════════════════════════════════════════ */
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  font-family: inherit !important;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  font-weight: 700;
+}
+
+h1 { font-size: 2.75rem;  font-weight: 800; }
+h2 { font-size: 2.125rem; font-weight: 700; }
+h3 { font-size: 1.375rem; font-weight: 700; }
+h4 { font-size: 1.125rem; font-weight: 600; }
+h5 { font-size: 1rem;     font-weight: 600; }
+h6 { font-size: 0.875rem; font-weight: 600; }
+
+@media (max-width: 768px) {
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.625rem; }
+  h3 { font-size: 1.25rem; }
+}
+
+@media (max-width: 480px) {
+  h1 { font-size: 1.75rem; }
+  h2 { font-size: 1.375rem; }
+}
+
+/* ═══════════════════════════════════════════
+   PARAGRAPHS
+═══════════════════════════════════════════ */
+p {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.8;
+  color: #6B7280;
+}
+
+/* paragraphs inside a text-center parent also center */
+.text-center > p,
+.text-center p {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ═══════════════════════════════════════════
+   SECTION OVERLINE LABEL
+   (small blue uppercase text above headings)
+═══════════════════════════════════════════ */
+.section-overline {
+  display: inline-block;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #08A9EE;
+  margin-bottom: 0.875rem;
+}
+
+/* ═══════════════════════════════════════════
+   SECTION WRAPPER SPACING
+   All content sections use py-20 (5rem top/bottom)
+═══════════════════════════════════════════ */
+.section-py {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+}
+@media (min-width: 1024px) {
+  .section-py {
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+  }
+}
+
+/* ═══════════════════════════════════════════
+   SECTION HEADER BLOCK
+   .section-head wraps overline + h2 + description
+═══════════════════════════════════════════ */
+.section-head {
+  text-align: center;
+  margin-bottom: 3.5rem;
+}
+.section-head h2 {
+  margin-top: 0.25rem;
+  margin-bottom: 1rem;
+  color: #10264A;
+}
+.section-head p {
+  font-size: 1rem;
+  color: #6B7280;
+  max-width: 38rem;
+  margin: 0 auto;
+  line-height: 1.75;
+  text-align: center;
+}
+
+/* ═══════════════════════════════════════════
+   BUTTONS
+═══════════════════════════════════════════ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  padding: 0.75rem 1.625rem;
+  border-radius: 0.5rem;
+  border: 2px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.18s ease, border-color 0.18s ease,
+              box-shadow 0.18s ease, transform 0.18s ease;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.btn-primary {
+  background-color: #08A9EE;
+  color: #ffffff;
+  border-color: #08A9EE;
+  box-shadow: 0 2px 12px rgba(8,169,238,0.28);
+}
+.btn-primary:hover {
+  background-color: #0798d4;
+  border-color: #0798d4;
+  box-shadow: 0 4px 18px rgba(8,169,238,0.38);
+  transform: translateY(-1px);
+}
+
+.btn-outline {
+  background-color: transparent;
+  color: #10264A;
+  border-color: #d1d5db;
+}
+.btn-outline:hover {
+  border-color: #10264A;
+  background-color: #10264A;
+  color: #ffffff;
+}
+
+.btn-outline-white {
+  background-color: transparent;
+  color: #ffffff;
+  border-color: rgba(255,255,255,0.45);
+}
+.btn-outline-white:hover {
+  border-color: #ffffff;
+  background-color: rgba(255,255,255,0.08);
+}
+
+.btn-yellow {
+  background-color: #f59e0b;
+  color: #1a1a2e;
+  border-color: #f59e0b;
+  box-shadow: 0 2px 12px rgba(245,158,11,0.28);
+}
+.btn-yellow:hover {
+  background-color: #d97706;
+  border-color: #d97706;
+}
+
+.btn-green {
+  background-color: #22c55e;
+  color: #ffffff;
+  border-color: #22c55e;
+  box-shadow: 0 2px 12px rgba(34,197,94,0.28);
+}
+.btn-green:hover {
+  background-color: #16a34a;
+  border-color: #16a34a;
+}
+
+/* ═══════════════════════════════════════════
+   CARDS
+═══════════════════════════════════════════ */
+.card {
+  background: #ffffff;
+  border-radius: 0.875rem;
+  border: 1px solid #e5e7eb;
+  padding: 2rem;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.card:hover {
+  box-shadow: 0 6px 24px rgba(0,0,0,0.07);
+  border-color: rgba(8,169,238,0.3);
+}
+
+/* ═══════════════════════════════════════════
+   ICON BOXES
+═══════════════════════════════════════════ */
+.icon-box {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.icon-box-primary { background-color: #EAF6FF; color: #08A9EE; }
+.icon-box-amber   { background-color: #FFF7ED; color: #D97706; }
+.icon-box-green   { background-color: #F0FDF4; color: #16A34A; }
+.icon-box-purple  { background-color: #FAF5FF; color: #9333EA; }
+
+/* ═══════════════════════════════════════════
+   BRAND GRADIENTS
+═══════════════════════════════════════════ */
+.hero-gradient {
+  background: linear-gradient(135deg, #0f1e3d 0%, #1a3a6b 55%, #0d1f3c 100%);
+}
+.section-dark {
+  background: linear-gradient(180deg, #0d1f3c 0%, #10264A 100%);
+}
+
+/* ═══════════════════════════════════════════
+   UTILITIES
+═══════════════════════════════════════════ */
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+
+.accordion-content { overflow: hidden; transition: max-height 0.3s ease-out; }
+
+@media (max-width: 640px) {
+  .route-table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+}
+
+::selection { background-color: #08A9EE; color: #ffffff; }
+
+/* Legacy utility aliases (kept for backward compat) */
+.section-overline-white { color: #08A9EE; }
+.btn-outline-white { background-color: transparent; color: #fff; border-color: rgba(255,255,255,0.45); }
+.section-spacing { padding-top: 5rem; padding-bottom: 5rem; }
+.section-intro { text-align: center; max-width: 36rem; margin: 0 auto; }
+.font-display { font-family: var(--font-plus-jakarta, "Plus Jakarta Sans", sans-serif) !important; font-weight: 700; }
+
+/* text size utilities */
+.text-xs   { font-size: 0.75rem !important; }
+.text-sm   { font-size: 0.875rem !important; }
+.text-base { font-size: 1rem !important; }
+.text-lg   { font-size: 1.125rem !important; }
+.text-xl   { font-size: 1.25rem !important; }
+.text-2xl  { font-size: 1.5rem !important; }
+.text-3xl  { font-size: 1.875rem !important; }
+.text-4xl  { font-size: 2.25rem !important; }
+.text-5xl  { font-size: 3rem !important; }
+
+/* Vehicle cards */
+.vehicle-card {
+  transition: box-shadow 0.22s, border-color 0.22s, transform 0.22s;
+}
+.vehicle-card:hover {
+  box-shadow: 0 12px 40px rgba(0,0,0,0.10);
+  border-color: rgba(8,169,238,0.3) !important;
+  transform: translateY(-3px);
+}
+
+/* Service cards hover */
+.service-card:hover {
+  box-shadow: 0 8px 28px rgba(0,0,0,0.08);
+  border-color: rgba(8,169,238,0.28) !important;
+  transform: translateY(-3px);
+}
+
+/* Spinner for location loading */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}

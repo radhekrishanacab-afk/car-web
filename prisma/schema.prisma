@@ -1,0 +1,273 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model AdminUser {
+  id           Int        @id @default(autoincrement())
+  username     String     @unique
+  email        String     @unique
+  passwordHash String
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  auditLogs    AuditLog[]
+}
+
+model Vehicle {
+  id                      Int          @id @default(autoincrement())
+  name                    String
+  slug                    String       @unique
+  description             String
+  imageUrl                String?
+  passengerCapacity       Int
+  luggageCapacity         Int
+  perKmRate               Float
+  minimumFare             Float
+  minimumBillableKm       Float?
+  roundTripRateMultiplier Float        @default(1.9)
+  isActive                Boolean      @default(true)
+  displayOrder            Int          @default(0)
+  createdAt               DateTime     @default(now())
+  updatedAt               DateTime     @updatedAt
+  routePrices             RoutePrice[]
+  bookings                Booking[]
+}
+
+model City {
+  id           Int      @id @default(autoincrement())
+  name         String   @unique
+  slug         String   @unique
+  description  String?
+  imageUrl     String?
+  isPopular    Boolean  @default(false)
+  popularOrder Int      @default(0)
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  routesFrom   Route[]  @relation("OriginCity")
+  routesTo     Route[]  @relation("DestinationCity")
+}
+
+model Route {
+  id                Int          @id @default(autoincrement())
+  slug              String       @unique
+  originCityId      Int
+  destinationCityId Int
+  originCity        City         @relation("OriginCity", fields: [originCityId], references: [id])
+  destinationCity   City         @relation("DestinationCity", fields: [destinationCityId], references: [id])
+  distanceKm        Float?
+  estimatedHours    Float?
+  description       String?
+  highlights        String?
+  seoTitle          String?
+  seoDescription    String?
+  seoKeywords       String?
+  isActive          Boolean      @default(true)
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+  priceOverrides    RoutePrice[]
+  bookings          Booking[]
+}
+
+model RoutePrice {
+  id              Int      @id @default(autoincrement())
+  routeId         Int
+  vehicleId       Int
+  oneWayFare      Float
+  roundTrip       Float?
+  driverAllowance Float?
+  tollCharges     Float?
+  parkingCharges  Float?
+  nightCharges    Float?
+  otherCharges    Float?
+  isActive        Boolean  @default(true)
+  route           Route    @relation(fields: [routeId], references: [id], onDelete: Cascade)
+  vehicle         Vehicle  @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@unique([routeId, vehicleId])
+}
+
+model Booking {
+  id             Int      @id @default(autoincrement())
+  reference      String   @unique
+  tripType       String   @default("ONE_WAY")
+  status         String   @default("PENDING")
+  customerName   String
+  customerPhone  String
+  customerEmail  String?
+  pickupLocation String
+  destination    String
+  pickupDate     DateTime
+  pickupTime     String
+  returnDate     DateTime?
+  passengerCount Int      @default(1)
+  message        String?
+  vehicleId      Int?
+  routeId        Int?
+  fareSnapshot   String?
+  estimatedFare  Float?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  vehicle        Vehicle? @relation(fields: [vehicleId], references: [id])
+  route          Route?   @relation(fields: [routeId], references: [id])
+}
+
+model ContactEnquiry {
+  id        Int      @id @default(autoincrement())
+  name      String
+  phone     String
+  email     String?
+  subject   String?
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ContactSettings {
+  id              Int      @id @default(autoincrement())
+  businessName    String   @default("Radhe Krishana Cabs & Taxi Service")
+  phone           String   @default("+91 97230 97832")
+  whatsappNumber  String   @default("919723097832")
+  email           String   @default("info@radhekrishanacab.com")
+  address         String   @default("Gujarat, India")
+  logoUrl         String?
+  metaDescription String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model SeoSettings {
+  id          Int      @id @default(autoincrement())
+  pageKey     String   @unique
+  pageLabel   String
+  title       String
+  description String
+  keywords    String
+  ogTitle     String?
+  ogDesc      String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model AuditLog {
+  id        Int       @id @default(autoincrement())
+  adminId   Int
+  action    String
+  entity    String
+  entityId  String?
+  details   String?
+  createdAt DateTime  @default(now())
+  admin     AdminUser @relation(fields: [adminId], references: [id])
+}
+
+// ═══════════════════════════════════════════════════════════════
+// EXPLORE INDIA — Tourist Places System
+// ═══════════════════════════════════════════════════════════════
+
+model IndianState {
+  id          Int              @id @default(autoincrement())
+  name        String           @unique
+  slug        String           @unique
+  code        String           @unique
+  capital     String?
+  region      String?
+  latitude    Float?
+  longitude   Float?
+  isActive    Boolean          @default(true)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  districts   IndianDistrict[]
+  places      TouristPlace[]
+}
+
+model IndianDistrict {
+  id        Int            @id @default(autoincrement())
+  name      String
+  slug      String
+  stateId   Int
+  latitude  Float?
+  longitude Float?
+  isActive  Boolean        @default(true)
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  state     IndianState    @relation(fields: [stateId], references: [id])
+  places    TouristPlace[]
+
+  @@unique([stateId, slug])
+}
+
+model PlaceCategory {
+  id          Int            @id @default(autoincrement())
+  name        String         @unique
+  slug        String         @unique
+  icon        String?
+  description String?
+  displayOrder Int           @default(0)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  places      TouristPlace[]
+}
+
+model TouristPlace {
+  id               Int             @id @default(autoincrement())
+  name             String
+  slug             String          @unique
+  shortDescription String?
+  description      String?
+  featuredImage    String?
+  galleryImages    String?
+  address          String?
+  latitude         Float?
+  longitude        Float?
+  stateId          Int
+  districtId       Int?
+  cityName         String?
+  categoryId       Int?
+  tags             String?
+  visitingHours    String?
+  entryFee         String?
+  bestTimeToVisit  String?
+  visitDuration    String?
+  nearbyPlaces     String?
+  status           String          @default("DRAFT")
+  isFeatured       Boolean         @default(false)
+  seoTitle         String?
+  seoDescription   String?
+  seoKeywords      String?
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  state            IndianState     @relation(fields: [stateId], references: [id])
+  district         IndianDistrict? @relation(fields: [districtId], references: [id])
+  category         PlaceCategory?  @relation(fields: [categoryId], references: [id])
+}
+
+// ═══════════════════════════════════════════════════════════════
+// BLOG / POSTS System
+// ═══════════════════════════════════════════════════════════════
+
+model BlogPost {
+  id              Int      @id @default(autoincrement())
+  title           String
+  slug            String   @unique
+  excerpt         String?
+  content         String
+  featuredImage   String?
+  category        String?
+  tags            String?
+  status          String   @default("DRAFT")   // DRAFT | PUBLISHED
+  isFeatured      Boolean  @default(false)
+  readingMinutes  Int      @default(3)
+  authorName      String   @default("Radhe Krishna Cab")
+  seoTitle        String?
+  seoDescription  String?
+  publishedAt     DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}

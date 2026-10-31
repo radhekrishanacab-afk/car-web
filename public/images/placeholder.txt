@@ -1,0 +1,9 @@
+Place your images here:
+- radhe-krishana-logo.png  (logo image)
+- hero-car.png             (hero section car)
+- about-car.png            (about section car)
+- cta-car.png              (CTA banner car)
+- destinations/statue-of-unity.jpg
+- destinations/saputara.jpg
+- destinations/dwarka.jpg
+- destinations/rann-of-kutch.jpg
