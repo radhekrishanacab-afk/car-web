@@ -33,21 +33,31 @@ export default async function RoutesPage({ searchParams }: PageProps) {
     ...(search ? { name: { contains: search } } : {}),
   }
 
-  const [citiesRaw, total, popularCities] = await Promise.all([
-    prisma.city.findMany({
-      where,
-      include: {
-        _count: {
-          select: { routesFrom: { where: { isActive: true } } },
+  let citiesRaw: Awaited<ReturnType<typeof prisma.city.findMany>> = []
+  let total = 0
+  let popularCities: Awaited<ReturnType<typeof getPopularCities>> = []
+
+  try {
+    ;[citiesRaw, total, popularCities] = await Promise.all([
+      prisma.city.findMany({
+        where,
+        include: {
+          _count: {
+            select: { routesFrom: { where: { isActive: true } } },
+          },
         },
-      },
-      orderBy: { name: 'asc' },
-      skip: (page - 1) * PER_PAGE,
-      take: PER_PAGE,
-    }),
-    prisma.city.count({ where }),
-    getPopularCities().catch(() => []),
-  ])
+        orderBy: { name: 'asc' },
+        skip: (page - 1) * PER_PAGE,
+        take: PER_PAGE,
+      }),
+      prisma.city.count({ where }),
+      getPopularCities().catch(() => []),
+    ])
+  } catch {
+    citiesRaw = []
+    total = 0
+    popularCities = []
+  }
 
   const pages = Math.ceil(total / PER_PAGE)
   const cities = citiesRaw.map((c) => ({ ...c, routeCount: c._count.routesFrom }))

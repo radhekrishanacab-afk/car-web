@@ -42,24 +42,41 @@ export default async function CityRoutesPage({ params, searchParams }: PageProps
     ...(search ? { destinationCity: { name: { contains: search } } } : {}),
   }
 
-  const [routes, total] = await Promise.all([
-    prisma.route.findMany({
-      where,
-      include: {
-        originCity: { select: { name: true, slug: true } },
-        destinationCity: { select: { name: true, slug: true } },
-        priceOverrides: {
-          where: { isActive: true },
-          orderBy: { oneWayFare: 'asc' },
-          take: 1,
+  type RouteRow = {
+    id: number; slug: string
+    originCity: { name: string; slug: string }
+    destinationCity: { name: string; slug: string }
+    priceOverrides: { oneWayFare: number | null }[]
+  }
+
+  let routes: RouteRow[] = []
+  let total = 0
+
+  try {
+    const [r, t] = await Promise.all([
+      prisma.route.findMany({
+        where,
+        include: {
+          originCity: { select: { name: true, slug: true } },
+          destinationCity: { select: { name: true, slug: true } },
+          priceOverrides: {
+            where: { isActive: true },
+            orderBy: { oneWayFare: 'asc' },
+            take: 1,
+          },
         },
-      },
-      orderBy: { destinationCity: { name: 'asc' } },
-      skip: (page - 1) * PER_PAGE,
-      take: PER_PAGE,
-    }),
-    prisma.route.count({ where }),
-  ])
+        orderBy: { destinationCity: { name: 'asc' } },
+        skip: (page - 1) * PER_PAGE,
+        take: PER_PAGE,
+      }),
+      prisma.route.count({ where }),
+    ])
+    routes = r
+    total = t
+  } catch {
+    routes = []
+    total = 0
+  }
 
   const pages = Math.ceil(total / PER_PAGE)
 
