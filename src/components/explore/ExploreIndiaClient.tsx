@@ -20,7 +20,7 @@ interface CategoryItem { id: number; name: string; slug: string; icon: string; p
 interface Props {
   places: PlaceCard[]; total: number; page: number; pages: number
   states: StateItem[]; categories: CategoryItem[]
-  mapPlaces?: unknown[]
+  mapPlaces: unknown[]
   initialState: string; initialCategory: string; initialSearch: string
 }
 
