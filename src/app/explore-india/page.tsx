@@ -66,6 +66,7 @@ export default async function ExploreIndiaPage({ searchParams }: PageProps) {
             id: c.id, name: c.name, slug: c.slug,
             icon: c.icon ?? '', placeCount: c.placeCount,
           }))}
+          mapPlaces={[]}
           initialState={stateSlug}
           initialCategory={categorySlug}
           initialSearch={search}
