@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { prisma } from '@/lib/prisma'
+import { Prisma } from '@prisma/client'
 import { Plus, Users, Briefcase } from 'lucide-react'
 import VehicleAdminActions from '@/components/admin/VehicleAdminActions'
 
@@ -16,7 +17,7 @@ export default async function VehiclesPage({ searchParams }: PageProps) {
   const search = params.search ?? ''
   const perPage = 20
 
-  const where = search ? { name: { contains: search, mode: 'insensitive' } } : {}
+  const where: Prisma.VehicleWhereInput = search ? { name: { contains: search, mode: 'insensitive' } } : {}
 
   const [vehicles, total] = await Promise.all([
     prisma.vehicle.findMany({

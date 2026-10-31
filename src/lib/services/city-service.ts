@@ -1,7 +1,8 @@
+import { Prisma } from '@prisma/client'
 import { prisma } from '../prisma'
 
 export async function getCitiesWithRouteCounts(page = 1, perPage = 24, search = '') {
-  const where = {
+  const where: Prisma.CityWhereInput = {
     isActive: true,
     ...(search ? { name: { contains: search, mode: 'insensitive' } } : {}),
   }

@@ -5,6 +5,7 @@ import WhatsAppButton from '@/components/ui/WhatsAppButton'
 import RoutesClient from '@/components/routes/RoutesClient'
 import { getPopularCities } from '@/lib/services/city-service'
 import { prisma } from '@/lib/prisma'
+import { Prisma } from '@prisma/client'
 
 export const metadata: Metadata = {
   title: 'All Taxi Routes — One Way & Outstation Cabs | Radhe Krishna Cab',
@@ -42,7 +43,7 @@ export default async function RoutesPage({ searchParams }: PageProps) {
   const search = sp.search ?? ''
   const page = Math.max(1, parseInt(sp.page ?? '1'))
 
-  const where = {
+  const where: Prisma.CityWhereInput = {
     isActive: true,
     ...(search ? { name: { contains: search, mode: 'insensitive' } } : {}),
   }

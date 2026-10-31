@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { prisma } from '@/lib/prisma'
+import { Prisma } from '@prisma/client'
 import { Plus } from 'lucide-react'
 import RouteActions from '@/components/admin/RouteActions'
 
@@ -16,7 +17,7 @@ export default async function RoutesPage({ searchParams }: PageProps) {
   const search = params.search ?? ''
   const perPage = 20
 
-  const where = search
+  const where: Prisma.RouteWhereInput = search
     ? {
         OR: [
           { originCity: { name: { contains: search, mode: 'insensitive' } } },

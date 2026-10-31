@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { prisma } from '@/lib/prisma'
+import { Prisma } from '@prisma/client'
 import CityActions from '@/components/admin/CityActions'
 import { Plus } from 'lucide-react'
 
@@ -16,7 +17,7 @@ export default async function CitiesPage({ searchParams }: PageProps) {
   const search = params.search ?? ''
   const perPage = 24
 
-  const where = search ? { name: { contains: search, mode: 'insensitive' } } : {}
+  const where: Prisma.CityWhereInput = search ? { name: { contains: search, mode: 'insensitive' } } : {}
 
   const [cities, total] = await Promise.all([
     prisma.city.findMany({
