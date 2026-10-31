@@ -44,7 +44,7 @@ export default async function RoutesPage({ searchParams }: PageProps) {
 
   const where = {
     isActive: true,
-    ...(search ? { name: { contains: search } } : {}),
+    ...(search ? { name: { contains: search, mode: 'insensitive' } } : {}),
   }
 
   let citiesRaw: CityWithCount[] = []

@@ -16,7 +16,7 @@ export default async function VehiclesPage({ searchParams }: PageProps) {
   const search = params.search ?? ''
   const perPage = 20
 
-  const where = search ? { name: { contains: search } } : {}
+  const where = search ? { name: { contains: search, mode: 'insensitive' } } : {}
 
   const [vehicles, total] = await Promise.all([
     prisma.vehicle.findMany({

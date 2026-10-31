@@ -3,7 +3,7 @@ import { prisma } from '../prisma'
 export async function getCitiesWithRouteCounts(page = 1, perPage = 24, search = '') {
   const where = {
     isActive: true,
-    ...(search ? { name: { contains: search } } : {}),
+    ...(search ? { name: { contains: search, mode: 'insensitive' } } : {}),
   }
 
   const [cities, total] = await Promise.all([

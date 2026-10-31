@@ -39,7 +39,7 @@ export default async function CityRoutesPage({ params, searchParams }: PageProps
   const where = {
     isActive: true,
     originCityId: city.id,
-    ...(search ? { destinationCity: { name: { contains: search } } } : {}),
+    ...(search ? { destinationCity: { name: { contains: search, mode: 'insensitive' as const } } } : {}),
   }
 
   type RouteRow = {

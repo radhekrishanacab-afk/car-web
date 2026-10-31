@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
   const perPage = 20
 
   const where = search
-    ? { name: { contains: search } }
+    ? { name: { contains: search, mode: 'insensitive' } }
     : {}
 
   const [cities, total] = await Promise.all([

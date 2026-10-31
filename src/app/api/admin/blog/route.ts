@@ -34,7 +34,7 @@ export async function GET(req: NextRequest) {
   const perPage = 20
   const where: Record<string, unknown> = {}
   if (status) where.status = status
-  if (search) where.OR = [{ title: { contains: search } }, { category: { contains: search } }]
+  if (search) where.OR = [{ title: { contains: search, mode: 'insensitive' } }, { category: { contains: search, mode: 'insensitive' } }]
   const [posts, total] = await Promise.all([
     prisma.blogPost.findMany({ where, orderBy: { createdAt: 'desc' }, skip: (page-1)*perPage, take: perPage }),
     prisma.blogPost.count({ where }),

@@ -40,10 +40,10 @@ export async function getAllPublishedPlaces(opts?: {
   if (search) {
     // SQLite doesn't support contains with OR at relation level — filter on flat fields
     where.OR = [
-      { name: { contains: search } },
-      { cityName: { contains: search } },
-      { tags: { contains: search } },
-      { shortDescription: { contains: search } },
+      { name: { contains: search, mode: 'insensitive' } },
+      { cityName: { contains: search, mode: 'insensitive' } },
+      { tags: { contains: search, mode: 'insensitive' } },
+      { shortDescription: { contains: search, mode: 'insensitive' } },
     ]
   }
 
@@ -164,7 +164,7 @@ export async function adminListPlaces(opts?: { search?: string; stateSlug?: stri
   }
 
   if (search) {
-    where.OR = [{ name: { contains: search } }, { cityName: { contains: search } }]
+    where.OR = [{ name: { contains: search, mode: 'insensitive' } }, { cityName: { contains: search, mode: 'insensitive' } }]
   }
 
   const [places, total] = await Promise.all([

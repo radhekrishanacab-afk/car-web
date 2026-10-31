@@ -20,10 +20,10 @@ export default async function EnquiriesPage({ searchParams }: PageProps) {
   const where: Record<string, unknown> = {}
   if (search) {
     where.OR = [
-      { name: { contains: search } },
-      { phone: { contains: search } },
-      { email: { contains: search } },
-      { message: { contains: search } },
+      { name: { contains: search, mode: 'insensitive' } },
+      { phone: { contains: search, mode: 'insensitive' } },
+      { email: { contains: search, mode: 'insensitive' } },
+      { message: { contains: search, mode: 'insensitive' } },
     ]
   }
   if (unreadOnly) where.isRead = false

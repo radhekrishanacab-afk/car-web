@@ -46,9 +46,9 @@ export async function GET(request: NextRequest) {
   const where: Record<string, unknown> = {}
   if (search) {
     where.OR = [
-      { customerName: { contains: search } },
-      { customerPhone: { contains: search } },
-      { reference: { contains: search } },
+      { customerName: { contains: search, mode: 'insensitive' } },
+      { customerPhone: { contains: search, mode: 'insensitive' } },
+      { reference: { contains: search, mode: 'insensitive' } },
     ]
   }
   if (status) where.status = status

@@ -33,7 +33,7 @@ export async function GET(request: NextRequest) {
   const page = Math.max(1, parseInt(searchParams.get('page') ?? '1'))
   const perPage = 20
 
-  const where = search ? { name: { contains: search } } : {}
+  const where = search ? { name: { contains: search, mode: 'insensitive' } } : {}
 
   const [vehicles, total] = await Promise.all([
     prisma.vehicle.findMany({

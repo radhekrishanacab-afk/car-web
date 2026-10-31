@@ -19,8 +19,8 @@ export default async function RoutesPage({ searchParams }: PageProps) {
   const where = search
     ? {
         OR: [
-          { originCity: { name: { contains: search } } },
-          { destinationCity: { name: { contains: search } } },
+          { originCity: { name: { contains: search, mode: 'insensitive' } } },
+          { destinationCity: { name: { contains: search, mode: 'insensitive' } } },
         ],
       }
     : {}

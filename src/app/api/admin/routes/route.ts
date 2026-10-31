@@ -32,8 +32,8 @@ export async function GET(request: NextRequest) {
   const where = search
     ? {
         OR: [
-          { originCity: { name: { contains: search } } },
-          { destinationCity: { name: { contains: search } } },
+          { originCity: { name: { contains: search, mode: 'insensitive' } } },
+          { destinationCity: { name: { contains: search, mode: 'insensitive' } } },
         ],
       }
     : {}

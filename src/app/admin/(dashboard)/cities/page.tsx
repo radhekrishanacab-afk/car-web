@@ -16,7 +16,7 @@ export default async function CitiesPage({ searchParams }: PageProps) {
   const search = params.search ?? ''
   const perPage = 24
 
-  const where = search ? { name: { contains: search } } : {}
+  const where = search ? { name: { contains: search, mode: 'insensitive' } } : {}
 
   const [cities, total] = await Promise.all([
     prisma.city.findMany({

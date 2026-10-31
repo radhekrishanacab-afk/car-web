@@ -23,7 +23,7 @@ export default async function TouristPlacesPage({ searchParams }: PageProps) {
     const st = await prisma.indianState.findUnique({ where: { slug: state }, select: { id: true } })
     if (st) where.stateId = st.id
   }
-  if (search) where.OR = [{ name: { contains: search } }, { cityName: { contains: search } }]
+  if (search) where.OR = [{ name: { contains: search, mode: 'insensitive' } }, { cityName: { contains: search, mode: 'insensitive' } }]
 
   const [places, total, states] = await Promise.all([
     prisma.touristPlace.findMany({
