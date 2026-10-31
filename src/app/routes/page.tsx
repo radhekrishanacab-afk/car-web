@@ -23,6 +23,20 @@ interface PageProps {
   searchParams: Promise<{ search?: string; page?: string }>
 }
 
+type CityWithCount = {
+  id: number
+  name: string
+  slug: string
+  description: string | null
+  imageUrl: string | null
+  isPopular: boolean
+  popularOrder: number
+  isActive: boolean
+  createdAt: Date
+  updatedAt: Date
+  _count: { routesFrom: number }
+}
+
 export default async function RoutesPage({ searchParams }: PageProps) {
   const sp = await searchParams
   const search = sp.search ?? ''
@@ -33,12 +47,12 @@ export default async function RoutesPage({ searchParams }: PageProps) {
     ...(search ? { name: { contains: search } } : {}),
   }
 
-  let citiesRaw: Awaited<ReturnType<typeof prisma.city.findMany>> = []
+  let citiesRaw: CityWithCount[] = []
   let total = 0
   let popularCities: Awaited<ReturnType<typeof getPopularCities>> = []
 
   try {
-    ;[citiesRaw, total, popularCities] = await Promise.all([
+    const results = await Promise.all([
       prisma.city.findMany({
         where,
         include: {
@@ -53,6 +67,9 @@ export default async function RoutesPage({ searchParams }: PageProps) {
       prisma.city.count({ where }),
       getPopularCities().catch(() => []),
     ])
+    citiesRaw = results[0] as CityWithCount[]
+    total = results[1]
+    popularCities = results[2]
   } catch {
     citiesRaw = []
     total = 0
