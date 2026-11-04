@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { prisma } from '@/lib/prisma'
 import { Plus, FileText, Eye, EyeOff } from 'lucide-react'
+import DeleteBlogPost from '@/components/admin/DeleteBlogPost'
 
 export const metadata: Metadata = { title: 'Blog Posts' }
 
@@ -95,6 +96,7 @@ export default async function BlogAdminPage({ searchParams }: PageProps) {
                     <div className="flex items-center gap-2">
                       <Link href={`/admin/blog/${p.id}/edit`} className="text-xs text-blue-600 hover:text-blue-800 font-medium">Edit</Link>
                       {p.status === 'PUBLISHED' && <Link href={`/blog/${p.slug}`} target="_blank" className="text-xs text-green-600 hover:text-green-800 font-medium">View</Link>}
+                      <DeleteBlogPost id={p.id} />
                     </div>
                   </td>
                 </tr>
