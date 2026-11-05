@@ -4,6 +4,7 @@ import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
 import { Plus } from 'lucide-react'
 import RouteActions from '@/components/admin/RouteActions'
+import RouteDataTools from '@/components/admin/RouteDataTools'
 
 export const metadata: Metadata = { title: 'Routes' }
 
@@ -56,6 +57,11 @@ export default async function RoutesPage({ searchParams }: PageProps) {
         >
           <Plus className="w-4 h-4" /> Add Route
         </Link>
+      </div>
+
+      {/* Export / Import / Delete All tools */}
+      <div className="mb-6">
+        <RouteDataTools totalRoutes={total} />
       </div>
 
       <form className="flex gap-3 mb-6">
