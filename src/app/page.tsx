@@ -9,6 +9,7 @@ import VehicleSliderSection from '@/components/home/VehicleSliderSection'
 import WhyChooseUs from '@/components/home/WhyChooseUs'
 import FAQSection from '@/components/home/FAQSection'
 import ContactCTA from '@/components/home/ContactCTA'
+import BlogSection from '@/components/home/BlogSection'
 import { getRoutesWithFares } from '@/lib/services/route-service'
 import { getAllActiveCities } from '@/lib/services/city-service'
 import { getActiveVehicles } from '@/lib/services/vehicle-service'
@@ -58,7 +59,10 @@ export default async function HomePage() {
         {/* 6. FAQ */}
         <FAQSection />
 
-        {/* 7. Book CTA */}
+        {/* 7. Blog Posts */}
+        <BlogSection />
+
+        {/* 8. Book CTA */}
         <ContactCTA />
       </main>
       <Footer />
