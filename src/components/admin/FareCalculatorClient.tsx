@@ -21,10 +21,18 @@ interface FareResult {
   vehicleId: number
   vehicleName: string
   perKmRate: number
-  minimumFare: number
   oneWayFare: number | null
   roundTrip: number | null
-  formula: string
+}
+
+// Unified display row — no union type issues
+interface DisplayRow {
+  key: string
+  vehicleName: string
+  perKmRate: number
+  minimumBillableKm: number
+  oneWayFare: number
+  roundTrip: number
 }
 
 function calcFare(distKm: number, v: Vehicle): number {
@@ -33,33 +41,48 @@ function calcFare(distKm: number, v: Vehicle): number {
 }
 
 export default function FareCalculatorClient({ cities, vehicles }: Props) {
-  const [origin, setOrigin]     = useState('')
-  const [dest,   setDest]       = useState('')
+  const [origin,   setOrigin]   = useState('')
+  const [dest,     setDest]     = useState('')
   const [manualKm, setManualKm] = useState('')
-  const [loading, setLoading]   = useState(false)
-  const [result,  setResult]    = useState<{ distanceKm: number | null; routeId: number | null; fares: FareResult[] } | null>(null)
-  const [error,   setError]     = useState('')
-  const [saving,  setSaving]    = useState(false)
-  const [saved,   setSaved]     = useState(false)
+  const [loading,  setLoading]  = useState(false)
+  const [result,   setResult]   = useState<{ distanceKm: number | null; routeId: number | null; fares: FareResult[] } | null>(null)
+  const [error,    setError]    = useState('')
+  const [saving,   setSaving]   = useState(false)
+  const [saved,    setSaved]    = useState(false)
 
-  // Live preview from manual km
   const previewKm = parseFloat(manualKm) || result?.distanceKm || 0
-  const liveFares = previewKm > 0
-    ? vehicles.map(v => ({ ...v, oneWayFare: calcFare(previewKm, v), roundTrip: Math.ceil(calcFare(previewKm, v) * v.roundTripRateMultiplier / 100) * 100 }))
-    : null
+
+  // Build unified display rows
+  const displayRows: DisplayRow[] = previewKm > 0
+    ? vehicles.map(v => ({
+        key: String(v.id),
+        vehicleName: v.name,
+        perKmRate: v.perKmRate,
+        minimumBillableKm: v.minimumBillableKm,
+        oneWayFare: calcFare(previewKm, v),
+        roundTrip: Math.ceil(calcFare(previewKm, v) * v.roundTripRateMultiplier / 100) * 100,
+      }))
+    : (result?.fares ?? []).map((f, i) => ({
+        key: String(f.vehicleId ?? i),
+        vehicleName: f.vehicleName,
+        perKmRate: f.perKmRate,
+        minimumBillableKm: 100,
+        oneWayFare: f.oneWayFare ?? 0,
+        roundTrip: f.roundTrip ?? 0,
+      }))
 
   const handleSearch = async () => {
     if (!origin || !dest) { setError('Please select both cities'); return }
-    if (origin === dest) { setError('Origin and destination cannot be the same'); return }
+    if (origin === dest)  { setError('Origin and destination cannot be the same'); return }
     setLoading(true); setError(''); setResult(null); setSaved(false)
     try {
-      const res = await fetch(`/api/admin/routes/fare-preview?originCity=${encodeURIComponent(origin)}&destCity=${encodeURIComponent(dest)}`)
+      const res  = await fetch(`/api/admin/routes/fare-preview?originCity=${encodeURIComponent(origin)}&destCity=${encodeURIComponent(dest)}`)
       const data = await res.json()
       if (!res.ok) { setError(data.error ?? 'Error'); return }
       setResult(data)
       if (data.distanceKm) setManualKm(String(data.distanceKm))
     } catch { setError('Network error') }
-    finally { setLoading(false) }
+    finally   { setLoading(false) }
   }
 
   const handleSave = async () => {
@@ -67,7 +90,6 @@ export default function FareCalculatorClient({ cities, vehicles }: Props) {
     if (!km || !result) return
     setSaving(true); setSaved(false)
     try {
-      // Update route distance if exists
       if (result.routeId) {
         await fetch(`/api/admin/routes/${result.routeId}`, {
           method: 'PATCH',
@@ -75,16 +97,17 @@ export default function FareCalculatorClient({ cities, vehicles }: Props) {
           body: JSON.stringify({ distanceKm: km }),
         })
       }
-      // Update prices
-      const prices = vehicles.map(v => ({
-        vehicleId: v.id,
-        oneWayFare: calcFare(km, v),
-        roundTrip: Math.ceil(calcFare(km, v) * v.roundTripRateMultiplier / 100) * 100,
-      }))
       await fetch('/api/admin/routes/update-fares', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ originCity: origin, destCity: dest, distanceKm: km, prices }),
+        body: JSON.stringify({
+          originCity: origin, destCity: dest, distanceKm: km,
+          prices: vehicles.map(v => ({
+            vehicleId:   v.id,
+            oneWayFare:  calcFare(km, v),
+            roundTrip:   Math.ceil(calcFare(km, v) * v.roundTripRateMultiplier / 100) * 100,
+          })),
+        }),
       })
       setSaved(true)
     } catch { setError('Save failed') }
@@ -92,10 +115,10 @@ export default function FareCalculatorClient({ cities, vehicles }: Props) {
   }
 
   const handleRecalculateAll = async () => {
-    if (!confirm('This will recalculate ALL route fares based on current vehicle per-km rates. This may take a few minutes. Continue?')) return
+    if (!confirm('Recalculate ALL 13,000+ route fares? This may take a few minutes.')) return
     setSaving(true)
     try {
-      const res = await fetch('/api/admin/vehicles/recalculate', { method: 'POST' })
+      const res  = await fetch('/api/admin/vehicles/recalculate', { method: 'POST' })
       const data = await res.json()
       alert(data.message ?? 'Done!')
     } catch { alert('Error recalculating') }
@@ -110,7 +133,9 @@ export default function FareCalculatorClient({ cities, vehicles }: Props) {
       {/* Vehicle Rates Summary */}
       <div className="bg-white rounded-xl border border-gray-200 p-5">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="font-semibold text-gray-800 flex items-center gap-2"><Calculator className="w-4 h-4" /> Vehicle Per-km Rates</h2>
+          <h2 className="font-semibold text-gray-800 flex items-center gap-2">
+            <Calculator className="w-4 h-4" /> Vehicle Per-km Rates
+          </h2>
           <button onClick={handleRecalculateAll} disabled={saving}
             className="flex items-center gap-2 text-xs bg-[#0a1628] text-white px-3 py-1.5 rounded-lg font-medium hover:bg-[#1a3a6b] disabled:opacity-50">
             {saving ? <Loader2 className="w-3 h-3 animate-spin" /> : <RefreshCw className="w-3 h-3" />}
@@ -128,14 +153,14 @@ export default function FareCalculatorClient({ cities, vehicles }: Props) {
           ))}
         </div>
         <p className="text-xs text-gray-400 mt-3">
-          Edit per-km rates in <a href="/admin/vehicles" className="text-blue-600 underline">Vehicles</a> page, then click "Recalculate All Fares" to update all 13,000+ routes automatically.
+          Edit per-km rates in <a href="/admin/vehicles" className="text-blue-600 underline">Vehicles</a>, then click &quot;Recalculate All Fares&quot; to auto-update all routes.
         </p>
       </div>
 
       {/* Fare Calculator */}
       <div className="bg-white rounded-xl border border-gray-200 p-5">
         <h2 className="font-semibold text-gray-800 mb-4">Calculate Fare for Specific Route</h2>
-        
+
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
           <div>
             <label className="block text-xs font-medium text-gray-600 mb-1">Origin City</label>
@@ -148,14 +173,18 @@ export default function FareCalculatorClient({ cities, vehicles }: Props) {
               placeholder="e.g. Surat" className={inp} />
           </div>
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">Distance (km) — override</label>
+            <label className="block text-xs font-medium text-gray-600 mb-1">Distance (km) — manual override</label>
             <input type="number" value={manualKm} onChange={e => setManualKm(e.target.value)}
               placeholder="Auto from DB or enter manually" className={inp} />
           </div>
         </div>
         <datalist id="city-list">{cities.map(c => <option key={c} value={c} />)}</datalist>
 
-        {error && <p className="text-xs text-red-500 mb-3 flex items-center gap-1"><AlertCircle className="w-3 h-3" />{error}</p>}
+        {error && (
+          <p className="text-xs text-red-500 mb-3 flex items-center gap-1">
+            <AlertCircle className="w-3 h-3" />{error}
+          </p>
+        )}
 
         <div className="flex gap-3 mb-6">
           <button onClick={handleSearch} disabled={loading}
@@ -172,16 +201,16 @@ export default function FareCalculatorClient({ cities, vehicles }: Props) {
           )}
         </div>
 
-        {/* Live Preview Table */}
-        {(liveFares || result?.fares) && (
+        {/* Results Table */}
+        {displayRows.length > 0 && (
           <div>
             <div className="flex items-center gap-2 mb-3">
               <p className="text-sm font-semibold text-gray-800">
                 {origin} → {dest}
                 {previewKm > 0 && <span className="ml-2 text-[#f59e0b] font-bold">{previewKm} km</span>}
               </p>
-              {result?.routeId && <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">Route exists in DB</span>}
-              {result && !result.routeId && <span className="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full">Route not in DB yet</span>}
+              {result?.routeId     && <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">Route in DB ✓</span>}
+              {result && !result.routeId && <span className="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full">New route</span>}
             </div>
             <div className="overflow-x-auto">
               <table className="w-full text-sm border border-gray-200 rounded-lg overflow-hidden">
@@ -195,15 +224,19 @@ export default function FareCalculatorClient({ cities, vehicles }: Props) {
                   </tr>
                 </thead>
                 <tbody>
-                  {(liveFares ?? result?.fares ?? []).map((f, i) => (
-                    <tr key={f.id ?? f.vehicleId ?? i} className="border-t border-gray-100">
-                      <td className="px-4 py-2.5 font-medium text-gray-800">{f.vehicleName ?? f.name}</td>
-                      <td className="px-4 py-2.5 text-gray-600">₹{f.perKmRate}</td>
+                  {displayRows.map(row => (
+                    <tr key={row.key} className="border-t border-gray-100">
+                      <td className="px-4 py-2.5 font-medium text-gray-800">{row.vehicleName}</td>
+                      <td className="px-4 py-2.5 text-gray-600">₹{row.perKmRate}</td>
                       <td className="px-4 py-2.5 text-xs text-gray-400 font-mono">
-                        max({previewKm},{f.minimumBillableKm ?? 100}) × ₹{f.perKmRate}
+                        max({previewKm}, {row.minimumBillableKm}) × ₹{row.perKmRate}
                       </td>
-                      <td className="px-4 py-2.5 font-bold text-[#0a1628] text-base">₹{(f.oneWayFare ?? 0).toLocaleString('en-IN')}</td>
-                      <td className="px-4 py-2.5 text-gray-600">₹{(f.roundTrip ?? 0).toLocaleString('en-IN')}</td>
+                      <td className="px-4 py-2.5 font-bold text-[#0a1628] text-base">
+                        ₹{row.oneWayFare.toLocaleString('en-IN')}
+                      </td>
+                      <td className="px-4 py-2.5 text-gray-600">
+                        ₹{row.roundTrip.toLocaleString('en-IN')}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
