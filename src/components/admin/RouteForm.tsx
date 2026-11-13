@@ -10,10 +10,9 @@ interface Route   { id: number; slug: string; originCityId: number; destinationC
 
 interface Props { route?: Route; cities: City[]; vehicles?: Vehicle[] }
 
-// FARE FORMULA: km × perKmRate (no minimum km floor, only minimum fare floor)
+// FARE FORMULA: km × perKmRate only — no minimum fare, no floor
 function calcFare(km: number, v: Vehicle): number {
-  const fare = km * v.perKmRate
-  return Math.ceil(Math.max(fare, v.minimumFare))
+  return Math.ceil(km * v.perKmRate)
 }
 
 export default function RouteForm({ route, cities, vehicles = [] }: Props) {
@@ -89,7 +88,7 @@ export default function RouteForm({ route, cities, vehicles = [] }: Props) {
       name:      v.name,
       rate:      v.perKmRate,
       oneWay:    calcFare(km, v),
-      roundTrip: Math.ceil(calcFare(km, v) * v.roundTripRateMultiplier),
+      roundTrip: calcFare(km * 2, v),
     })))
   }, [form.distanceKm, vehicles])
 
@@ -301,19 +300,13 @@ export default function RouteForm({ route, cities, vehicles = [] }: Props) {
                 </thead>
                 <tbody>
                   {liveFares.map(f => {
-                    const v = vehicles.find(vv => vv.id === f.vehicleId)
                     const km = parseFloat(form.distanceKm)
-                    const rawFare = km * f.rate
-                    const usedMinimum = rawFare < (v?.minimumFare ?? 0)
                     return (
                       <tr key={f.vehicleId} className="border-t border-gray-100">
                         <td className="px-4 py-2.5 font-medium text-gray-800">{f.name}</td>
                         <td className="px-4 py-2.5 text-gray-500 text-xs">₹{f.rate}/km</td>
                         <td className="px-4 py-2.5 text-xs font-mono text-gray-400">
-                          {usedMinimum
-                            ? <span className="text-amber-600">{km} × ₹{f.rate} = ₹{Math.ceil(rawFare)} → min ₹{v?.minimumFare}</span>
-                            : <span>{km} × ₹{f.rate} = ₹{Math.ceil(rawFare)}</span>
-                          }
+                          {km} × ₹{f.rate} = ₹{f.oneWay}
                         </td>
                         <td className="px-4 py-2.5 font-bold text-[#0a1628] text-base">₹{f.oneWay.toLocaleString('en-IN')}</td>
                         <td className="px-4 py-2.5 text-gray-600">₹{f.roundTrip.toLocaleString('en-IN')}</td>
