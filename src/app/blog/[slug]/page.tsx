@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import Image from 'next/image'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import WhatsAppButton from '@/components/ui/WhatsAppButton'
@@ -41,8 +40,9 @@ export default async function BlogPostPage({ params }: PageProps) {
 
         {/* Hero */}
         {post.featuredImage && (
-          <div style={{ position: 'relative', height: 420, background: '#0a1628' }}>
-            <Image src={post.featuredImage} alt={post.title} fill sizes="100vw" style={{ objectFit: 'cover', opacity: 0.6 }} priority />
+          <div style={{ position: 'relative', height: 420, background: '#0a1628', overflow: 'hidden' }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={post.featuredImage} alt={post.title} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.6, position: 'absolute', inset: 0 }} />
             <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent 40%, rgba(10,22,40,0.9))' }} />
             <div style={{ position: 'absolute', bottom: 32, left: '50%', transform: 'translateX(-50%)', width: '100%', maxWidth: 800, padding: '0 20px' }}>
               {post.category && <p style={{ fontSize: 11, fontWeight: 700, color: '#f59e0b', letterSpacing: '0.1em', marginBottom: 10 }}>{post.category.toUpperCase()}</p>}
@@ -123,7 +123,8 @@ export default async function BlogPostPage({ params }: PageProps) {
                   <Link key={r.id} href={`/blog/${r.slug}`} style={{ textDecoration: 'none' }}>
                     <div style={{ background: '#fff', borderRadius: 12, overflow: 'hidden', border: '1px solid #e2e8f0' }}>
                       <div style={{ position: 'relative', height: 140, background: '#e8edf5' }}>
-                        {r.featuredImage ? <Image src={r.featuredImage} alt={r.title} fill sizes="280px" style={{ objectFit: 'cover' }} /> : <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', fontSize: 32 }}>✍️</div>}
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        {r.featuredImage ? <img src={r.featuredImage} alt={r.title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} /> : <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', fontSize: 32 }}>✍️</div>}
                       </div>
                       <div style={{ padding: '14px 16px' }}>
                         <p style={{ fontSize: 13, fontWeight: 600, color: '#0a1628', margin: '0 0 6px', lineHeight: 1.4 }}>{r.title}</p>

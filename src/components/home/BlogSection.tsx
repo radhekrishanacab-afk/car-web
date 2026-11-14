@@ -1,6 +1,5 @@
 import Link from 'next/link'
-import Image from 'next/image'
-import { ArrowRight, Clock, Tag } from 'lucide-react'
+import { ArrowRight, Clock } from 'lucide-react'
 import { prisma } from '@/lib/prisma'
 
 async function getLatestPosts() {
@@ -46,7 +45,8 @@ export default async function BlogSection() {
                 {/* Image */}
                 <div style={{ position: 'relative', height: 200, background: '#e8edf5', flexShrink: 0 }}>
                   {post.featuredImage
-                    ? <Image src={post.featuredImage} alt={post.title} fill sizes="400px" style={{ objectFit: 'cover' }} />
+                    // eslint-disable-next-line @next/next/no-img-element
+                    ? <img src={post.featuredImage} alt={post.title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
                     : <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', fontSize: 48 }}>✍️</div>
                   }
                   {i === 0 && post.isFeatured && (

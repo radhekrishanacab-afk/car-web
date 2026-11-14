@@ -1,11 +1,10 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import Image from 'next/image'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import WhatsAppButton from '@/components/ui/WhatsAppButton'
 import { prisma } from '@/lib/prisma'
-import { Calendar, Clock, ArrowRight, Tag } from 'lucide-react'
+import { Calendar, Clock, ArrowRight } from 'lucide-react'
 
 export const metadata: Metadata = {
   title: 'Blog — Travel Tips & Cab Guides | Radhe Krishna Cab',
@@ -55,8 +54,9 @@ export default async function BlogPage() {
                   <div style={{ background: '#fff', borderRadius: 16, overflow: 'hidden', border: '1px solid #e2e8f0', boxShadow: '0 4px 20px rgba(10,22,40,.07)', display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(280px,1fr))' }}>
                     <div style={{ position: 'relative', minHeight: 260, background: '#e8edf5' }}>
                       {featured.featuredImage
-                        ? <Image src={featured.featuredImage} alt={featured.title} fill sizes="600px" style={{ objectFit: 'cover' }} />
-                        : <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', fontSize: 64 }}>✍️</div>
+                        // eslint-disable-next-line @next/next/no-img-element
+                        ? <img src={featured.featuredImage} alt={featured.title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', minHeight: 260 }} />
+                        : <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', minHeight: 260, fontSize: 64 }}>✍️</div>
                       }
                       <div style={{ position: 'absolute', top: 14, left: 14, background: '#f59e0b', color: '#0a1628', fontSize: 11, fontWeight: 700, padding: '4px 12px', borderRadius: 50 }}>FEATURED</div>
                     </div>
@@ -84,7 +84,8 @@ export default async function BlogPage() {
                       <div style={{ background: '#fff', borderRadius: 14, overflow: 'hidden', border: '1px solid #e2e8f0', boxShadow: '0 2px 8px rgba(10,22,40,.05)', height: '100%', display: 'flex', flexDirection: 'column' }}>
                         <div style={{ position: 'relative', height: 200, background: '#e8edf5', flexShrink: 0 }}>
                           {post.featuredImage
-                            ? <Image src={post.featuredImage} alt={post.title} fill sizes="400px" style={{ objectFit: 'cover' }} />
+                            // eslint-disable-next-line @next/next/no-img-element
+                            ? <img src={post.featuredImage} alt={post.title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
                             : <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', fontSize: 48 }}>✍️</div>
                           }
                           {post.category && (
