@@ -18,7 +18,6 @@ const navItems = [
   { href: '/admin/routes/import', icon: Upload, label: 'Bulk Import' },
   { href: '/admin/pricing', icon: IndianRupee, label: 'Route Pricing' },
   { href: '/admin/vehicles', icon: Car, label: 'Vehicles' },
-  { href: '/admin/tourist-places', icon: Globe, label: 'Tourist Places' },
   { href: '/admin/seo', icon: Search, label: 'SEO Settings' },
   { href: '/admin/settings', icon: Settings, label: 'Settings' },
 ]

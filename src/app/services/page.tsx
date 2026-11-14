@@ -266,8 +266,8 @@ export default function ServicesPage() {
                 </p>
               </div>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.875rem', flexShrink: 0 }}>
-                <Link href="/explore-india" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: '#f59e0b', color: '#0a1628', fontWeight: 700, fontSize: '0.9375rem', padding: '0.875rem 1.75rem', borderRadius: '50px', textDecoration: 'none' }}>
-                  <MapPin size={16} /> Explore All Destinations
+                <Link href="/routes" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: '#f59e0b', color: '#0a1628', fontWeight: 700, fontSize: '0.9375rem', padding: '0.875rem 1.75rem', borderRadius: '50px', textDecoration: 'none' }}>
+                  <MapPin size={16} /> Explore All Routes
                 </Link>
                 <a href={`https://wa.me/${WA}?text=${encodeURIComponent('Hello! I want to plan a tourist trip across India. Please share taxi options.')}`}
                   target="_blank" rel="noopener noreferrer"

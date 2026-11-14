@@ -10,7 +10,6 @@ const navLinks = [
   { href: '/about',        label: 'About Us' },
   { href: '/routes',       label: 'Routes' },
   { href: '/vehicles',     label: 'Our Cars' },
-  { href: '/explore-india', label: 'Places' },
   { href: '/blog',         label: 'Blog' },
   { href: '/contact',      label: 'Contact Us' },
 ]
