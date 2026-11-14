@@ -293,9 +293,7 @@ export default function RouteForm({ route, cities, vehicles = [] }: Props) {
                   <tr>
                     <th className="px-4 py-2 text-left text-xs font-semibold text-gray-600">Vehicle</th>
                     <th className="px-4 py-2 text-left text-xs font-semibold text-gray-600">Rate</th>
-                    <th className="px-4 py-2 text-left text-xs font-semibold text-gray-600">Formula</th>
-                    <th className="px-4 py-2 text-left text-xs font-semibold text-gray-600">One-Way Fare</th>
-                    <th className="px-4 py-2 text-left text-xs font-semibold text-gray-600">Round Trip</th>
+                    <th className="px-4 py-2 text-left text-xs font-semibold text-gray-600">Total Fare ({form.distanceKm} km × rate)</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -305,11 +303,9 @@ export default function RouteForm({ route, cities, vehicles = [] }: Props) {
                       <tr key={f.vehicleId} className="border-t border-gray-100">
                         <td className="px-4 py-2.5 font-medium text-gray-800">{f.name}</td>
                         <td className="px-4 py-2.5 text-gray-500 text-xs">₹{f.rate}/km</td>
-                        <td className="px-4 py-2.5 text-xs font-mono text-gray-400">
-                          {km} × ₹{f.rate} = ₹{f.oneWay}
+                        <td className="px-4 py-2.5 font-bold text-[#0a1628] text-base">
+                          {km} × ₹{f.rate} = <span className="text-green-700">₹{f.oneWay}</span>
                         </td>
-                        <td className="px-4 py-2.5 font-bold text-[#0a1628] text-base">₹{f.oneWay.toLocaleString('en-IN')}</td>
-                        <td className="px-4 py-2.5 text-gray-600">₹{f.roundTrip.toLocaleString('en-IN')}</td>
                       </tr>
                     )
                   })}
