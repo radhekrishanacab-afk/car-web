@@ -162,7 +162,7 @@ export default async function RouteDetailPage({ params }: PageProps) {
                   <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 14 }}>
                     <thead>
                       <tr style={{ background: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
-                        {['Vehicle', 'Passengers', 'One-Way Fare', 'Round Trip', ''].map(h => (
+                        {['Vehicle', 'Passengers', 'One-Way Fare', ''].map(h => (
                           <th key={h} style={{ padding: '11px 20px', textAlign: 'left', fontSize: 11, fontWeight: 600, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em', whiteSpace: 'nowrap' }}>{h}</th>
                         ))}
                       </tr>
@@ -181,9 +181,6 @@ export default async function RouteDetailPage({ params }: PageProps) {
                             {fare.oneWayFare != null
                               ? <span style={{ fontWeight: 700, fontSize: 16, color: '#0f172a' }}>₹{fare.oneWayFare.toLocaleString('en-IN')}</span>
                               : <span style={{ color: '#94a3b8', fontSize: 12 }}>Call for fare</span>}
-                          </td>
-                          <td style={{ padding: '16px 20px', color: '#64748b' }}>
-                            {fare.roundTripFare != null ? `₹${fare.roundTripFare.toLocaleString('en-IN')}` : '—'}
                           </td>
                           <td style={{ padding: '16px 20px', textAlign: 'right' }}>
                             <a href={`https://wa.me/${WA}?text=${encodeURIComponent(`Hello! I want to book ${fare.vehicleName} from ${o.name} to ${d.name}.`)}`}
