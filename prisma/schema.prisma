@@ -264,6 +264,7 @@ model BlogPost {
   tags            String?
   status          String   @default("DRAFT")   // DRAFT | PUBLISHED
   isFeatured      Boolean  @default(false)
+  homepagePosition Int?                       // null = hidden from homepage, 1/2/3 = display position
   readingMinutes  Int      @default(3)
   authorName      String   @default("Radhe Krishna Cab")
   seoTitle        String?

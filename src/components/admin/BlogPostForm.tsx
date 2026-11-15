@@ -15,6 +15,7 @@ interface BlogPost {
   tags: string | null
   status: string
   isFeatured: boolean
+  homepagePosition: number | null
   readingMinutes: number
   authorName: string
   seoTitle: string | null
@@ -43,6 +44,7 @@ export default function BlogPostForm({ post }: Props) {
     tags:           post?.tags ?? '',
     status:         post?.status ?? 'DRAFT',
     isFeatured:     post?.isFeatured ?? false,
+    homepagePosition: post?.homepagePosition != null ? String(post.homepagePosition) : '',
     readingMinutes: String(post?.readingMinutes ?? 3),
     authorName:     post?.authorName ?? 'Radhe Krishna Cab',
     seoTitle:       post?.seoTitle ?? '',
@@ -82,6 +84,7 @@ export default function BlogPostForm({ post }: Props) {
           tags:           form.tags.trim() || null,
           status:         form.status,
           isFeatured:     form.isFeatured,
+          homepagePosition: form.homepagePosition === '' ? null : parseInt(form.homepagePosition),
           readingMinutes: parseInt(form.readingMinutes) || 3,
           authorName:     form.authorName.trim() || 'Radhe Krishna Cab',
           seoTitle:       form.seoTitle.trim() || null,
@@ -207,6 +210,20 @@ export default function BlogPostForm({ post }: Props) {
           <input type="checkbox" checked={form.isFeatured} onChange={e => set('isFeatured', e.target.checked)} className="w-4 h-4 rounded" />
           Mark as Featured (shown prominently on blog listing)
         </label>
+
+        {/* Homepage Position */}
+        <div className="pt-3 border-t border-gray-100">
+          <label className="block text-sm font-medium text-gray-700 mb-1">Homepage Display Position</label>
+          <select value={form.homepagePosition} onChange={e => set('homepagePosition', e.target.value)} className={inp}>
+            <option value="">— Do not show on homepage —</option>
+            <option value="1">Position 1 (First / Left)</option>
+            <option value="2">Position 2 (Middle)</option>
+            <option value="3">Position 3 (Last / Right)</option>
+          </select>
+          <p className="text-xs text-gray-400 mt-1">
+            Choose where this post appears on the homepage blog section. Only published posts with a position set will show. Up to 3 posts can be displayed.
+          </p>
+        </div>
       </div>
 
       {/* Actions */}
