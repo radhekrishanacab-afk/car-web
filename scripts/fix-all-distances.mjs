@@ -168,11 +168,6 @@ async function buildMatrix(cities, coordsByName) {
   return matrix
 }
 
-function calcFare(km, perKm, minFare, minKm) {
-  const billable = minKm ? Math.max(km, minKm) : km
-  return Math.ceil(Math.max(billable * perKm, minFare) / 100) * 100
-}
-
 async function main() {
   console.log(APPLY ? '🚀 APPLY mode — will write to database\n' : '🔍 DRY RUN — no changes will be written\n')
 
@@ -194,7 +189,6 @@ async function main() {
   const routes = await prisma.route.findMany({
     include: { originCity: { select: { name: true } }, destinationCity: { select: { name: true } } },
   })
-  const vehicles = await prisma.vehicle.findMany({ where: { isActive: true }, orderBy: { displayOrder: 'asc' } })
 
   const changes = []
   let missing = 0
@@ -241,45 +235,72 @@ async function main() {
     return
   }
 
+  // Bulk-write via raw SQL: one statement per batch instead of thousands of
+  // round-trips (Neon serverless latency makes row-by-row writes hopeless).
+  const ROUTE_BATCH = 1000
+
   console.log('\nStep 3: Updating route distances...')
-  const ROUTE_BATCH = 300
   for (let i = 0; i < changes.length; i += ROUTE_BATCH) {
     const batch = changes.slice(i, i + ROUTE_BATCH)
-    await prisma.$transaction(
-      batch.map((c) =>
-        prisma.route.update({
-          where: { id: c.id },
-          data: { distanceKm: c.km, estimatedHours: Math.round((c.km / 50) * 10) / 10 },
-        })
-      )
+    const values = batch
+      .map((c) => `(${c.id},${c.km},${Math.round((c.km / 50) * 10) / 10})`)
+      .join(',')
+    await prisma.$executeRawUnsafe(
+      `UPDATE "Route" AS r
+         SET "distanceKm" = v.km::float8,
+             "estimatedHours" = v.hours::float8,
+             "updatedAt" = NOW()
+       FROM (VALUES ${values}) AS v(id, km, hours)
+       WHERE r.id = v.id::int`,
     )
     process.stdout.write(`\r  Routes: ${Math.min(i + ROUTE_BATCH, changes.length)}/${changes.length}`)
   }
   console.log('\n')
 
   console.log('Step 4: Recalculating fares...')
+  // Recalculate for EVERY route (not just the changed ones) so that fares are
+  // always consistent with the corrected distance — some route prices may have
+  // gone stale when distances were fixed in an earlier partial run.
+  const fareTargets = await prisma.route.findMany({
+    where: { distanceKm: { not: null } },
+    select: { id: true },
+    orderBy: { id: 'asc' },
+  })
+  // One cross-join statement per batch: every (route × active vehicle).
+  // Mirrors calcFare(): billable = max(km, minBillableKm || km);
+  //                    oneWay = ceil(max(billable*perKm, minFare)/100)*100;
+  //                    roundTrip = ceil(oneWay*multiplier/100)*100
   let fareCount = 0
-  for (let i = 0; i < changes.length; i += ROUTE_BATCH) {
-    const batch = changes.slice(i, i + ROUTE_BATCH)
-    const ops = []
-    for (const c of batch) {
-      for (const v of vehicles) {
-        const ow = calcFare(c.km, Number(v.perKmRate), Number(v.minimumFare), v.minimumBillableKm ? Number(v.minimumBillableKm) : null)
-        const rt = Math.ceil((ow * Number(v.roundTripRateMultiplier)) / 100) * 100
-        ops.push(
-          prisma.routePrice.upsert({
-            where: { routeId_vehicleId: { routeId: c.id, vehicleId: v.id } },
-            update: { oneWayFare: ow, roundTrip: rt, isActive: true },
-            create: { routeId: c.id, vehicleId: v.id, oneWayFare: ow, roundTrip: rt, isActive: true },
-          })
-        )
-      }
-    }
-    // chunk the transaction itself
-    for (let k = 0; k < ops.length; k += 500) {
-      await prisma.$transaction(ops.slice(k, k + 500))
-      fareCount += Math.min(500, ops.length - k)
-    }
+  for (let i = 0; i < fareTargets.length; i += ROUTE_BATCH) {
+    const batch = fareTargets.slice(i, i + ROUTE_BATCH)
+    const ids = batch.map((c) => c.id).join(',')
+    const rows = await prisma.$executeRawUnsafe(
+      `INSERT INTO "RoutePrice"
+         ("routeId","vehicleId","oneWayFare","roundTrip","isActive","createdAt","updatedAt")
+       SELECT r.id, v.id,
+         CEIL(GREATEST(
+           GREATEST(r."distanceKm", COALESCE(NULLIF(v."minimumBillableKm", 0), r."distanceKm")) * v."perKmRate",
+           v."minimumFare"
+         ) / 100.0) * 100.0,
+         CEIL(
+           (CEIL(GREATEST(
+             GREATEST(r."distanceKm", COALESCE(NULLIF(v."minimumBillableKm", 0), r."distanceKm")) * v."perKmRate",
+             v."minimumFare"
+           ) / 100.0) * 100.0) * v."roundTripRateMultiplier" / 100.0
+         ) * 100.0,
+         true, NOW(), NOW()
+       FROM "Route" r
+       CROSS JOIN "Vehicle" v
+       WHERE r.id IN (${ids})
+         AND r."distanceKm" IS NOT NULL
+         AND v."isActive" = true
+       ON CONFLICT ("routeId","vehicleId") DO UPDATE
+         SET "oneWayFare" = EXCLUDED."oneWayFare",
+             "roundTrip"  = EXCLUDED."roundTrip",
+             "isActive"   = true,
+             "updatedAt"  = NOW()`,
+    )
+    fareCount += rows
     process.stdout.write(`\r  Fares: ${fareCount}`)
   }
   console.log('\n\n✅ Done.')
