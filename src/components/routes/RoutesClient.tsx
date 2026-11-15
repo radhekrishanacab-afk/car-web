@@ -135,7 +135,7 @@ export default function RoutesClient({ cities, popularCities, total, page, pages
         <div style={{ maxWidth: 960, margin: '0 auto', padding: '48px 16px 40px', textAlign: 'center' }}>
 
           <h1 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.25rem)', fontWeight: 800, color: '#ffffff', margin: '0 0 12px', lineHeight: 1.25 }}>
-            Find Your <span style={{ color: '#f59e0b' }}>One-Way Taxi</span> Route
+            Find Your <span style={{ color: '#08a9ee' }}>One-Way Taxi</span> Route
           </h1>
           <p style={{ fontSize: 15, color: '#94a3b8', margin: '0 0 32px', lineHeight: 1.6 }}>
             Transparent fixed fares. Verified drivers. Well-maintained vehicles.<br />
@@ -177,7 +177,7 @@ export default function RoutesClient({ cities, popularCities, total, page, pages
               />
             </div>
             <button type="submit"
-              style={{ background: '#f59e0b', color: '#0a1628', fontWeight: 700, fontSize: 14, padding: '0 24px', borderRadius: '0 10px 10px 0', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}>
+              style={{ background: '#08a9ee', color: '#ffffff', fontWeight: 700, fontSize: 14, padding: '0 24px', borderRadius: '0 10px 10px 0', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}>
               Search
             </button>
             {suggestionsOpen && search.trim().length >= 2 && (
@@ -281,7 +281,7 @@ export default function RoutesClient({ cities, popularCities, total, page, pages
           {!initialSearch && popularCities.length > 0 && (
             <section style={{ marginBottom: 44 }}>
               <h2 style={{ fontSize: 18, fontWeight: 700, color: '#0f172a', margin: '0 0 20px', display: 'flex', alignItems: 'center', gap: 10 }}>
-                <span style={{ display: 'inline-block', width: 4, height: 20, background: '#f59e0b', borderRadius: 2 }} />
+                <span style={{ display: 'inline-block', width: 4, height: 20, background: '#08a9ee', borderRadius: 2 }} />
                 Popular Pickup Cities
               </h2>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 14 }}>
@@ -371,7 +371,7 @@ export default function RoutesClient({ cities, popularCities, total, page, pages
                         if (small) small.style.color = '#94a3b8'
                       }}
                     >
-                      <MapPin size={14} style={{ color: '#f59e0b', flexShrink: 0 }} />
+                      <MapPin size={14} style={{ color: '#08a9ee', flexShrink: 0 }} />
                       <div style={{ minWidth: 0 }}>
                         <p style={{ fontSize: 13, fontWeight: 600, color: '#0f172a', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', transition: 'color 0.15s' }}>{city.name}</p>
                         <small style={{ fontSize: 11, color: '#94a3b8', transition: 'color 0.15s' }}>

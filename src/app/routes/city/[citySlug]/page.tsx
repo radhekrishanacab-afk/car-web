@@ -114,7 +114,7 @@ export default async function CityRoutesPage({ params, searchParams }: PageProps
                   ← Back to All Cities
                 </Link>
                 <h1 style={{ fontSize: 26, fontWeight: 700, color: '#ffffff', margin: '0 0 8px', lineHeight: 1.3 }}>
-                  Taxi from <span style={{ color: '#f59e0b' }}>{city.name}</span>
+                  Taxi from <span style={{ color: '#08a9ee' }}>{city.name}</span>
                 </h1>
                 <p style={{ fontSize: 14, color: '#94a3b8', margin: 0 }}>
                   {total > 0

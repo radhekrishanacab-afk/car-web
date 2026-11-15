@@ -332,7 +332,7 @@ export default async function RouteDetailPage({ params }: PageProps) {
                 </div>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
                   <Link href="/contact#enquiry"
-                    style={{ background: '#f59e0b', color: '#0a1628', fontWeight: 700, fontSize: 13, padding: '10px 20px', borderRadius: 8, textDecoration: 'none' }}>
+                    style={{ background: '#08a9ee', color: '#ffffff', fontWeight: 700, fontSize: 13, padding: '10px 20px', borderRadius: 8, textDecoration: 'none' }}>
                     Book Now
                   </Link>
                   <a href={`tel:${PHONE.replace(/\s/g, '')}`}
