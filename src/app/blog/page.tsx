@@ -61,7 +61,7 @@ export default async function BlogPage() {
                       <div style={{ position: 'absolute', top: 14, left: 14, background: '#f59e0b', color: '#0a1628', fontSize: 11, fontWeight: 700, padding: '4px 12px', borderRadius: 50 }}>FEATURED</div>
                     </div>
                     <div style={{ padding: '28px 32px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                      {featured.category && <p style={{ fontSize: 11, fontWeight: 700, color: '#f59e0b', letterSpacing: '0.08em', marginBottom: 10 }}>{featured.category.toUpperCase()}</p>}
+                      {featured.showCategory && featured.category && <p style={{ fontSize: 11, fontWeight: 700, color: '#f59e0b', letterSpacing: '0.08em', marginBottom: 10 }}>{featured.category.toUpperCase()}</p>}
                       <h2 style={{ fontSize: 22, fontWeight: 800, color: '#0a1628', margin: '0 0 12px', lineHeight: 1.3 }}>{featured.title}</h2>
                       {featured.excerpt && <p style={{ fontSize: 14, color: '#64748b', lineHeight: 1.7, margin: '0 0 20px' }}>{featured.excerpt}</p>}
                       <div style={{ display: 'flex', alignItems: 'center', gap: 16, fontSize: 12, color: '#94a3b8' }}>
@@ -88,7 +88,7 @@ export default async function BlogPage() {
                             ? <img src={post.featuredImage} alt={post.title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
                             : <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', fontSize: 48 }}>✍️</div>
                           }
-                          {post.category && (
+                          {post.showCategory && post.category && (
                             <div style={{ position: 'absolute', top: 10, left: 10, background: 'rgba(10,22,40,.75)', color: '#fff', fontSize: 10, fontWeight: 600, padding: '3px 10px', borderRadius: 50 }}>
                               {post.category}
                             </div>

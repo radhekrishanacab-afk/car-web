@@ -261,6 +261,7 @@ model BlogPost {
   content         String
   featuredImage   String?
   category        String?
+  showCategory    Boolean  @default(true)
   tags            String?
   status          String   @default("DRAFT")   // DRAFT | PUBLISHED
   isFeatured      Boolean  @default(false)

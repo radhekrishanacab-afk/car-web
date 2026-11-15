@@ -1,9 +1,8 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { prisma } from '@/lib/prisma'
-import { Plus, FileText, Eye, EyeOff } from 'lucide-react'
+import { Plus, FileText } from 'lucide-react'
 import DeleteBlogPost from '@/components/admin/DeleteBlogPost'
-import HomepageBlogSettingsForm from '@/components/admin/HomepageBlogSettingsForm'
 
 export const metadata: Metadata = { title: 'Blog Posts' }
 
@@ -22,10 +21,9 @@ export default async function BlogAdminPage({ searchParams }: PageProps) {
   if (status) where.status = status
   if (search) where.OR = [{ title: { contains: search, mode: 'insensitive' } }, { category: { contains: search, mode: 'insensitive' } }]
 
-  const [posts, total, homepageSettings] = await Promise.all([
+  const [posts, total] = await Promise.all([
     prisma.blogPost.findMany({ where, orderBy: { createdAt: 'desc' }, skip: (page-1)*perPage, take: perPage }),
     prisma.blogPost.count({ where }),
-    prisma.homepageBlogSettings.findUnique({ where: { id: 1 } }).catch(() => null),
   ])
   const pages = Math.ceil(total / perPage)
 
@@ -41,11 +39,6 @@ export default async function BlogAdminPage({ searchParams }: PageProps) {
           <Plus className="w-4 h-4" /> New Post
         </Link>
       </div>
-
-      <HomepageBlogSettingsForm
-        initialHeading={homepageSettings?.heading ?? 'TRAVEL BLOG'}
-        initialDescription={homepageSettings?.description ?? 'Tips, Guides & Destinations'}
-      />
 
       {/* Filters */}
       <form className="flex flex-wrap gap-3 mb-6">
@@ -75,7 +68,7 @@ export default async function BlogAdminPage({ searchParams }: PageProps) {
                 <th className="px-4 py-3 font-medium text-gray-500">Title</th>
                 <th className="px-4 py-3 font-medium text-gray-500">Category</th>
                 <th className="px-4 py-3 font-medium text-gray-500">Status</th>
-                <th className="px-4 py-3 font-medium text-gray-500">Featured</th>
+                <th className="px-4 py-3 font-medium text-gray-500">Category Display</th>
                 <th className="px-4 py-3 font-medium text-gray-500">Homepage</th>
                 <th className="px-4 py-3 font-medium text-gray-500">Date</th>
                 <th className="px-4 py-3 font-medium text-gray-500">Actions</th>
@@ -95,7 +88,9 @@ export default async function BlogAdminPage({ searchParams }: PageProps) {
                     </span>
                   </td>
                   <td className="px-4 py-3">
-                    {p.isFeatured ? <Eye className="w-4 h-4 text-amber-500" /> : <EyeOff className="w-4 h-4 text-gray-300" />}
+                    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${p.showCategory && p.category ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
+                      {p.showCategory && p.category ? 'Shown' : 'Hidden'}
+                    </span>
                   </td>
                   <td className="px-4 py-3">
                     {p.homepagePosition ? (

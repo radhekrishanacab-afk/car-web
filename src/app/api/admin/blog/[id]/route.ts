@@ -10,6 +10,7 @@ const UpdateSchema = z.object({
   content: z.string().min(10).optional(),
   featuredImage: z.string().optional().nullable(),
   category: z.string().max(80).optional().nullable(),
+  showCategory: z.boolean().optional(),
   tags: z.string().max(500).optional().nullable(),
   status: z.enum(['DRAFT', 'PUBLISHED']).optional(),
   isFeatured: z.boolean().optional(),

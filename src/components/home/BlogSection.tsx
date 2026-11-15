@@ -11,14 +11,11 @@ async function getLatestPosts() {
 }
 
 export default async function BlogSection() {
-  const [posts, sectionSettings, contactSettings] = await Promise.all([
+  const [posts, contactSettings] = await Promise.all([
     getLatestPosts(),
-    prisma.homepageBlogSettings.findUnique({ where: { id: 1 } }).catch(() => null),
     prisma.contactSettings.findFirst().catch(() => null),
   ])
   if (posts.length === 0) return null
-  const heading = sectionSettings?.heading ?? 'TRAVEL BLOG'
-  const description = sectionSettings?.description ?? 'Tips, Guides & Destinations'
   const whatsappNumber = (contactSettings?.whatsappNumber ?? process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '919723097832').replace(/\D/g, '')
 
   return (
@@ -28,9 +25,9 @@ export default async function BlogSection() {
         {/* Header */}
         <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginBottom: 36 }}>
           <div>
-            <p style={{ fontSize: 12, fontWeight: 700, color: '#f59e0b', letterSpacing: '0.1em', marginBottom: 6 }}>{heading}</p>
+            <p style={{ fontSize: 12, fontWeight: 700, color: '#f59e0b', letterSpacing: '0.1em', marginBottom: 6 }}>TRAVEL BLOG</p>
             <h2 style={{ fontSize: 'clamp(1.5rem,3vw,2rem)', fontWeight: 800, color: '#0a1628', margin: 0, lineHeight: 1.2 }}>
-              {description}
+              Tips, Guides &amp; <span style={{ color: '#f59e0b' }}>Destinations</span>
             </h2>
           </div>
           <Link href="/blog"
@@ -42,10 +39,10 @@ export default async function BlogSection() {
         {/* Cards */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(250px,1fr))', gap: 24 }}>
           {posts.map((post) => {
-            const title = post.homepageTitle || post.title
-            const cardDescription = post.homepageDescription || post.excerpt
-            const image = post.homepageImage || post.featuredImage
-            const message = post.homepageWhatsappMessage || `Hello! I saw "${title}" on your website and would like more information.`
+            const title = post.title
+            const cardDescription = post.excerpt
+            const image = post.featuredImage
+            const message = `Hello! I saw "${title}" on your website and would like more information.`
             const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`
 
             return (
@@ -67,7 +64,7 @@ export default async function BlogSection() {
                       FEATURED
                     </div>
                   )}
-                  {post.category && (
+                  {post.showCategory && post.category && (
                     <div style={{ position: 'absolute', top: 12, right: 12, background: 'rgba(10,22,40,0.75)', color: '#fff', fontSize: 10, fontWeight: 600, padding: '3px 10px', borderRadius: 50 }}>
                       {post.category}
                     </div>
@@ -94,7 +91,7 @@ export default async function BlogSection() {
                   </div>
                   <a href={whatsappUrl} target="_blank" rel="noopener noreferrer"
                     style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginTop: 16, padding: '10px 12px', background: '#16a34a', color: '#fff', borderRadius: 8, fontSize: 13, fontWeight: 700, textDecoration: 'none' }}>
-                    <MessageCircle size={15} /> {post.homepageButtonLabel || 'Enquire on WhatsApp'}
+                    <MessageCircle size={15} /> Enquire on WhatsApp
                   </a>
                 </div>
               </article>

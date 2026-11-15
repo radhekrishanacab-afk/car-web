@@ -8,9 +8,10 @@ const BlogSchema = z.object({
   title: z.string().min(3).max(200),
   slug: z.string().min(2).max(220).regex(/^[a-z0-9-]+$/).optional(),
   excerpt: z.string().max(500).optional().nullable(),
-  content: z.string().min(10),
+  content: z.string().min(1).optional(),
   featuredImage: z.string().optional().nullable(),
   category: z.string().max(80).optional().nullable(),
+  showCategory: z.boolean().optional(),
   tags: z.string().max(500).optional().nullable(),
   status: z.enum(['DRAFT', 'PUBLISHED']).optional(),
   isFeatured: z.boolean().optional(),
@@ -55,9 +56,11 @@ export async function POST(req: NextRequest) {
   const parsed = BlogSchema.safeParse(body)
   if (!parsed.success) return Response.json({ error: 'Invalid input', issues: parsed.error.issues }, { status: 400 })
   const d = parsed.data
-  const slug = d.slug ?? slugify(d.title)
+  const slug = d.slug || slugify(d.title) || `post-${Date.now()}`
   const existing = await prisma.blogPost.findUnique({ where: { slug } })
   if (existing) return Response.json({ error: 'Slug already exists' }, { status: 409 })
+  const content = d.content ?? d.excerpt ?? d.title
+  const readingMinutes = d.readingMinutes ?? Math.max(1, Math.ceil(content.trim().split(/\s+/).length / 200))
 
   const post = await prisma.$transaction(async tx => {
     if (d.homepagePosition) {
@@ -68,8 +71,9 @@ export async function POST(req: NextRequest) {
     }
     return tx.blogPost.create({
       data: {
-        title: d.title, slug, excerpt: d.excerpt ?? null, content: d.content,
+        title: d.title, slug, excerpt: d.excerpt ?? null, content,
         featuredImage: d.featuredImage ?? null, category: d.category ?? null,
+        showCategory: d.showCategory ?? true,
         tags: d.tags ?? null, status: d.status ?? 'DRAFT',
         isFeatured: d.isFeatured ?? false,
         homepagePosition: d.homepagePosition ?? null,
@@ -78,7 +82,7 @@ export async function POST(req: NextRequest) {
         homepageImage: d.homepageImage ?? null,
         homepageButtonLabel: d.homepageButtonLabel ?? null,
         homepageWhatsappMessage: d.homepageWhatsappMessage ?? null,
-        readingMinutes: d.readingMinutes ?? 3,
+        readingMinutes,
         authorName: d.authorName ?? 'Radhe Krishna Cab',
         seoTitle: d.seoTitle ?? null, seoDescription: d.seoDescription ?? null,
         publishedAt: d.status === 'PUBLISHED' ? new Date() : null,
