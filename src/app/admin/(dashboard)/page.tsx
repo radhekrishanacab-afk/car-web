@@ -98,6 +98,7 @@ export default async function AdminDashboard() {
               { href: '/admin/cities/new', label: '+ Add City' },
               { href: '/admin/routes/new', label: '+ Add Route' },
               { href: '/admin/vehicles/new', label: '+ Add Vehicle' },
+              { href: '/admin/blog/categories', label: '+ Add Category' },
               { href: '/admin/pricing', label: 'Manage Pricing' },
             ].map((a) => (
               <Link
