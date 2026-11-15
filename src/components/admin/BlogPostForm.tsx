@@ -73,6 +73,7 @@ export default function BlogPostForm({ post }: Props) {
 
   const [states,    setStates]    = useState<{ id: number; name: string }[]>([])
   const [districts, setDistricts] = useState<{ id: number; name: string; stateId: number }[]>([])
+  const [categories, setCategories] = useState<string[]>([])
 
   useEffect(() => {
     fetch('/api/admin/tourist-places/meta')
@@ -81,6 +82,10 @@ export default function BlogPostForm({ post }: Props) {
         setStates(d.states ?? [])
         setDistricts(d.districts ?? [])
       })
+      .catch(() => {})
+    fetch('/api/admin/blog/categories')
+      .then(r => r.json())
+      .then(d => setCategories(d.categories ?? []))
       .catch(() => {})
   }, [])
 
@@ -159,12 +164,37 @@ export default function BlogPostForm({ post }: Props) {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-end">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
-            <input type="text" value={form.category} onChange={e => set('category', e.target.value)} placeholder="e.g. Travel Tips" className={inp} />
+            <input
+              list="category-options"
+              type="text"
+              value={form.category}
+              onChange={e => set('category', e.target.value)}
+              placeholder="Type or select a category"
+              className={inp}
+            />
+            <datalist id="category-options">
+              {categories.map(c => <option key={c} value={c} />)}
+            </datalist>
           </div>
-          <label className="flex items-center gap-2 pb-2 text-sm text-gray-700 cursor-pointer">
-            <input type="checkbox" checked={form.showCategory} onChange={e => set('showCategory', e.target.checked)} className="h-4 w-4 rounded" />
-            Show category on the blog page
-          </label>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Show category on the website</label>
+            <div className="inline-flex rounded-lg border border-gray-200 overflow-hidden">
+              <button
+                type="button"
+                onClick={() => set('showCategory', true)}
+                className={`px-4 py-2.5 text-sm font-medium transition-colors ${form.showCategory ? 'bg-[#0a1628] text-white' : 'bg-white text-gray-600 hover:bg-gray-50'}`}
+              >
+                Yes
+              </button>
+              <button
+                type="button"
+                onClick={() => set('showCategory', false)}
+                className={`px-4 py-2.5 text-sm font-medium transition-colors ${!form.showCategory ? 'bg-[#0a1628] text-white' : 'bg-white text-gray-600 hover:bg-gray-50'}`}
+              >
+                No
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
