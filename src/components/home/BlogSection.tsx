@@ -2,6 +2,9 @@ import Link from 'next/link'
 import { ArrowRight, MessageCircle } from 'lucide-react'
 import { prisma } from '@/lib/prisma'
 
+const SITE_NAVY = '#10264A'
+const SITE_CYAN = '#08A9EE'
+
 async function getLatestPosts() {
   return prisma.blogPost.findMany({
     where: { status: 'PUBLISHED', homepagePosition: { not: null } },
@@ -25,13 +28,13 @@ export default async function BlogSection() {
         {/* Header */}
         <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginBottom: 36 }}>
           <div>
-            <p style={{ fontSize: 12, fontWeight: 700, color: '#f59e0b', letterSpacing: '0.1em', marginBottom: 6 }}>TRAVEL BLOG</p>
-            <h2 style={{ fontSize: 'clamp(1.5rem,3vw,2rem)', fontWeight: 800, color: '#0a1628', margin: 0, lineHeight: 1.2 }}>
-              Tips, Guides &amp; <span style={{ color: '#f59e0b' }}>Destinations</span>
+            <p style={{ fontSize: 12, fontWeight: 700, color: SITE_CYAN, letterSpacing: '0.1em', marginBottom: 6 }}>TRAVEL BLOG</p>
+            <h2 style={{ fontSize: 'clamp(1.5rem,3vw,2rem)', fontWeight: 800, color: SITE_NAVY, margin: 0, lineHeight: 1.2 }}>
+              Tips, Guides &amp; <span style={{ color: SITE_CYAN }}>Destinations</span>
             </h2>
           </div>
-          <Link href="/blog"
-            style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 13, fontWeight: 600, color: '#0a1628', textDecoration: 'none', border: '1px solid #e2e8f0', padding: '8px 16px', borderRadius: 8, background: '#fff' }}>
+          <Link href="/blog" className="btn btn-primary"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 13, fontWeight: 700, textDecoration: 'none', padding: '9px 16px', borderRadius: 8 }}>
             View All Posts <ArrowRight size={14} />
           </Link>
         </div>
@@ -60,12 +63,12 @@ export default async function BlogSection() {
                     : <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', fontSize: 48 }}>✍️</div>
                   }
                   {post.isFeatured && (
-                    <div style={{ position: 'absolute', top: 12, left: 12, background: '#f59e0b', color: '#0a1628', fontSize: 10, fontWeight: 700, padding: '3px 10px', borderRadius: 50 }}>
+                    <div style={{ position: 'absolute', top: 12, left: 12, background: SITE_CYAN, color: '#fff', fontSize: 10, fontWeight: 700, padding: '3px 10px', borderRadius: 50 }}>
                       FEATURED
                     </div>
                   )}
                   {post.showCategory && post.category && (
-                    <div style={{ position: 'absolute', top: 12, right: 12, background: 'rgba(10,22,40,0.75)', color: '#fff', fontSize: 10, fontWeight: 600, padding: '3px 10px', borderRadius: 50 }}>
+                    <div style={{ position: 'absolute', top: 12, right: 12, background: 'rgba(16,38,74,0.88)', color: '#fff', fontSize: 10, fontWeight: 600, padding: '3px 10px', borderRadius: 50 }}>
                       {post.category}
                     </div>
                   )}
@@ -73,7 +76,7 @@ export default async function BlogSection() {
 
                 {/* Content */}
                 <div style={{ padding: '20px 22px', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                  <h3 style={{ fontSize: 15, fontWeight: 700, color: '#0a1628', margin: '0 0 8px', lineHeight: 1.4 }}>
+                  <h3 style={{ fontSize: 15, fontWeight: 700, color: SITE_NAVY, margin: '0 0 8px', lineHeight: 1.4 }}>
                     {title}
                   </h3>
                   {cardDescription && (
@@ -82,12 +85,15 @@ export default async function BlogSection() {
                     </p>
                   )}
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginTop: 'auto', fontSize: 12, color: '#94a3b8' }}>
-                    <Link href={`/blog/${post.slug}`} style={{ display: 'inline-flex', alignItems: 'center', gap: 4, color: '#0a1628', fontWeight: 600, textDecoration: 'none' }}>
+                    <Link
+                      href={`/blog/${post.slug}`}
+                      className="text-[#08A9EE] hover:text-[#0284c7] transition-colors"
+                      style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontWeight: 700, textDecoration: 'none' }}>
                       Read More <ArrowRight size={11} />
                     </Link>
                   </div>
-                  <a href={whatsappUrl} target="_blank" rel="noopener noreferrer"
-                    style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginTop: 16, padding: '10px 12px', background: '#16a34a', color: '#fff', borderRadius: 8, fontSize: 13, fontWeight: 700, textDecoration: 'none' }}>
+                  <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="btn btn-green"
+                    style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginTop: 16, padding: '10px 12px', borderRadius: 8, fontSize: 13, fontWeight: 700, textDecoration: 'none' }}>
                     <MessageCircle size={15} /> Enquire on WhatsApp
                   </a>
                 </div>
