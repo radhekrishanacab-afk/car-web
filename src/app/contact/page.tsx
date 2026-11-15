@@ -6,7 +6,7 @@ import WhatsAppButton from '@/components/ui/WhatsAppButton'
 import ContactForm from '@/components/contact/ContactForm'
 import ContactCards from '@/components/contact/ContactCards'
 import Link from 'next/link'
-import { MessageCircle, Clock } from 'lucide-react'
+import { MessageCircle, Zap } from 'lucide-react'
 
 export const metadata: Metadata = {
   title: 'Contact Us — Radhe Krishna Cab | +91 97230 97832',
@@ -49,12 +49,12 @@ export default function ContactPage() {
         </section>
 
         {/* ── Main Content ── */}
-        <section className="py-14 sm:py-16 lg:py-20" style={{ background: '#ffffff' }}>
+        <section className="py-12 sm:py-16 lg:py-18" style={{ background: '#f8fafc' }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-14">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10">
 
               {/* ── Left: Contact Info ── */}
-              <div className="lg:col-span-2">
+              <div className="lg:col-span-5">
                 {/* Overline pill */}
                 <div style={{
                   display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
@@ -74,15 +74,14 @@ export default function ContactPage() {
                 </div>
 
                 <h2 style={{
-                  color: '#10264A', marginBottom: '0.875rem', lineHeight: 1.2,
+                  color: '#10264A', marginBottom: '0.75rem', lineHeight: 1.2,
                   fontSize: 'clamp(1.5rem, 3vw, 2rem)',
                 }}>
-                  We&apos;re Here<br />
-                  <span style={{ color: '#08A9EE' }}>to Help You</span>
+                  We&apos;re here to <span style={{ color: '#08A9EE' }}>help you</span>
                 </h2>
                 <p style={{
-                  color: '#6B7280', fontSize: '0.9375rem',
-                  lineHeight: 1.8, marginBottom: '1.75rem',
+                  color: '#64748b', fontSize: '0.9375rem',
+                  lineHeight: 1.7, marginBottom: '1.5rem',
                 }}>
                   Call us, WhatsApp us, or send an email.
                   Our team responds fast and confirms bookings quickly.
@@ -90,78 +89,50 @@ export default function ContactPage() {
 
                 <ContactCards />
 
-                {/* Business Hours Box */}
+                {/* Booking reassurance */}
                 <div style={{
-                  marginTop: '1.25rem',
+                  marginTop: '1rem',
                   display: 'flex', alignItems: 'center', gap: '0.75rem',
-                  background: '#F0F9FF',
-                  border: '1px solid #BAE6FD',
+                  background: '#ffffff',
+                  border: '1px solid #e2e8f0',
                   borderRadius: '0.875rem',
-                  padding: '0.875rem 1.125rem',
+                  padding: '0.875rem 1rem',
                 }}>
                   <div style={{
                     width: '2.5rem', height: '2.5rem', flexShrink: 0,
-                    background: '#E0F2FE',
-                    borderRadius: '0.625rem',
+                    background: '#EAF6FF',
+                    borderRadius: '0.75rem',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    color: '#0284C7',
                   }}>
-                    <Clock size={19} color="#08A9EE" />
+                    <Zap size={18} color="#08A9EE" />
                   </div>
                   <div>
-                    <div style={{ fontSize: '0.8125rem', fontWeight: 700, color: '#0369A1', lineHeight: 1.3 }}>
-                      Business Hours: 24/7 Available
+                    <div style={{ fontSize: '0.875rem', fontWeight: 700, color: '#10264A', lineHeight: 1.35 }}>
+                      Fast booking confirmation
                     </div>
-                    <div style={{ fontSize: '0.75rem', color: '#0284C7', marginTop: '1px' }}>
-                      Monday – Sunday: Open 24 Hours (Round the Clock)
+                    <div style={{ fontSize: '0.8125rem', color: '#64748b', marginTop: '2px', lineHeight: 1.5 }}>
+                      Most trips are confirmed within 5 minutes.
                     </div>
                   </div>
                 </div>
 
-                {/* Trust badge */}
-                <div style={{
-                  marginTop: '1rem',
-                  display: 'flex', alignItems: 'center', gap: '0.625rem',
-                  background: 'linear-gradient(135deg, #0f1e3d, #1a3a6b)',
-                  borderRadius: '0.875rem',
-                  padding: '0.875rem 1.125rem',
-                }}>
-                  <div style={{
-                    width: '2.5rem', height: '2.5rem', flexShrink: 0,
-                    background: 'rgba(8,169,238,0.15)',
-                    borderRadius: '0.625rem',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontSize: '1.125rem',
-                  }}>
-                    ⚡
-                  </div>
-                  <div>
-                    <div style={{ fontSize: '0.8125rem', fontWeight: 700, color: '#ffffff', lineHeight: 1.3 }}>
-                      Instant Confirmation
-                    </div>
-                    <div style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.55)', marginTop: '1px' }}>
-                      Most bookings confirmed within 5 minutes
-                    </div>
-                  </div>
-                </div>
               </div>
 
               {/* ── Right: Form ── */}
-              <div id="enquiry" className="lg:col-span-3">
+              <div id="enquiry" className="lg:col-span-7">
                 <div style={{
                   background: '#ffffff',
-                  borderRadius: '1.5rem',
-                  border: '1.5px solid #e5e7eb',
-                  boxShadow: '0 8px 48px rgba(16,38,74,0.10)',
+                  borderRadius: '1.25rem',
+                  border: '1px solid #e2e8f0',
+                  boxShadow: '0 12px 36px rgba(16,38,74,0.08)',
                   overflow: 'hidden',
                 }}>
-                  {/* Coloured top bar */}
                   <div style={{
                     height: '4px',
-                    background: 'linear-gradient(90deg, #08A9EE 0%, #10264A 100%)',
+                    background: '#08A9EE',
                   }} />
 
-                  <div className="p-5 sm:p-8 lg:p-10">
+                  <div className="p-5 sm:p-7 lg:p-8">
                     {/* Form header */}
                     <div style={{
                       display: 'flex', alignItems: 'flex-start', gap: '0.875rem',
@@ -181,9 +152,9 @@ export default function ContactPage() {
                       <div>
                         <span style={{
                           display: 'inline-block',
-                          fontSize: '0.6875rem', fontWeight: 700,
-                          color: '#08A9EE', letterSpacing: '0.12em',
-                          textTransform: 'uppercase', marginBottom: '0.2rem',
+                          fontSize: '0.75rem', fontWeight: 700,
+                          color: '#08A9EE', letterSpacing: '0.08em',
+                          textTransform: 'uppercase', marginBottom: '0.25rem',
                         }}>
                           Quick Enquiry
                         </span>
@@ -191,13 +162,13 @@ export default function ContactPage() {
                           color: '#10264A', fontSize: 'clamp(1.125rem, 3vw, 1.375rem)',
                           fontWeight: 800, lineHeight: 1.25, margin: 0,
                         }}>
-                          Send Us a Message
+                          Send a booking enquiry
                         </h2>
                         <p style={{
-                          fontSize: '0.8125rem', color: '#9CA3AF',
-                          lineHeight: 1.6, marginTop: '0.25rem',
+                          fontSize: '0.875rem', color: '#64748b',
+                          lineHeight: 1.6, marginTop: '0.3rem',
                         }}>
-                          We&apos;ll open WhatsApp with your message — just press Send there.
+                          Share your trip details and we&apos;ll help you choose the right cab.
                         </p>
                       </div>
                     </div>

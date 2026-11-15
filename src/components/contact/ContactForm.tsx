@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { z } from 'zod'
 import {
   MessageCircle, User, Phone, Mail,
-  AlignLeft, CheckCircle2, AlertCircle,
+  CheckCircle2, AlertCircle,
   MapPin, Calendar, LocateFixed, Loader2, Clock, Car, ChevronDown,
 } from 'lucide-react'
 
@@ -116,7 +116,7 @@ export default function ContactForm() {
   }
 
   /* ── Get current location → reverse geocode → fill field ── */
-  const useMyLocation = (field: 'pickup' | 'drop') => {
+  const handleUseMyLocation = (field: 'pickup' | 'drop') => {
     if (!navigator.geolocation) {
       alert('Location not supported in your browser.')
       return
@@ -192,6 +192,13 @@ export default function ContactForm() {
   }
 
   const today = new Date().toISOString().split('T')[0]
+  const labelStyle: React.CSSProperties = {
+    display: 'block',
+    fontSize: '0.8125rem',
+    fontWeight: 600,
+    color: '#10264A',
+    marginBottom: '0.4rem',
+  }
 
   /* ── Success screen ── */
   if (submitted) {
@@ -258,7 +265,7 @@ export default function ContactForm() {
         {/* Name + Phone */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
           <div>
-            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '0.35rem' }}>
+            <label style={labelStyle}>
               Your Name *
             </label>
             <div className={`contact-input-box ${errors.name ? 'has-error' : ''}`}>
@@ -271,7 +278,7 @@ export default function ContactForm() {
                 style={{
                   width: '100%', padding: '10px 12px 10px 36px',
                   background: 'transparent', border: 'none',
-                  fontSize: '0.875rem', color: '#0f172a', outline: 'none', fontWeight: 500,
+                  fontSize: '0.9375rem', color: '#10264A', outline: 'none', fontWeight: 500,
                 }}
               />
             </div>
@@ -283,7 +290,7 @@ export default function ContactForm() {
           </div>
 
           <div>
-            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '0.35rem' }}>
+            <label style={labelStyle}>
               Mobile Number *
             </label>
             <div className={`contact-input-box ${errors.phone ? 'has-error' : ''}`}>
@@ -297,7 +304,7 @@ export default function ContactForm() {
                 style={{
                   width: '100%', padding: '10px 12px 10px 36px',
                   background: 'transparent', border: 'none',
-                  fontSize: '0.875rem', color: '#0f172a', outline: 'none', fontWeight: 500,
+                  fontSize: '0.9375rem', color: '#10264A', outline: 'none', fontWeight: 500,
                 }}
               />
             </div>
@@ -312,25 +319,25 @@ export default function ContactForm() {
         {/* Pickup + Drop Location */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
           <div>
-            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '0.35rem' }}>
+            <label style={labelStyle}>
               Pickup Location *
             </label>
             <div className={`contact-input-box ${errors.pickup ? 'has-error' : ''}`}>
-              <MapPin size={15} color="#10b981" style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} />
+              <MapPin size={15} color="#08A9EE" style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} />
               <input
                 type="text"
                 value={form.pickup}
                 onChange={e => update('pickup', e.target.value)}
                 placeholder="City or area name"
                 style={{
-                  width: '100%', padding: '10px 96px 10px 36px',
+                  width: '100%', padding: '12px 96px 12px 36px',
                   background: 'transparent', border: 'none',
-                  fontSize: '0.875rem', color: '#0f172a', outline: 'none', fontWeight: 500,
+                  fontSize: '0.9375rem', color: '#10264A', outline: 'none', fontWeight: 500,
                 }}
               />
               <button
                 type="button"
-                onClick={() => useMyLocation('pickup')}
+                onClick={() => handleUseMyLocation('pickup')}
                 disabled={locating === 'pickup'}
                 title="Use current location"
                 style={{
@@ -361,25 +368,25 @@ export default function ContactForm() {
           </div>
 
           <div>
-            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '0.35rem' }}>
+            <label style={labelStyle}>
               Drop Location *
             </label>
             <div className={`contact-input-box ${errors.drop ? 'has-error' : ''}`}>
-              <MapPin size={15} color="#ef4444" style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} />
+              <MapPin size={15} color="#08A9EE" style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} />
               <input
                 type="text"
                 value={form.drop}
                 onChange={e => update('drop', e.target.value)}
                 placeholder="Destination city or area"
                 style={{
-                  width: '100%', padding: '10px 96px 10px 36px',
+                  width: '100%', padding: '12px 96px 12px 36px',
                   background: 'transparent', border: 'none',
-                  fontSize: '0.875rem', color: '#0f172a', outline: 'none', fontWeight: 500,
+                  fontSize: '0.9375rem', color: '#10264A', outline: 'none', fontWeight: 500,
                 }}
               />
               <button
                 type="button"
-                onClick={() => useMyLocation('drop')}
+                onClick={() => handleUseMyLocation('drop')}
                 disabled={locating === 'drop'}
                 title="Use current location"
                 style={{
@@ -413,7 +420,7 @@ export default function ContactForm() {
         {/* Travel Date + Travel Time */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
           <div>
-            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '0.35rem' }}>
+            <label style={labelStyle}>
               Travel Date *
             </label>
             <div className={`contact-input-box ${errors.date ? 'has-error' : ''}`}>
@@ -424,9 +431,9 @@ export default function ContactForm() {
                 value={form.date}
                 onChange={e => update('date', e.target.value)}
                 style={{
-                  width: '100%', padding: '10px 10px 10px 36px',
+                  width: '100%', padding: '12px 10px 12px 36px',
                   background: 'transparent', border: 'none',
-                  fontSize: '0.875rem', color: '#0f172a', outline: 'none', fontWeight: 500,
+                  fontSize: '0.9375rem', color: '#10264A', outline: 'none', fontWeight: 500,
                 }}
               />
             </div>
@@ -438,7 +445,7 @@ export default function ContactForm() {
           </div>
 
           <div>
-            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '0.35rem' }}>
+            <label style={labelStyle}>
               Pickup Time
             </label>
             <div className="contact-input-box">
@@ -448,9 +455,9 @@ export default function ContactForm() {
                 value={form.time}
                 onChange={e => update('time', e.target.value)}
                 style={{
-                  width: '100%', padding: '10px 10px 10px 36px',
+                  width: '100%', padding: '12px 10px 12px 36px',
                   background: 'transparent', border: 'none',
-                  fontSize: '0.875rem', color: '#0f172a', outline: 'none', fontWeight: 500,
+                  fontSize: '0.9375rem', color: '#10264A', outline: 'none', fontWeight: 500,
                 }}
               />
             </div>
@@ -460,7 +467,7 @@ export default function ContactForm() {
         {/* Vehicle Selection + Email */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
           <div>
-            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '0.35rem' }}>
+            <label style={labelStyle}>
               Select Vehicle
             </label>
             <div className="contact-input-box" style={{ position: 'relative' }}>
@@ -469,9 +476,9 @@ export default function ContactForm() {
                 value={form.vehicle}
                 onChange={e => update('vehicle', e.target.value)}
                 style={{
-                  width: '100%', padding: '11px 34px 11px 36px',
+                  width: '100%', padding: '12px 34px 12px 36px',
                   background: 'transparent', border: 'none',
-                  fontSize: '0.875rem', color: '#0f172a', outline: 'none',
+                  fontSize: '0.9375rem', color: '#10264A', outline: 'none',
                   fontWeight: 600, cursor: 'pointer', appearance: 'none',
                 }}
               >
@@ -484,7 +491,7 @@ export default function ContactForm() {
           </div>
 
           <div>
-            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '0.35rem' }}>
+            <label style={labelStyle}>
               Email Address (Optional)
             </label>
             <div className={`contact-input-box ${errors.email ? 'has-error' : ''}`}>
@@ -497,7 +504,7 @@ export default function ContactForm() {
                 style={{
                   width: '100%', padding: '10px 12px 10px 36px',
                   background: 'transparent', border: 'none',
-                  fontSize: '0.875rem', color: '#0f172a', outline: 'none', fontWeight: 500,
+                  fontSize: '0.9375rem', color: '#10264A', outline: 'none', fontWeight: 500,
                 }}
               />
             </div>
@@ -511,7 +518,7 @@ export default function ContactForm() {
 
         {/* Message / Special Requests */}
         <div style={{ marginBottom: '1.25rem' }}>
-          <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '0.35rem' }}>
+          <label style={labelStyle}>
             Message / Special Requests
           </label>
           <div className="contact-input-box">
@@ -523,7 +530,7 @@ export default function ContactForm() {
               style={{
                 width: '100%', padding: '10px 12px',
                 background: 'transparent', border: 'none',
-                fontSize: '0.875rem', color: '#0f172a', outline: 'none', resize: 'none',
+                fontSize: '0.9375rem', color: '#10264A', outline: 'none', resize: 'none',
                 fontFamily: 'inherit',
               }}
             />
@@ -542,7 +549,7 @@ export default function ContactForm() {
             color: '#fff',
             border: 'none',
             borderRadius: '10px',
-            fontSize: '1rem',
+            fontSize: '0.9375rem',
             fontWeight: 700,
             cursor: loading ? 'not-allowed' : 'pointer',
             boxShadow: '0 8px 24px -4px rgba(8, 169, 238, 0.45)',

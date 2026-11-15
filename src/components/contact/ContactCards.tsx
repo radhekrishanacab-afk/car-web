@@ -9,9 +9,9 @@ const contactItems = [
     value: '+91 97230 97832',
     sub: 'Available 24 × 7',
     href: 'tel:+919723097832',
-    gradient: 'linear-gradient(135deg, #0f1e3d 0%, #1a3a6b 100%)',
+    gradient: 'linear-gradient(135deg, #EAF6FF 0%, #dbeeff 100%)',
     iconColor: '#08A9EE',
-    glowColor: 'rgba(8,169,238,0.18)',
+    glowColor: 'rgba(8,169,238,0.12)',
     badge: '24/7',
   },
   {
@@ -20,9 +20,9 @@ const contactItems = [
     value: '+91 97230 97832',
     sub: 'Tap to chat instantly',
     href: 'https://wa.me/919723097832',
-    gradient: 'linear-gradient(135deg, #15803d 0%, #22c55e 100%)',
-    iconColor: '#ffffff',
-    glowColor: 'rgba(34,197,94,0.18)',
+    gradient: 'linear-gradient(135deg, #EAF6FF 0%, #dbeeff 100%)',
+    iconColor: '#08A9EE',
+    glowColor: 'rgba(8,169,238,0.12)',
     badge: 'Chat',
   },
   {
@@ -31,9 +31,9 @@ const contactItems = [
     value: 'info@radhekrishanacab.com',
     sub: 'We reply within 24 hrs',
     href: 'mailto:info@radhekrishanacab.com',
-    gradient: 'linear-gradient(135deg, #0369a1 0%, #08A9EE 100%)',
-    iconColor: '#ffffff',
-    glowColor: 'rgba(8,169,238,0.18)',
+    gradient: 'linear-gradient(135deg, #EAF6FF 0%, #dbeeff 100%)',
+    iconColor: '#08A9EE',
+    glowColor: 'rgba(8,169,238,0.12)',
     badge: null,
   },
   {
@@ -42,9 +42,9 @@ const contactItems = [
     value: 'Gujarat & All India',
     sub: '250+ cities covered',
     href: null,
-    gradient: 'linear-gradient(135deg, #92400e 0%, #d97706 100%)',
-    iconColor: '#ffffff',
-    glowColor: 'rgba(217,119,6,0.15)',
+    gradient: 'linear-gradient(135deg, #EAF6FF 0%, #dbeeff 100%)',
+    iconColor: '#08A9EE',
+    glowColor: 'rgba(8,169,238,0.12)',
     badge: '250+',
   },
   {
@@ -53,9 +53,9 @@ const contactItems = [
     value: 'Open 24 Hours × 7 Days',
     sub: 'Round the clock service (24/7/365)',
     href: null,
-    gradient: 'linear-gradient(135deg, #0369a1 0%, #08A9EE 100%)',
-    iconColor: '#ffffff',
-    glowColor: 'rgba(8,169,238,0.2)',
+    gradient: 'linear-gradient(135deg, #EAF6FF 0%, #dbeeff 100%)',
+    iconColor: '#08A9EE',
+    glowColor: 'rgba(8,169,238,0.12)',
     badge: '24/7 Open',
   },
 ]
@@ -70,11 +70,11 @@ export default function ContactCards() {
           <>
             {/* Icon box */}
             <div style={{
-              width: '3rem', height: '3rem', flexShrink: 0,
-              borderRadius: '0.875rem',
+              width: '2.75rem', height: '2.75rem', flexShrink: 0,
+              borderRadius: '0.75rem',
               background: item.gradient,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              boxShadow: `0 4px 14px ${item.glowColor}`,
+              border: '1px solid #dbeeff',
             }}>
               <Icon size={19} color={item.iconColor} strokeWidth={2} />
             </div>
@@ -82,8 +82,8 @@ export default function ContactCards() {
             {/* Text */}
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{
-                fontSize: '0.6875rem', fontWeight: 600,
-                color: '#9CA3AF', letterSpacing: '0.08em',
+                fontSize: '0.75rem', fontWeight: 600,
+                color: '#64748b', letterSpacing: '0.04em',
                 textTransform: 'uppercase', marginBottom: '2px',
               }}>
                 {item.label}
@@ -95,7 +95,7 @@ export default function ContactCards() {
               }}>
                 {item.value}
               </div>
-              <div style={{ fontSize: '0.75rem', color: '#9CA3AF', marginTop: '2px' }}>
+              <div style={{ fontSize: '0.8125rem', color: '#64748b', marginTop: '3px', lineHeight: 1.4 }}>
                 {item.sub}
               </div>
             </div>
@@ -114,12 +114,13 @@ export default function ContactCards() {
             ) : item.badge ? (
               <div style={{
                 flexShrink: 0,
-                background: 'linear-gradient(135deg, #EAF6FF, #dbeeff)',
+                background: '#EAF6FF',
                 color: '#0369a1',
                 fontSize: '0.6875rem', fontWeight: 700,
                 padding: '0.25rem 0.625rem',
                 borderRadius: '999px',
                 letterSpacing: '0.04em',
+                border: '1px solid #dbeeff',
               }}>
                 {item.badge}
               </div>
@@ -130,9 +131,9 @@ export default function ContactCards() {
         const base: React.CSSProperties = {
           display: 'flex', alignItems: 'center', gap: '0.875rem',
           background: '#ffffff',
-          border: '1.5px solid #f1f5f9',
-          borderRadius: '1rem',
-          padding: '0.9rem 1rem',
+          border: '1px solid #e2e8f0',
+          borderRadius: '0.875rem',
+          padding: '0.8rem 0.9rem',
           textDecoration: 'none',
           transition: 'border-color 0.18s ease, box-shadow 0.18s ease, transform 0.15s ease',
         }
@@ -146,13 +147,13 @@ export default function ContactCards() {
             style={base}
             onMouseEnter={e => {
               const el = e.currentTarget as HTMLAnchorElement
-              el.style.borderColor = 'rgba(8,169,238,0.35)'
+              el.style.borderColor = 'rgba(8,169,238,0.5)'
               el.style.boxShadow = `0 6px 24px ${item.glowColor}`
               el.style.transform = 'translateY(-2px)'
             }}
             onMouseLeave={e => {
               const el = e.currentTarget as HTMLAnchorElement
-              el.style.borderColor = '#f1f5f9'
+              el.style.borderColor = '#e2e8f0'
               el.style.boxShadow = 'none'
               el.style.transform = 'translateY(0)'
             }}
