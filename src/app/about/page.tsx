@@ -125,7 +125,7 @@ export default function AboutPage() {
               </div>
 
               {/* Content */}
-              <div className="text-center lg:text-left">
+              <div className="text-center">
                 <span className="section-overline">OUR STORY</span>
                 <h2 style={{ color: '#10264A', marginTop: '0.5rem', marginBottom: '1.125rem', lineHeight: 1.25 }}>
                   Your Trusted Travel<br />
@@ -134,11 +134,13 @@ export default function AboutPage() {
                 <p style={{
                   display: 'block',
                   width: '100%',
+                  boxSizing: 'border-box',
                   color: '#6B7280',
                   fontSize: '1rem',
                   lineHeight: 1.75,
                   margin: '0 auto 1.5rem',
-                  maxWidth: '36rem',
+                  paddingTop: '0.5rem',
+                  maxWidth: '32rem',
                   textAlign: 'center',
                 }}>
                   Radhe Krishna Cab is a professional taxi and outstation cab service
@@ -150,7 +152,7 @@ export default function AboutPage() {
                 </p>
 
                 {/* Checklist */}
-                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8 max-w-md mx-auto lg:mx-0 text-left list-none p-0">
+                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8 max-w-lg mx-auto text-left list-none p-0">
                   {features.map((f) => (
                     <li key={f} className="flex items-start gap-2">
                       <CheckCircle2 size={16} color="#08A9EE" className="shrink-0 mt-0.5" />
@@ -159,7 +161,7 @@ export default function AboutPage() {
                   ))}
                 </ul>
 
-                <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center lg:justify-start gap-3 max-w-md mx-auto lg:mx-0">
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 max-w-lg mx-auto">
                   <a href={`tel:${rawPhone}`} className="btn btn-primary">
                     <Phone size={15} /> Call Now: {PHONE}
                   </a>

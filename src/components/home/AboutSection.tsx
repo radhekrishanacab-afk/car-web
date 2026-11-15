@@ -39,7 +39,7 @@ export default function AboutSection() {
           </div>
 
           {/* ── Content Column ── */}
-          <div className="order-1 lg:order-2 text-center lg:text-left">
+          <div className="order-1 lg:order-2 text-center">
             <span className="section-overline">ABOUT US</span>
 
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#10264A] leading-tight mt-2 mb-4">
@@ -52,8 +52,10 @@ export default function AboutSection() {
               style={{
                 display: 'block',
                 width: '100%',
-                maxWidth: '36rem',
+                maxWidth: '32rem',
                 margin: '0 auto 1.5rem',
+                paddingTop: '0.5rem',
+                boxSizing: 'border-box',
                 textAlign: 'center',
                 lineHeight: 1.75,
               }}
@@ -65,7 +67,7 @@ export default function AboutSection() {
             </p>
 
             {/* Feature Checklist — 2 Column */}
-            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8 p-0 list-none max-w-lg mx-auto lg:mx-0 text-left">
+            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8 p-0 list-none max-w-lg mx-auto text-left">
               {features.map((f) => (
                 <li key={f} className="flex items-start gap-2.5">
                   <CheckCircle2 size={16} className="text-[#08A9EE] shrink-0 mt-0.5" />
@@ -75,7 +77,7 @@ export default function AboutSection() {
             </ul>
 
             {/* Buttons */}
-            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3">
+            <div className="flex flex-wrap items-center justify-center gap-3">
               <a href="tel:+919723097832" className="btn btn-primary">
                 <Phone size={15} />
                 <span>Call Now</span>
