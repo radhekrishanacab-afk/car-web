@@ -64,7 +64,7 @@ function MapController({ bounds, center, zoom }: {
 /* ── Individual step panels ───────────────────────────────────────────────── */
 function StepBadge({ n, active, done }: { n: number; active: boolean; done: boolean }) {
   return (
-    <div style={{ width: 24, height: 24, borderRadius: '50%', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 700, background: done ? '#22c55e' : active ? '#f59e0b' : '#e2e8f0', color: done || active ? '#fff' : '#64748b' }}>
+    <div style={{ width: 24, height: 24, borderRadius: '50%', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 700, background: done ? '#22c55e' : active ? '#08a9ee' : '#e2e8f0', color: done || active ? '#fff' : '#64748b' }}>
       {done ? '✓' : n}
     </div>
   )
@@ -212,9 +212,9 @@ export default function IndiaInteractiveMap({ places, states, selectedStateSlug,
     const isSelected = slug === selState?.slug
     const isHovered  = slug === hoveredState
     return {
-      fillColor: isSelected ? '#f59e0b' : isHovered ? '#3b82f6' : count > 0 ? '#0a1628' : '#94a3b8',
+      fillColor: isSelected ? '#08a9ee' : isHovered ? '#3b82f6' : count > 0 ? '#0a1628' : '#94a3b8',
       fillOpacity: isSelected ? 0.85 : isHovered ? 0.7 : count > 0 ? 0.45 : 0.15,
-      color: isSelected ? '#d97706' : '#ffffff',
+      color: isSelected ? '#0798d4' : '#ffffff',
       weight: isSelected ? 2.5 : isHovered ? 2 : 0.7,
     }
   }, [selState, hoveredState, places])
@@ -228,9 +228,9 @@ export default function IndiaInteractiveMap({ places, states, selectedStateSlug,
     const isHovered  = slug === hoveredDistrict
     const hasPlaces  = places.some(p => p.district?.slug === slug)
     return {
-      fillColor: isSelected ? '#f59e0b' : isHovered ? '#3b82f6' : hasPlaces ? '#10264a' : '#94a3b8',
+      fillColor: isSelected ? '#08a9ee' : isHovered ? '#3b82f6' : hasPlaces ? '#10264a' : '#94a3b8',
       fillOpacity: isSelected ? 0.85 : isHovered ? 0.7 : hasPlaces ? 0.5 : 0.15,
-      color: isSelected ? '#d97706' : '#ffffff',
+      color: isSelected ? '#0798d4' : '#ffffff',
       weight: isSelected ? 2.5 : 1,
     }
   }, [selDistrictSlug, hoveredDistrict, places])
@@ -296,7 +296,7 @@ export default function IndiaInteractiveMap({ places, states, selectedStateSlug,
   const L = require('leaflet')
 
   const makeMarkerIcon = (emoji: string, active = false) => L.divIcon({
-    html: `<div style="background:${active?'#f59e0b':'#0a1628'};color:${active?'#0a1628':'#f59e0b'};width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;border:2px solid ${active?'#d97706':'#f59e0b'};box-shadow:0 2px 8px rgba(0,0,0,.3)">${emoji}</div>`,
+    html: `<div style="background:${active?'#08a9ee':'#0a1628'};color:${active?'#10264a':'#08a9ee'};width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;border:2px solid ${active?'#0798d4':'#08a9ee'};box-shadow:0 2px 8px rgba(0,0,0,.3)">${emoji}</div>`,
     iconSize: [30,30], iconAnchor: [15,15], popupAnchor: [0,-18], className: '',
   })
 
@@ -403,7 +403,7 @@ export default function IndiaInteractiveMap({ places, states, selectedStateSlug,
                 onMouseEnter={e => (e.currentTarget.style.background = '#f8fafc')}
                 onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
               >
-                <div style={{ width: 8, height: 8, borderRadius: '50%', background: s.placeCount > 0 ? '#f59e0b' : '#e2e8f0', flexShrink: 0 }} />
+                <div style={{ width: 8, height: 8, borderRadius: '50%', background: s.placeCount > 0 ? '#08a9ee' : '#e2e8f0', flexShrink: 0 }} />
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ fontSize: 12, fontWeight: 600, color: '#0a1628', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{s.name}</div>
                   {s.placeCount > 0 && <div style={{ fontSize: 10, color: '#94a3b8' }}>{s.placeCount} place{s.placeCount>1?'s':''}</div>}
@@ -419,11 +419,11 @@ export default function IndiaInteractiveMap({ places, states, selectedStateSlug,
                     const count = places.filter(p => p.district?.slug === d.slug).length
                     return (
                       <button key={d.slug} onClick={() => handleDistrictSelect(d.slug, d.name)}
-                        style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 8, padding: '9px 14px', background: selDistrictSlug === d.slug ? '#fffbeb' : 'transparent', border: 'none', borderBottom: '1px solid #f8fafc', cursor: 'pointer', textAlign: 'left' }}
+                        style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 8, padding: '9px 14px', background: selDistrictSlug === d.slug ? '#eaf6ff' : 'transparent', border: 'none', borderBottom: '1px solid #f8fafc', cursor: 'pointer', textAlign: 'left' }}
                         onMouseEnter={e => { if (selDistrictSlug !== d.slug) e.currentTarget.style.background = '#f8fafc' }}
                         onMouseLeave={e => { if (selDistrictSlug !== d.slug) e.currentTarget.style.background = 'transparent' }}
                       >
-                        <MapPin size={12} style={{ color: '#f59e0b', flexShrink: 0 }} />
+                        <MapPin size={12} style={{ color: '#08a9ee', flexShrink: 0 }} />
                         <div style={{ flex: 1, minWidth: 0 }}>
                           <div style={{ fontSize: 12, fontWeight: 600, color: '#0a1628', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{d.name}</div>
                           {count > 0 && <div style={{ fontSize: 10, color: '#94a3b8' }}>{count} place{count>1?'s':''}</div>}
@@ -534,7 +534,7 @@ export default function IndiaInteractiveMap({ places, states, selectedStateSlug,
                     const n = (f.properties as Record<string,string>).ST_NM ?? (f.properties as Record<string,string>).NAME_1 ?? ''
                     return nameToSlug(n) === selState.slug
                   }) as unknown as GeoJSON.FeatureCollection}
-                style={() => ({ fillColor: '#fef3c7', fillOpacity: 0.3, color: '#f59e0b', weight: 2 })}
+                style={() => ({ fillColor: '#eaf6ff', fillOpacity: 0.45, color: '#08a9ee', weight: 2 })}
               />
             )}
 

@@ -23,9 +23,9 @@ const reasons = [
     title: 'Comfortable Vehicles',
     description:
       'Travel in spotless, premium cars — Sedan, SUV, or Innova Crysta — maintained for a smooth, relaxing ride.',
-    gradient: 'linear-gradient(135deg, #FFF7ED 0%, #fed7aa 100%)',
-    iconColor: '#D97706',
-    ring: 'rgba(217,119,6,0.18)',
+    gradient: 'linear-gradient(135deg, #EAF6FF 0%, #c8e8fa 100%)',
+    iconColor: '#08A9EE',
+    ring: 'rgba(8,169,238,0.18)',
   },
   {
     icon: Zap,

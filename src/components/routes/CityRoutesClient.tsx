@@ -40,7 +40,7 @@ export default function CityRoutesClient({ routes }: { routes: RouteRow[] }) {
             </span>
             <span style={{ fontSize: 14, fontWeight: 500, color: '#0f172a', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
               {route.originName}
-              <span style={{ color: '#f59e0b', fontWeight: 700, margin: '0 6px' }}>→</span>
+              <span style={{ color: '#08a9ee', fontWeight: 700, margin: '0 6px' }}>→</span>
               {route.destinationName}
             </span>
           </div>

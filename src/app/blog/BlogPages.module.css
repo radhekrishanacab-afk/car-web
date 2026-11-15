@@ -42,10 +42,18 @@
 .articleTitleInner h1 {
   margin: 0;
   color: inherit;
-  font-size: clamp(2rem, 4.5vw, 3.35rem);
   font-weight: 800;
   letter-spacing: -0.035em;
   line-height: 1.12;
+}
+
+.listHero h1 {
+  font-size: clamp(1.9rem, 4vw, 2.75rem);
+}
+
+.articleHeroContent h1,
+.articleTitleInner h1 {
+  font-size: clamp(1.8rem, 3.25vw, 2.55rem);
 }
 
 .listHeroDescription {
@@ -778,10 +786,13 @@
     padding: 52px 0 36px;
   }
 
-  .listHero h1,
+  .listHero h1 {
+    font-size: clamp(1.8rem, 8vw, 2.3rem);
+  }
+
   .articleHeroContent h1,
   .articleTitleInner h1 {
-    font-size: clamp(2rem, 9vw, 2.8rem);
+    font-size: clamp(1.7rem, 7vw, 2.2rem);
   }
 
   .articleTitleInner {

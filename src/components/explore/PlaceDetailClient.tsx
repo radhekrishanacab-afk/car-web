@@ -55,7 +55,7 @@ export default function PlaceDetailClient({ place, stateSlug }: { place: Place; 
               <MapPin size={13} />{place.cityName ? `${place.cityName}, ` : ''}{place.district ? `${place.district.name}, ` : ''}{place.state.name}
             </span>
             {place.category && (
-              <span style={{ background: 'rgba(245,158,11,0.2)', color: '#f59e0b', fontSize: 11, fontWeight: 600, padding: '3px 10px', borderRadius: 50 }}>
+              <span style={{ background: 'rgba(8,169,238,0.18)', color: '#72cdf5', fontSize: 11, fontWeight: 600, padding: '3px 10px', borderRadius: 50 }}>
                 {place.category.icon} {place.category.name}
               </span>
             )}

@@ -70,7 +70,7 @@ export default function ExploreIndiaClient({ places, total, page, pages, states,
           </nav>
 
           <h1 style={{ fontSize: 'clamp(1.75rem,4vw,2.75rem)', fontWeight: 800, margin: '0 0 10px', lineHeight: 1.2 }}>
-            Explore Tourist <span style={{ color: '#f59e0b' }}>Places</span>
+            Explore Tourist <span style={{ color: '#08a9ee' }}>Places</span>
           </h1>
           <p style={{ fontSize: 15, color: '#94a3b8', margin: '0 0 24px', lineHeight: 1.7 }}>
             Discover amazing destinations across India. Book a taxi with Radhe Krishna Cab for your trip.
@@ -83,7 +83,7 @@ export default function ExploreIndiaClient({ places, total, page, pages, states,
               <input type="text" value={search} onChange={e => setSearch(e.target.value)} placeholder="Search destinations, cities…"
                 style={{ width: '100%', padding: '12px 12px 12px 34px', borderRadius: '9px 0 0 9px', border: 'none', fontSize: 13, outline: 'none', boxSizing: 'border-box', color: '#0f172a' }} />
             </div>
-            <button type="submit" style={{ background: '#f59e0b', color: '#0a1628', fontWeight: 700, fontSize: 13, padding: '0 20px', borderRadius: '0 9px 9px 0', border: 'none', cursor: 'pointer' }}>Search</button>
+            <button type="submit" style={{ background: '#08a9ee', color: '#ffffff', fontWeight: 700, fontSize: 13, padding: '0 20px', borderRadius: '0 9px 9px 0', border: 'none', cursor: 'pointer' }}>Search</button>
           </form>
         </div>
       </div>

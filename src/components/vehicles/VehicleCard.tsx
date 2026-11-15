@@ -31,7 +31,7 @@ export default function VehicleCard({
             </div>
           </div>
         )}
-        <div className="absolute top-3 right-3 bg-[#f59e0b] text-[#0a1628] text-xs font-bold px-2 py-1 rounded">
+        <div className="absolute top-3 right-3 bg-[#22c55e] text-white text-xs font-bold px-2 py-1 rounded">
           Available
         </div>
       </div>
@@ -56,7 +56,7 @@ export default function VehicleCard({
             </div>
             <div className="text-xs text-gray-500">Min. ₹{Number(minimumFare).toFixed(0)}</div>
           </div>
-          <span className="text-xs text-[#f59e0b] font-medium bg-amber-50 px-2 py-1 rounded">
+          <span className="text-xs text-[#0798d4] font-medium bg-[#EAF6FF] px-2 py-1 rounded">
             Enquire for fare
           </span>
         </div>

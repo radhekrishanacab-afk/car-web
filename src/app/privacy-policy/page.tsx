@@ -16,7 +16,7 @@ export default function PrivacyPolicyPage() {
         <div className="hero-gradient text-white py-14">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <nav className="text-sm text-gray-400 mb-4" aria-label="Breadcrumb">
-              <Link href="/" className="hover:text-[#fbbf24]">Home</Link>
+              <Link href="/" className="hover:text-[#08A9EE]">Home</Link>
               <span className="mx-2">/</span>
               <span className="text-white">Privacy Policy</span>
             </nav>

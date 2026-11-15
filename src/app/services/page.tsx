@@ -255,7 +255,7 @@ export default function ServicesPage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div style={{ background: 'linear-gradient(135deg, #0a1628 0%, #1a3a6b 100%)', borderRadius: '1.5rem', padding: '3rem 2.5rem', display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '2rem' }}>
               <div>
-                <span style={{ fontSize: '0.6875rem', fontWeight: 700, color: '#f59e0b', letterSpacing: '0.15em', textTransform: 'uppercase' as const, display: 'block', marginBottom: '0.5rem' }}>
+                <span style={{ fontSize: '0.6875rem', fontWeight: 700, color: '#08a9ee', letterSpacing: '0.15em', textTransform: 'uppercase' as const, display: 'block', marginBottom: '0.5rem' }}>
                   🗺️ Explore Incredible India
                 </span>
                 <h3 style={{ fontSize: 'clamp(1.25rem, 2.5vw, 1.75rem)', fontWeight: 800, color: '#ffffff', margin: '0 0 0.75rem', lineHeight: 1.25 }}>
@@ -266,7 +266,7 @@ export default function ServicesPage() {
                 </p>
               </div>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.875rem', flexShrink: 0 }}>
-                <Link href="/routes" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: '#f59e0b', color: '#0a1628', fontWeight: 700, fontSize: '0.9375rem', padding: '0.875rem 1.75rem', borderRadius: '50px', textDecoration: 'none' }}>
+                <Link href="/routes" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: '#08a9ee', color: '#ffffff', fontWeight: 700, fontSize: '0.9375rem', padding: '0.875rem 1.75rem', borderRadius: '50px', textDecoration: 'none' }}>
                   <MapPin size={16} /> Explore All Routes
                 </Link>
                 <a href={`https://wa.me/${WA}?text=${encodeURIComponent('Hello! I want to plan a tourist trip across India. Please share taxi options.')}`}

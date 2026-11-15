@@ -17,8 +17,8 @@ const services = [
     description:
       'Plan a comfortable round trip with the driver waiting at your destination. Best for outstation visits and day tours.',
     href: '/services#round-trip',
-    color: 'bg-amber-50 text-amber-600',
-    border: 'hover:border-amber-300/60',
+    color: 'bg-[#EAF6FF] text-[#08A9EE]',
+    border: 'hover:border-[#08A9EE]/40',
   },
   {
     icon: Plane,

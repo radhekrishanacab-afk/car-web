@@ -30,7 +30,7 @@ export default function SinglePlaceMap({ lat, lng, name, icon }: Props) {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const L = require('leaflet')
   const customIcon = L.divIcon({
-    html: `<div style="background:#0a1628;color:#f59e0b;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;border:2px solid #f59e0b;box-shadow:0 2px 8px rgba(0,0,0,.35)">${icon}</div>`,
+    html: `<div style="background:#0a1628;color:#08a9ee;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;border:2px solid #08a9ee;box-shadow:0 2px 8px rgba(0,0,0,.35)">${icon}</div>`,
     iconSize: [32, 32], iconAnchor: [16, 16], popupAnchor: [0, -18], className: '',
   })
 
