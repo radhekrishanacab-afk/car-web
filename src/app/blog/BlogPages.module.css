@@ -42,9 +42,9 @@
 .articleTitleInner h1 {
   margin: 0;
   color: inherit;
-  font-size: clamp(2.1rem, 4.5vw, 3.35rem);
+  font-size: clamp(2rem, 4.5vw, 3.35rem);
   font-weight: 800;
-  letter-spacing: -0.045em;
+  letter-spacing: -0.035em;
   line-height: 1.12;
 }
 
@@ -114,6 +114,16 @@
 .relatedLink:hover .relatedCard {
   transform: translateY(-4px);
   box-shadow: 0 18px 42px rgba(16, 38, 74, 0.13);
+}
+
+.featuredLink:focus-visible,
+.postLink:focus-visible,
+.relatedLink:focus-visible,
+.allPostsLink:focus-visible,
+.backLink:focus-visible,
+.whatsappButton:focus-visible {
+  outline: 3px solid rgba(8, 169, 238, 0.55);
+  outline-offset: 4px;
 }
 
 .featuredImage,
@@ -337,8 +347,6 @@
 .articleHeroContent h1,
 .articleTitleInner h1 {
   max-width: 940px;
-  font-size: clamp(2.3rem, 5vw, 3.75rem);
-  line-height: 1.13;
 }
 
 .authorLine {
@@ -433,6 +441,17 @@
   line-height: inherit;
 }
 
+.articleBody :where(h1, h2, h3, h4, h5, h6) {
+  color: var(--blog-navy);
+}
+
+.articleBody h1 {
+  margin: 1.8em 0 0.65em;
+  font-size: clamp(1.75rem, 3.2vw, 2.25rem);
+  font-weight: 800;
+  line-height: 1.25;
+}
+
 .articleBody h2 {
   margin: 1.8em 0 0.65em;
   color: var(--blog-navy);
@@ -447,6 +466,26 @@
   font-size: clamp(1.2rem, 2.2vw, 1.5rem);
   font-weight: 750;
   line-height: 1.35;
+}
+
+.articleBody h4,
+.articleBody h5,
+.articleBody h6 {
+  margin: 1.5em 0 0.55em;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.articleBody h4 {
+  font-size: 1.125rem;
+}
+
+.articleBody h5 {
+  font-size: 1rem;
+}
+
+.articleBody h6 {
+  font-size: 0.875rem;
 }
 
 .articleBody ul,
@@ -632,7 +671,7 @@
   display: -webkit-box;
   overflow: hidden;
   margin: 0 0 18px;
-  color: #10264a;
+  color: var(--blog-navy);
   font-size: 1.05rem;
   font-weight: 750;
   line-height: 1.45;
@@ -675,10 +714,6 @@
 @media (max-width: 640px) {
   .listHero {
     padding: 48px 20px 44px;
-  }
-
-  .listHero h1 {
-    font-size: clamp(1.9rem, 9vw, 2.6rem);
   }
 
   .listContent,
@@ -743,6 +778,7 @@
     padding: 52px 0 36px;
   }
 
+  .listHero h1,
   .articleHeroContent h1,
   .articleTitleInner h1 {
     font-size: clamp(2rem, 9vw, 2.8rem);
