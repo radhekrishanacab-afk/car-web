@@ -21,7 +21,6 @@ export interface VehicleData {
   category: 'sedan' | 'suv' | 'traveller'
   categoryLabel: string
   luggage: string
-  tagline: string
   desc: string
   image: string
   features: string[]
@@ -38,7 +37,6 @@ export const FLEET_VEHICLES: VehicleData[] = [
     category: 'sedan',
     categoryLabel: 'Sedan (4+1)',
     luggage: '2 Large + 1 Small Bag',
-    tagline: 'Economical, Smooth & Comfortable Compact Sedan',
     desc: 'India’s most trusted compact sedan. Outstanding mileage, smooth ride, and great comfort for city rides & outstation journeys.',
     image: '/images/vehicles/fleet-1-swift-desire.png',
     features: ['Best fuel economy for intercity trips', 'Generous boot luggage space', 'Ideal for individuals & small families'],
@@ -53,7 +51,6 @@ export const FLEET_VEHICLES: VehicleData[] = [
     category: 'sedan',
     categoryLabel: 'Sedan (4+1)',
     luggage: '2 Large + 2 Small Bags',
-    tagline: 'Executive Styling, Plush Legroom & Premium Comfort',
     desc: 'Modern and stylish sedan with generous boot space and plush legroom. Ideal for families and business travelers.',
     image: '/images/vehicles/fleet-2-hyundai-aura.png',
     features: ['Plush dual-tone spacious cabin', 'Deep boot capacity for airport luggage', 'Ultra quiet highway cruising'],
@@ -68,7 +65,6 @@ export const FLEET_VEHICLES: VehicleData[] = [
     category: 'suv',
     categoryLabel: 'MUV / SUV (6+1)',
     luggage: '3 Large Bags + Luggage Carrier',
-    tagline: 'India’s Favorite 7-Seater Family MUV',
     desc: 'The best-value 7-seater MPV with flexible seating, ample boot space, and smooth ride for family vacations and airport trips.',
     image: '/images/vehicles/fleet-3-maruti-suzuki-ertiga.png',
     features: ['Flexible 3-row family seating', 'Smooth ride on state highways', 'Ample boot space for holiday bags'],
@@ -83,7 +79,6 @@ export const FLEET_VEHICLES: VehicleData[] = [
     category: 'suv',
     categoryLabel: 'MUV / SUV (6+1)',
     luggage: '3 Large Bags',
-    tagline: 'Next-Gen Recreational Vehicle with Premium Comfort',
     desc: 'Next-gen recreational vehicle with comfortable seats and advanced safety features for long highway journeys.',
     image: '/images/vehicles/fleet-4-kia-carens.png',
     features: ['Executive captain comfort seating', 'Advanced highway safety suspension', 'Spacious headroom and legroom in all rows'],
@@ -98,7 +93,6 @@ export const FLEET_VEHICLES: VehicleData[] = [
     category: 'suv',
     categoryLabel: 'MUV / SUV (6+1)',
     luggage: '4 Large Bags',
-    tagline: 'Undisputed Highway King with Plush Captain Seats',
     desc: 'The undisputed king of Indian highways. Superior comfort, plush captain seats, and exceptional highway stability.',
     image: '/images/vehicles/fleet-5-toyota-innova-crysta.png',
     features: ['Supreme highway stability & safety', 'VIP plush captain seats', 'Best-in-class comfort for long distances'],
@@ -113,7 +107,6 @@ export const FLEET_VEHICLES: VehicleData[] = [
     category: 'traveller',
     categoryLabel: 'Van / Traveller',
     luggage: '6 Large Bags + Rear Storage',
-    tagline: 'Spacious 12-Seater Van with Individual Bucket Seats',
     desc: 'Spacious 12-seater passenger van with individual bucket seats and superior headroom for corporate travel and group tours.',
     image: '/images/vehicles/fleet-6-tata-winger.png',
     features: ['Individual high-back bucket seats', 'Walk-through high headroom cabin', 'Perfect for corporate delegations & weddings'],
@@ -128,7 +121,6 @@ export const FLEET_VEHICLES: VehicleData[] = [
     category: 'traveller',
     categoryLabel: 'Van / Traveller',
     luggage: '8 Large Bags + Roof Carrier',
-    tagline: '14-Seater Force Traveller with Pushback Recliners',
     desc: 'Dedicated 14-seater Force Tempo Traveller with push-back recliner seats and spacious luggage compartment for pilgrimages and group tours.',
     image: '/images/vehicles/fleet-7-tempo-traveller-14.png',
     features: ['Comfortable push-back recliner seats', 'Wide center aisle & roof luggage carrier', 'Top choice for pilgrimage & family yatras'],
@@ -143,7 +135,6 @@ export const FLEET_VEHICLES: VehicleData[] = [
     category: 'traveller',
     categoryLabel: 'Van / Traveller',
     luggage: '10 Large Bags + Roof Carrier',
-    tagline: 'High-Roof 17-Seater Luxury Force Traveller',
     desc: 'High-roof 17-seater Force Tempo Traveller with premium pushback seats, wide aisle, and dedicated luggage space for large groups.',
     image: '/images/vehicles/fleet-8-tempo-traveller-17.png',
     features: ['High-roof spacious 17 passenger layout', 'Deep luggage hold & extra roof storage', 'Ideal for large group holidays & events'],
@@ -158,7 +149,6 @@ export const FLEET_VEHICLES: VehicleData[] = [
     category: 'traveller',
     categoryLabel: 'Van / Traveller',
     luggage: '12 Large Bags',
-    tagline: 'Executive World-Class Luxury Van with Airline Seats',
     desc: 'World-class Force Urbania executive van with panoramic windows, airline-style recliner seats, and whisper-quiet cabin luxury.',
     image: '/images/vehicles/fleet-9-urbania-traveller.png',
     features: ['Airline-style luxury recliner seating', 'Panoramic viewing windows', 'Whisper-quiet premium ride experience'],
@@ -312,14 +302,6 @@ export default function VehicleSliderSection() {
               <h3 className="text-2xl sm:text-3xl font-extrabold text-white mb-2 leading-tight">
                 {activeCar.name}
               </h3>
-
-              <p className="text-xs sm:text-sm font-bold text-[#08A9EE] mb-3">
-                {activeCar.tagline}
-              </p>
-
-              <p className="text-xs sm:text-sm text-gray-300 leading-relaxed mb-5 max-w-lg mx-auto lg:mx-0">
-                {activeCar.desc}
-              </p>
 
               {/* Spec Chips Row */}
               <div className="grid grid-cols-2 gap-2.5 mb-5 max-w-sm mx-auto lg:mx-0 w-full text-left">

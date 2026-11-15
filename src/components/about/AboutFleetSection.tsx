@@ -16,7 +16,6 @@ export interface AboutVehicle {
   passengers: number
   transmission: 'Manual' | 'Auto'
   type: string
-  bestFor: string
   desc: string
   img: string
 }
@@ -29,7 +28,6 @@ export const POPULAR_3_VEHICLES: AboutVehicle[] = [
     passengers: 4,
     transmission: 'Manual',
     type: 'Compact Sedan',
-    bestFor: 'City rides, airport drops & economical outstation trips',
     desc: 'India’s most trusted compact sedan. Outstanding mileage, smooth ride, and great comfort for city rides & outstation journeys.',
     img: '/images/vehicles/fleet-1-swift-desire.png',
   },
@@ -40,7 +38,6 @@ export const POPULAR_3_VEHICLES: AboutVehicle[] = [
     passengers: 4,
     transmission: 'Manual',
     type: 'Executive Sedan',
-    bestFor: 'Executive travel, plush legroom & deep boot luggage',
     desc: 'Modern and stylish sedan with generous boot space and plush legroom. Ideal for families and business travelers.',
     img: '/images/vehicles/fleet-2-hyundai-aura.png',
   },
@@ -51,7 +48,6 @@ export const POPULAR_3_VEHICLES: AboutVehicle[] = [
     passengers: 6,
     transmission: 'Manual',
     type: '7-Seater Family MUV',
-    bestFor: 'Family vacations, weekend tours & airport luggage runs',
     desc: 'The best-value 7-seater MPV with flexible seating, ample boot space, and smooth ride for family vacations and airport trips.',
     img: '/images/vehicles/fleet-3-maruti-suzuki-ertiga.png',
   },
@@ -124,16 +120,6 @@ export default function AboutFleetSection() {
                 <p className="text-xs sm:text-sm text-gray-500 leading-relaxed mb-4 flex-1">
                   {v.desc}
                 </p>
-
-                {/* Recommended Scenario Chip */}
-                <div className="bg-slate-50 rounded-lg p-2.5 border border-slate-100 mb-4">
-                  <span className="text-[10px] font-extrabold text-[#0369a1] block uppercase tracking-wider mb-0.5">
-                    RECOMMENDED FOR:
-                  </span>
-                  <span className="text-xs text-gray-700 font-medium leading-snug">
-                    {v.bestFor}
-                  </span>
-                </div>
 
                 {/* Dual Buttons — Book redirects to /vehicles */}
                 <div className="grid grid-cols-2 gap-2.5 mt-auto">

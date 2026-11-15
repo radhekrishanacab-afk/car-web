@@ -131,7 +131,14 @@ export default function AboutPage() {
                   Your Trusted Travel<br />
                   <span style={{ color: '#08A9EE' }}>Partner in India</span>
                 </h2>
-                <p style={{ color: '#6B7280', fontSize: '1rem', lineHeight: 1.85, marginBottom: '2rem' }}>
+                <p style={{
+                  color: '#6B7280',
+                  fontSize: '1rem',
+                  lineHeight: 1.85,
+                  margin: '0 auto 2rem',
+                  maxWidth: '42rem',
+                  textAlign: 'center',
+                }}>
                   Radhe Krishna Cab is a professional taxi and outstation cab service
                   operating across India since 2020. We connect cities with safe,
                   comfortable, and reliable intercity taxi service for individuals,
