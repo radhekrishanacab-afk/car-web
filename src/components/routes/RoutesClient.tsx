@@ -42,12 +42,7 @@ export default function RoutesClient({ cities, popularCities, total, page, pages
 
   useEffect(() => {
     const query = search.trim()
-    if (query.length < 2) {
-      setSuggestions([])
-      setSuggestionsFor('')
-      setLoadingSuggestions(false)
-      return
-    }
+    if (query.length < 2) return
 
     const controller = new AbortController()
     const timer = window.setTimeout(async () => {
@@ -159,8 +154,15 @@ export default function RoutesClient({ cities, popularCities, total, page, pages
                 type="text"
                 value={search}
                 onChange={e => {
-                  setSearch(e.target.value)
+                  const value = e.target.value
+                  setSearch(value)
                   setSuggestionsOpen(true)
+                  if (value.trim().length < 2) {
+                    setSuggestions([])
+                    setSuggestionsFor('')
+                    setLoadingSuggestions(false)
+                    setActiveSuggestion(-1)
+                  }
                 }}
                 onFocus={() => setSuggestionsOpen(true)}
                 onKeyDown={handleSuggestionKeys}
