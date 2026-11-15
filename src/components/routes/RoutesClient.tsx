@@ -1,9 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { Search, MapPin, ArrowRight, Phone, MessageCircle } from 'lucide-react'
+import { Search, MapPin, ArrowRight, Phone, MessageCircle, Route as RouteIcon, LoaderCircle } from 'lucide-react'
 
 interface City {
   id: number
@@ -21,16 +21,115 @@ interface Props {
   initialSearch?: string
 }
 
+interface SearchSuggestion {
+  type: 'city' | 'route'
+  label: string
+  detail: string
+  href: string
+  fare?: number | null
+}
+
 const WA = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '919723097832'
 
 export default function RoutesClient({ cities, popularCities, total, page, pages, initialSearch = '' }: Props) {
   const router = useRouter()
   const [search, setSearch] = useState(initialSearch)
+  const [suggestions, setSuggestions] = useState<SearchSuggestion[]>([])
+  const [suggestionsFor, setSuggestionsFor] = useState('')
+  const [suggestionsOpen, setSuggestionsOpen] = useState(false)
+  const [activeSuggestion, setActiveSuggestion] = useState(-1)
+  const [loadingSuggestions, setLoadingSuggestions] = useState(false)
 
-  const handleSearch = (e: React.FormEvent) => {
+  useEffect(() => {
+    const query = search.trim()
+    if (query.length < 2) {
+      setSuggestions([])
+      setSuggestionsFor('')
+      setLoadingSuggestions(false)
+      return
+    }
+
+    const controller = new AbortController()
+    const timer = window.setTimeout(async () => {
+      setLoadingSuggestions(true)
+      try {
+        const response = await fetch(`/api/public/routes/suggestions?q=${encodeURIComponent(query)}`, {
+          signal: controller.signal,
+          cache: 'no-store',
+        })
+        const data = await response.json()
+        if (!controller.signal.aborted) {
+          setSuggestions(data.suggestions ?? [])
+          setSuggestionsFor(query)
+          setActiveSuggestion(-1)
+        }
+      } catch {
+        if (!controller.signal.aborted) {
+          setSuggestions([])
+          setSuggestionsFor(query)
+        }
+      } finally {
+        if (!controller.signal.aborted) setLoadingSuggestions(false)
+      }
+    }, 220)
+
+    return () => {
+      window.clearTimeout(timer)
+      controller.abort()
+    }
+  }, [search])
+
+  const goToSuggestion = (items: SearchSuggestion[], selectedIndex = activeSuggestion) => {
+    const selected = items[selectedIndex] ?? items[0]
+    const query = search.trim()
+    setSuggestionsOpen(false)
+    if (selected) {
+      router.push(selected.href)
+    } else {
+      router.push(query ? `/routes?search=${encodeURIComponent(query)}&page=1` : '/routes')
+    }
+  }
+
+  const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault()
     const q = search.trim()
-    router.push(q ? `/routes?search=${encodeURIComponent(q)}&page=1` : '/routes')
+    if (!q) {
+      router.push('/routes')
+      return
+    }
+
+    if (suggestionsFor === q) {
+      goToSuggestion(suggestions)
+      return
+    }
+
+    try {
+      const response = await fetch(`/api/public/routes/suggestions?q=${encodeURIComponent(q)}`, { cache: 'no-store' })
+      const data = await response.json()
+      goToSuggestion(data.suggestions ?? [])
+    } catch {
+      router.push(`/routes?search=${encodeURIComponent(q)}&page=1`)
+    }
+  }
+
+  const handleSuggestionKeys = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Escape') {
+      setSuggestionsOpen(false)
+      setActiveSuggestion(-1)
+      return
+    }
+
+    if (!suggestionsOpen || suggestions.length === 0) return
+    if (e.key === 'ArrowDown') {
+      e.preventDefault()
+      setActiveSuggestion((current) => (current + 1) % suggestions.length)
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault()
+      setActiveSuggestion((current) => current <= 0 ? suggestions.length - 1 : current - 1)
+    } else if (e.key === 'Enter' && activeSuggestion >= 0) {
+      e.preventDefault()
+      goToSuggestion(suggestions)
+    }
   }
 
   return (
@@ -49,14 +148,29 @@ export default function RoutesClient({ cities, popularCities, total, page, pages
           </p>
 
           {/* Search bar */}
-          <form onSubmit={handleSearch} style={{ maxWidth: 540, margin: '0 auto', position: 'relative', display: 'flex', gap: 0 }}>
+          <form
+            onSubmit={handleSearch}
+            onBlur={() => window.setTimeout(() => setSuggestionsOpen(false), 140)}
+            style={{ maxWidth: 540, margin: '0 auto', position: 'relative', display: 'flex', gap: 0, zIndex: 10 }}
+          >
             <div style={{ position: 'relative', flex: 1 }}>
               <Search size={16} style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: '#94a3b8', pointerEvents: 'none' }} />
               <input
                 type="text"
                 value={search}
-                onChange={e => setSearch(e.target.value)}
-                placeholder="Search pickup city — e.g. Ahmedabad, Surat…"
+                onChange={e => {
+                  setSearch(e.target.value)
+                  setSuggestionsOpen(true)
+                }}
+                onFocus={() => setSuggestionsOpen(true)}
+                onKeyDown={handleSuggestionKeys}
+                role="combobox"
+                aria-autocomplete="list"
+                aria-expanded={suggestionsOpen && search.trim().length >= 2}
+                aria-controls="route-search-suggestions"
+                aria-activedescendant={activeSuggestion >= 0 ? `route-suggestion-${activeSuggestion}` : undefined}
+                autoComplete="off"
+                placeholder="Search a city or route — e.g. Surat to Vadodara"
                 style={{ width: '100%', padding: '13px 14px 13px 40px', borderRadius: '10px 0 0 10px', border: 'none', fontSize: 14, outline: 'none', boxSizing: 'border-box', background: '#ffffff', color: '#0f172a' }}
               />
             </div>
@@ -64,9 +178,77 @@ export default function RoutesClient({ cities, popularCities, total, page, pages
               style={{ background: '#f59e0b', color: '#0a1628', fontWeight: 700, fontSize: 14, padding: '0 24px', borderRadius: '0 10px 10px 0', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}>
               Search
             </button>
+            {suggestionsOpen && search.trim().length >= 2 && (
+              <div
+                id="route-search-suggestions"
+                role="listbox"
+                aria-label="City and route suggestions"
+                style={{
+                  position: 'absolute',
+                  top: 'calc(100% + 8px)',
+                  left: 0,
+                  right: 0,
+                  overflow: 'hidden',
+                  border: '1px solid #e2e8f0',
+                  borderRadius: 12,
+                  background: '#ffffff',
+                  boxShadow: '0 16px 36px rgba(10,22,40,.2)',
+                  textAlign: 'left',
+                }}
+              >
+                {suggestions.map((suggestion, index) => (
+                  <button
+                    id={`route-suggestion-${index}`}
+                    key={`${suggestion.type}-${suggestion.href}`}
+                    type="button"
+                    role="option"
+                    aria-selected={activeSuggestion === index}
+                    onMouseDown={e => e.preventDefault()}
+                    onMouseEnter={() => setActiveSuggestion(index)}
+                    onClick={() => goToSuggestion(suggestions, index)}
+                    style={{
+                      display: 'flex',
+                      width: '100%',
+                      alignItems: 'center',
+                      gap: 12,
+                      padding: '12px 16px',
+                      border: 0,
+                      borderBottom: index < suggestions.length - 1 ? '1px solid #f1f5f9' : 0,
+                      background: activeSuggestion === index ? '#f0f7ff' : '#ffffff',
+                      color: '#0f172a',
+                      cursor: 'pointer',
+                      textAlign: 'left',
+                    }}
+                  >
+                    <span style={{ display: 'grid', width: 34, height: 34, flexShrink: 0, placeItems: 'center', borderRadius: 10, background: suggestion.type === 'route' ? '#eaf6ff' : '#f8fafc', color: '#08a9ee' }}>
+                      {suggestion.type === 'route' ? <RouteIcon size={17} /> : <MapPin size={17} />}
+                    </span>
+                    <span style={{ display: 'block', minWidth: 0, flex: 1 }}>
+                      <span style={{ display: 'block', overflow: 'hidden', fontSize: 14, fontWeight: 700, textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        {suggestion.label}
+                      </span>
+                      <span style={{ display: 'block', marginTop: 2, color: '#64748b', fontSize: 12 }}>
+                        {suggestion.detail}
+                      </span>
+                    </span>
+                    <ArrowRight size={15} style={{ flexShrink: 0, color: '#94a3b8' }} />
+                  </button>
+                ))}
+                {loadingSuggestions && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 9, padding: '14px 16px', color: '#64748b', fontSize: 13 }}>
+                    <LoaderCircle size={16} className="animate-spin" /> Finding matching cities and routes…
+                  </div>
+                )}
+                {!loadingSuggestions && suggestions.length === 0 && suggestionsFor === search.trim() && (
+                  <div style={{ padding: '14px 16px', color: '#64748b', fontSize: 13 }}>
+                    No close matches yet. Try a shorter city name or check the spelling.
+                  </div>
+                )}
+              </div>
+            )}
           </form>
           {search && (
-            <button type="button" onClick={() => { setSearch(''); router.push('/routes') }}
+            <button type="button" onClick={() => { setSearch(''); setSuggestions([]); setSuggestionsOpen(false); router.push('/routes') }}
               style={{ marginTop: 10, background: 'none', border: 'none', color: '#64748b', fontSize: 12, cursor: 'pointer', textDecoration: 'underline' }}>
               Clear search
             </button>
