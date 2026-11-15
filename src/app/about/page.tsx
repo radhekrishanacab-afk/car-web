@@ -136,7 +136,7 @@ export default function AboutPage() {
                   fontSize: '1rem',
                   lineHeight: 1.85,
                   margin: '0 auto 2rem',
-                  maxWidth: '42rem',
+                  maxWidth: '36rem',
                   textAlign: 'center',
                 }}>
                   Radhe Krishna Cab is a professional taxi and outstation cab service

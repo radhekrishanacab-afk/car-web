@@ -299,7 +299,7 @@ export default function VehicleSliderSection() {
                 </span>
               </div>
 
-              <h3 className="text-2xl sm:text-3xl font-extrabold text-white mb-2 leading-tight">
+              <h3 className="text-2xl sm:text-3xl font-extrabold text-white mb-5 leading-tight">
                 {activeCar.name}
               </h3>
 
