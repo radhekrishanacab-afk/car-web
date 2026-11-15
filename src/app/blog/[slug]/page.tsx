@@ -5,7 +5,8 @@ import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import WhatsAppButton from '@/components/ui/WhatsAppButton'
 import { prisma } from '@/lib/prisma'
-import { ArrowLeft, ArrowRight, MessageCircle, Tag } from 'lucide-react'
+import { ArrowLeft, ArrowRight, MapPin, MessageCircle, Tag } from 'lucide-react'
+import { blogLocationLabel } from '@/lib/blog-location'
 import styles from '../BlogPages.module.css'
 
 interface PageProps { params: Promise<{ slug: string }> }
@@ -28,6 +29,8 @@ export default async function BlogPostPage({ params }: PageProps) {
   const post = await prisma.blogPost.findUnique({ where: { slug } }).catch(() => null)
   if (!post || post.status !== 'PUBLISHED') notFound()
 
+  const location = blogLocationLabel(post)
+
   const related = await prisma.blogPost.findMany({
     where: { status: 'PUBLISHED', id: { not: post.id }, ...(post.category ? { category: post.category } : {}) },
     orderBy: { publishedAt: 'desc' },
@@ -47,6 +50,9 @@ export default async function BlogPostPage({ params }: PageProps) {
               {post.showCategory && post.category && <p className={styles.eyebrow}>{post.category}</p>}
               <h1>{post.title}</h1>
               <p className={styles.authorLine}>By {post.authorName}</p>
+              {location && (
+                <p className={styles.articleLocation}><MapPin size={14} aria-hidden="true" />{location}</p>
+              )}
             </div>
           </section>
         ) : (
@@ -55,6 +61,9 @@ export default async function BlogPostPage({ params }: PageProps) {
               {post.showCategory && post.category && <p className={styles.eyebrow}>{post.category}</p>}
               <h1>{post.title}</h1>
               <p className={styles.authorLine}>By {post.authorName}</p>
+              {location && (
+                <p className={styles.articleLocation}><MapPin size={14} aria-hidden="true" />{location}</p>
+              )}
             </div>
           </section>
         )}
@@ -115,6 +124,9 @@ export default async function BlogPostPage({ params }: PageProps) {
                       </div>
                       <div className={styles.relatedBody}>
                         {r.showCategory && r.category && <p className={styles.cardCategory}>{r.category}</p>}
+                        {blogLocationLabel(r) && (
+                          <p className={styles.cardLocation}><MapPin size={13} aria-hidden="true" />{blogLocationLabel(r)}</p>
+                        )}
                         <h3>{r.title}</h3>
                         <span className={styles.readMore}>Read guide <ArrowRight size={15} /></span>
                       </div>

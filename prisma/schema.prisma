@@ -262,6 +262,10 @@ model BlogPost {
   featuredImage   String?
   category        String?
   showCategory    Boolean  @default(true)
+  state           String?
+  district        String?
+  showState       Boolean  @default(false)
+  showDistrict    Boolean  @default(false)
   tags            String?
   status          String   @default("DRAFT")   // DRAFT | PUBLISHED
   isFeatured      Boolean  @default(false)

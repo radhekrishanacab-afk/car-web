@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Loader2, CheckCircle, AlertCircle } from 'lucide-react'
 
@@ -12,6 +12,10 @@ interface BlogPost {
   featuredImage: string | null
   category: string | null
   showCategory: boolean
+  state: string | null
+  district: string | null
+  showState: boolean
+  showDistrict: boolean
   status: string
   homepagePosition: number | null
   seoTitle: string | null
@@ -52,6 +56,10 @@ export default function BlogPostForm({ post }: Props) {
     featuredImage:  post?.featuredImage ?? '',
     category:       post?.category ?? '',
     showCategory:   post?.showCategory ?? true,
+    state:          post?.state ?? '',
+    district:       post?.district ?? '',
+    showState:      post?.showState ?? false,
+    showDistrict:   post?.showDistrict ?? false,
     status:         post?.status ?? 'DRAFT',
     homepagePosition: post?.homepagePosition != null ? String(post.homepagePosition) : '',
     seoTitle:       post?.seoTitle ?? '',
@@ -62,6 +70,22 @@ export default function BlogPostForm({ post }: Props) {
   const [uploadError, setUploadError] = useState('')
   const [saved,       setSaved]       = useState(false)
   const [serverError, setServerError] = useState('')
+
+  const [states,    setStates]    = useState<{ id: number; name: string }[]>([])
+  const [districts, setDistricts] = useState<{ id: number; name: string; stateId: number }[]>([])
+
+  useEffect(() => {
+    fetch('/api/admin/tourist-places/meta')
+      .then(r => r.json())
+      .then(d => {
+        setStates(d.states ?? [])
+        setDistricts(d.districts ?? [])
+      })
+      .catch(() => {})
+  }, [])
+
+  const selectedStateId = states.find(s => s.name === form.state)?.id
+  const filteredDistricts = districts.filter(d => d.stateId === selectedStateId)
 
   const set = (f: string, v: string | boolean) => setForm(p => ({ ...p, [f]: v }))
 
@@ -87,6 +111,10 @@ export default function BlogPostForm({ post }: Props) {
           featuredImage:  form.featuredImage.trim() || null,
           category:       form.category.trim() || null,
           showCategory:   form.showCategory,
+          state:          form.state.trim() || null,
+          district:       form.district.trim() || null,
+          showState:      form.showState,
+          showDistrict:   form.showDistrict,
           status:         form.status,
           homepagePosition: form.homepagePosition === '' ? null : parseInt(form.homepagePosition),
           seoTitle:       form.seoTitle.trim() || null,
@@ -138,6 +166,41 @@ export default function BlogPostForm({ post }: Props) {
             Show category on the blog page
           </label>
         </div>
+      </div>
+
+      {/* State & District */}
+      <div className="bg-white rounded-xl border border-gray-200 p-6 space-y-4">
+        <h2 className="font-semibold text-gray-800">State &amp; District</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">State</label>
+            <select value={form.state} onChange={e => { set('state', e.target.value); set('district', '') }} className={inp}>
+              <option value="">Select State</option>
+              {states.map(s => <option key={s.id} value={s.name}>{s.name}</option>)}
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">District</label>
+            <select value={form.district} onChange={e => set('district', e.target.value)} className={inp}>
+              <option value="">Select District</option>
+              {filteredDistricts.map(d => <option key={d.id} value={d.name}>{d.name}</option>)}
+            </select>
+          </div>
+        </div>
+        <div className="flex flex-wrap items-center gap-6">
+          <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+            <input type="checkbox" checked={form.showState} onChange={e => set('showState', e.target.checked)} className="h-4 w-4 rounded" />
+            Show state on the website
+          </label>
+          <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+            <input type="checkbox" checked={form.showDistrict} onChange={e => set('showDistrict', e.target.checked)} className="h-4 w-4 rounded" />
+            Show district on the website
+          </label>
+        </div>
+        <p className="text-xs text-gray-400">
+          Both are optional and hidden by default. District options depend on the selected state.
+          You can also turn them on or off for every post together from the Blog Posts list.
+        </p>
       </div>
 
       {/* Single post image */}

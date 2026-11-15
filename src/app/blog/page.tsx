@@ -4,7 +4,8 @@ import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import WhatsAppButton from '@/components/ui/WhatsAppButton'
 import { prisma } from '@/lib/prisma'
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, MapPin } from 'lucide-react'
+import { blogLocationLabel } from '@/lib/blog-location'
 import styles from './BlogPages.module.css'
 
 export const metadata: Metadata = {
@@ -59,6 +60,9 @@ export default async function BlogPage() {
                     </div>
                     <div className={styles.featuredBody}>
                       {featured.showCategory && featured.category && <p className={styles.cardCategory}>{featured.category}</p>}
+                      {blogLocationLabel(featured) && (
+                        <p className={styles.cardLocation}><MapPin size={13} aria-hidden="true" />{blogLocationLabel(featured)}</p>
+                      )}
                       <h2>{featured.title}</h2>
                       {featured.excerpt && <p className={styles.featuredExcerpt}>{featured.excerpt}</p>}
                       <span className={styles.readMore}>Read the guide <ArrowRight size={17} /></span>
@@ -85,6 +89,9 @@ export default async function BlogPage() {
                           )}
                         </div>
                         <div className={styles.postBody}>
+                          {blogLocationLabel(post) && (
+                            <p className={styles.cardLocation}><MapPin size={13} aria-hidden="true" />{blogLocationLabel(post)}</p>
+                          )}
                           <h2>{post.title}</h2>
                           {post.excerpt && (
                             <p className={styles.postExcerpt}>

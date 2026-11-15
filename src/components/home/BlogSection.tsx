@@ -1,5 +1,6 @@
 import Link from 'next/link'
-import { ArrowRight, MessageCircle } from 'lucide-react'
+import { ArrowRight, MapPin, MessageCircle } from 'lucide-react'
+import { blogLocationLabel } from '@/lib/blog-location'
 import { prisma } from '@/lib/prisma'
 
 const SITE_NAVY = '#10264A'
@@ -47,6 +48,7 @@ export default async function BlogSection() {
             const image = post.featuredImage
             const message = `Hello! I saw "${title}" on your website and would like more information.`
             const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`
+            const location = blogLocationLabel(post)
 
             return (
               <article key={post.id} style={{
@@ -76,6 +78,11 @@ export default async function BlogSection() {
 
                 {/* Content */}
                 <div style={{ padding: '20px 22px', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                  {location && (
+                    <div style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 12, fontWeight: 600, color: '#64748b', marginBottom: 8 }}>
+                      <MapPin size={12} /> {location}
+                    </div>
+                  )}
                   <h3 style={{ fontSize: 15, fontWeight: 700, color: SITE_NAVY, margin: '0 0 8px', lineHeight: 1.4 }}>
                     {title}
                   </h3>

@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { prisma } from '@/lib/prisma'
 import { Plus, FileText } from 'lucide-react'
 import DeleteBlogPost from '@/components/admin/DeleteBlogPost'
+import BlogLocationBulkToggle from '@/components/admin/BlogLocationBulkToggle'
 
 export const metadata: Metadata = { title: 'Blog Posts' }
 
@@ -40,6 +41,8 @@ export default async function BlogAdminPage({ searchParams }: PageProps) {
         </Link>
       </div>
 
+      <BlogLocationBulkToggle />
+
       {/* Filters */}
       <form className="flex flex-wrap gap-3 mb-6">
         <input type="text" name="search" defaultValue={search} placeholder="Search posts…"
@@ -67,6 +70,7 @@ export default async function BlogAdminPage({ searchParams }: PageProps) {
               <tr className="text-left">
                 <th className="px-4 py-3 font-medium text-gray-500">Title</th>
                 <th className="px-4 py-3 font-medium text-gray-500">Category</th>
+                <th className="px-4 py-3 font-medium text-gray-500">State / District</th>
                 <th className="px-4 py-3 font-medium text-gray-500">Status</th>
                 <th className="px-4 py-3 font-medium text-gray-500">Category Display</th>
                 <th className="px-4 py-3 font-medium text-gray-500">Homepage</th>
@@ -82,6 +86,19 @@ export default async function BlogAdminPage({ searchParams }: PageProps) {
                     <div className="text-xs text-gray-400 font-mono">{p.slug}</div>
                   </td>
                   <td className="px-4 py-3 text-gray-600 text-xs">{p.category ?? '—'}</td>
+                  <td className="px-4 py-3">
+                    {p.state || p.district ? (
+                      <div className="text-xs text-gray-600">
+                        <div>{p.district ?? '—'}</div>
+                        <div className="text-gray-400">{p.state ?? '—'}</div>
+                        <div className={`mt-1 inline-block px-2 py-0.5 rounded-full text-[10px] font-medium ${p.showState || p.showDistrict ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
+                          {p.showState || p.showDistrict ? 'Shown' : 'Hidden'}
+                        </div>
+                      </div>
+                    ) : (
+                      <span className="text-xs text-gray-400">—</span>
+                    )}
+                  </td>
                   <td className="px-4 py-3">
                     <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${p.status === 'PUBLISHED' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
                       {p.status}
