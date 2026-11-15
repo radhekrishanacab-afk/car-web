@@ -49,6 +49,9 @@ export default async function TouristPlacesPage({ searchParams }: PageProps) {
           <h1 className="text-2xl font-bold text-gray-900">Tourist Places</h1>
           <p className="text-gray-500 text-sm mt-0.5">{total} total · <Link href="/explore-india" className="text-blue-600 hover:underline" target="_blank">View public page</Link></p>
         </div>
+        <Link href="/admin/tourist-places/new" className="flex items-center gap-1.5 bg-[#0a1628] hover:bg-[#1a3a6b] text-white px-4 py-2 rounded-lg text-sm font-medium">
+          <Plus className="w-4 h-4" /> New Place
+        </Link>
       </div>
 
       {/* Filters */}

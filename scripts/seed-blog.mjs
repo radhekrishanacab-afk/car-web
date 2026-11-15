@@ -123,7 +123,7 @@ const posts = [
 <p><strong>Distance from Ahmedabad:</strong> 175 km</p>
 <h2>Recommended 3-Day Itinerary</h2>
 <p>Day 1: Ahmedabad → Somnath (stay overnight)<br/>Day 2: Somnath → Dwarka (stay overnight)<br/>Day 3: Dwarka → Ambaji → Ahmedabad</p>`,
-    featuredImage: 'https://images.unsplash.com/photo-1570458436416-b8fcccfe883f?w=800&q=80',
+    featuredImage: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Somnath_temple_1.jpg/1280px-Somnath_temple_1.jpg',
     category: 'Pilgrimage',
     tags: 'Somnath, Dwarka, Ambaji, pilgrimage, Gujarat tour',
     status: 'PUBLISHED',
