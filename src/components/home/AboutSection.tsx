@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { Phone, CheckCircle2, ArrowRight } from 'lucide-react'
+import styles from '@/components/about/AboutContent.module.css'
 
 const features = [
   'Background-verified professional chauffeurs',
@@ -39,7 +40,7 @@ export default function AboutSection() {
           </div>
 
           {/* ── Content Column ── */}
-          <div className="order-1 lg:order-2 text-center">
+          <div className={`${styles.copyBlock} order-1 lg:order-2`}>
             <span className="section-overline">ABOUT US</span>
 
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#10264A] leading-tight mt-2 mb-4">
@@ -47,19 +48,7 @@ export default function AboutSection() {
               <span className="text-[#08A9EE]">Partner in India</span>
             </h2>
 
-            <p
-              className="text-gray-500 text-sm sm:text-base"
-              style={{
-                display: 'block',
-                width: '100%',
-                maxWidth: '32rem',
-                margin: '0 auto 1.5rem',
-                paddingTop: '0.5rem',
-                boxSizing: 'border-box',
-                textAlign: 'center',
-                lineHeight: 1.75,
-              }}
-            >
+<p className={`text-gray-500 text-sm sm:text-base ${styles.description}`}>
               Radhe Krishna Cab is a professional taxi and outstation cab service
               operating across India since 2020. We connect cities with safe,
               comfortable, and reliable intercity taxi service — for individuals,
@@ -67,7 +56,7 @@ export default function AboutSection() {
             </p>
 
             {/* Feature Checklist — 2 Column */}
-            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8 p-0 list-none max-w-lg mx-auto text-left">
+            <ul className={`grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8 p-0 list-none text-left ${styles.features}`}>
               {features.map((f) => (
                 <li key={f} className="flex items-start gap-2.5">
                   <CheckCircle2 size={16} className="text-[#08A9EE] shrink-0 mt-0.5" />
@@ -77,7 +66,7 @@ export default function AboutSection() {
             </ul>
 
             {/* Buttons */}
-            <div className="flex flex-wrap items-center justify-center gap-3">
+            <div className={`${styles.actions} flex flex-wrap gap-3`}>
               <a href="tel:+919723097832" className="btn btn-primary">
                 <Phone size={15} />
                 <span>Call Now</span>
