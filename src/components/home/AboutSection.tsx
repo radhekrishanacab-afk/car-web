@@ -47,7 +47,17 @@ export default function AboutSection() {
               <span className="text-[#08A9EE]">Partner in India</span>
             </h2>
 
-            <p className="text-gray-500 text-sm sm:text-base leading-relaxed mb-6 max-w-xl mx-auto text-center">
+            <p
+              className="text-gray-500 text-sm sm:text-base"
+              style={{
+                display: 'block',
+                width: '100%',
+                maxWidth: '36rem',
+                margin: '0 auto 1.5rem',
+                textAlign: 'center',
+                lineHeight: 1.75,
+              }}
+            >
               Radhe Krishna Cab is a professional taxi and outstation cab service
               operating across India since 2020. We connect cities with safe,
               comfortable, and reliable intercity taxi service — for individuals,

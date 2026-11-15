@@ -132,10 +132,12 @@ export default function AboutPage() {
                   <span style={{ color: '#08A9EE' }}>Partner in India</span>
                 </h2>
                 <p style={{
+                  display: 'block',
+                  width: '100%',
                   color: '#6B7280',
                   fontSize: '1rem',
-                  lineHeight: 1.85,
-                  margin: '0 auto 2rem',
+                  lineHeight: 1.75,
+                  margin: '0 auto 1.5rem',
                   maxWidth: '36rem',
                   textAlign: 'center',
                 }}>
