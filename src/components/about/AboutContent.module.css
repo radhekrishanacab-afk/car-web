@@ -1,0 +1,47 @@
+.copyBlock {
+  text-align: left;
+}
+
+.copyBlock .description {
+  display: block;
+  width: 100%;
+  max-width: 32rem;
+  box-sizing: border-box;
+  margin: 0 0 1.5rem;
+  padding-top: 0.5rem;
+  text-align: left;
+  line-height: 1.75;
+}
+
+.copyBlock .features {
+  width: 100%;
+  max-width: 32rem;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.copyBlock .actions {
+  justify-content: flex-start;
+}
+
+@media (max-width: 1023px) {
+  .copyBlock {
+    text-align: center;
+  }
+
+  .copyBlock .description {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+  }
+
+  .copyBlock .features {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left;
+  }
+
+  .copyBlock .actions {
+    justify-content: center;
+  }
+}
