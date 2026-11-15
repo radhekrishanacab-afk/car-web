@@ -77,10 +77,13 @@ export default async function BlogPostPage({ params }: PageProps) {
 
           <article className={styles.articleCard}>
             {post.excerpt && <p className={styles.articleLead}>{post.excerpt}</p>}
-            <div
-              className={styles.articleBody}
-              dangerouslySetInnerHTML={{ __html: post.content.includes('<') ? post.content : post.content.split('\n\n').map(p => `<p>${p.replace(/\n/g, '<br/>')}</p>`).join('') }}
-            />
+            {/* Only render the body if it differs from the excerpt to avoid duplicate content */}
+            {post.content && post.content.trim() !== (post.excerpt ?? '').trim() && (
+              <div
+                className={styles.articleBody}
+                dangerouslySetInnerHTML={{ __html: post.content.includes('<') ? post.content : post.content.split('\n\n').map(p => `<p>${p.replace(/\n/g, '<br/>')}</p>`).join('') }}
+              />
+            )}
             {post.tags && (
               <div className={styles.tags}>
                 <Tag size={16} aria-hidden="true" />
