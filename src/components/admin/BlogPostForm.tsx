@@ -22,6 +22,12 @@ interface BlogPost {
   seoDescription: string | null
 }
 
+interface CategoryItem {
+  id: number
+  name: string
+  displayOrder: number
+}
+
 interface Props {
   post?: BlogPost
 }
@@ -73,7 +79,7 @@ export default function BlogPostForm({ post }: Props) {
 
   const [states,    setStates]    = useState<{ id: number; name: string }[]>([])
   const [districts, setDistricts] = useState<{ id: number; name: string; stateId: number }[]>([])
-  const [categories, setCategories] = useState<string[]>([])
+  const [categories, setCategories] = useState<CategoryItem[]>([])
 
   useEffect(() => {
     fetch('/api/admin/tourist-places/meta')
@@ -93,6 +99,26 @@ export default function BlogPostForm({ post }: Props) {
   const filteredDistricts = districts.filter(d => d.stateId === selectedStateId)
 
   const set = (f: string, v: string | boolean) => setForm(p => ({ ...p, [f]: v }))
+
+  // Resolve a category number to its name, or keep the typed text.
+  const handleCategoryChange = (value: string) => {
+    const trimmed = value.trim()
+    if (/^\d+$/.test(trimmed)) {
+      const num = parseInt(trimmed)
+      const match = categories.find(c => c.displayOrder === num)
+      if (match) {
+        set('category', match.name)
+        return
+      }
+    }
+    set('category', value)
+  }
+
+  // Build datalist options: show "Order - Name" so users can pick by number or name.
+  const categoryOptions = categories.map(c => ({
+    value: c.name,
+    label: `${c.displayOrder} - ${c.name}`,
+  }))
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -168,13 +194,18 @@ export default function BlogPostForm({ post }: Props) {
               list="category-options"
               type="text"
               value={form.category}
-              onChange={e => set('category', e.target.value)}
-              placeholder="Type or select a category"
+              onChange={e => handleCategoryChange(e.target.value)}
+              placeholder="Type number (e.g. 1) or name"
               className={inp}
             />
             <datalist id="category-options">
-              {categories.map(c => <option key={c} value={c} />)}
+              {categoryOptions.map(o => (
+                <option key={o.value} value={o.value} label={o.label} />
+              ))}
             </datalist>
+            <p className="text-xs text-gray-400 mt-1">
+              Enter the order number to auto-fill the name, or type a name directly.
+            </p>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Show category on the website</label>

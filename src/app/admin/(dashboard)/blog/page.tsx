@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { prisma } from '@/lib/prisma'
-import { Plus, FileText } from 'lucide-react'
+import { Plus, FileText, Tags } from 'lucide-react'
 import DeleteBlogPost from '@/components/admin/DeleteBlogPost'
 import BlogLocationBulkToggle from '@/components/admin/BlogLocationBulkToggle'
 
@@ -35,10 +35,16 @@ export default async function BlogAdminPage({ searchParams }: PageProps) {
           <h1 className="text-2xl font-bold text-gray-900">Blog Posts</h1>
           <p className="text-gray-500 text-sm mt-0.5">{total} total</p>
         </div>
-        <Link href="/admin/blog/new"
-          className="flex items-center gap-2 bg-[#0a1628] hover:bg-[#1a3a6b] text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-          <Plus className="w-4 h-4" /> New Post
-        </Link>
+        <div className="flex items-center gap-2">
+          <Link href="/admin/blog/categories"
+            className="flex items-center gap-2 border border-gray-200 hover:bg-gray-50 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+            <Tags className="w-4 h-4" /> Categories
+          </Link>
+          <Link href="/admin/blog/new"
+            className="flex items-center gap-2 bg-[#0a1628] hover:bg-[#1a3a6b] text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+            <Plus className="w-4 h-4" /> New Post
+          </Link>
+        </div>
       </div>
 
       <BlogLocationBulkToggle />

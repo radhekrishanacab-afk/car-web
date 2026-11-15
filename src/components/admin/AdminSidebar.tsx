@@ -6,7 +6,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import {
   LayoutDashboard, Car, MapPin, Navigation, IndianRupee,
   CalendarCheck, MessageSquare, Settings, LogOut, FileText,
-  Menu, X, ChevronRight, Search, Upload,
+  Menu, X, ChevronRight, Search,
 } from 'lucide-react'
 
 const navItems = [
@@ -15,7 +15,6 @@ const navItems = [
   { href: '/admin/enquiries', icon: MessageSquare, label: 'Enquiries' },
   { href: '/admin/cities', icon: MapPin, label: 'Cities' },
   { href: '/admin/routes', icon: Navigation, label: 'Routes' },
-  { href: '/admin/routes/import', icon: Upload, label: 'Bulk Import' },
   { href: '/admin/pricing', icon: IndianRupee, label: 'Route Pricing' },
   { href: '/admin/vehicles', icon: Car, label: 'Vehicles' },
   { href: '/admin/blog', icon: FileText, label: 'Blog & Homepage' },

@@ -253,6 +253,16 @@ model TouristPlace {
 // BLOG / POSTS System
 // ═══════════════════════════════════════════════════════════════
 
+model BlogCategory {
+  id           Int      @id @default(autoincrement())
+  name         String   @unique
+  slug         String   @unique
+  displayOrder Int      @default(0)
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
 model BlogPost {
   id              Int      @id @default(autoincrement())
   title           String
