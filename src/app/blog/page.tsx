@@ -4,7 +4,7 @@ import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import WhatsAppButton from '@/components/ui/WhatsAppButton'
 import { prisma } from '@/lib/prisma'
-import { Calendar, Clock, ArrowRight } from 'lucide-react'
+import { Calendar, ArrowRight } from 'lucide-react'
 
 export const metadata: Metadata = {
   title: 'Blog — Travel Tips & Cab Guides | Radhe Krishna Cab',
@@ -66,7 +66,6 @@ export default async function BlogPage() {
                       {featured.excerpt && <p style={{ fontSize: 14, color: '#64748b', lineHeight: 1.7, margin: '0 0 20px' }}>{featured.excerpt}</p>}
                       <div style={{ display: 'flex', alignItems: 'center', gap: 16, fontSize: 12, color: '#94a3b8' }}>
                         <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><Calendar size={12} />{featured.publishedAt ? new Date(featured.publishedAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : ''}</span>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><Clock size={12} />{featured.readingMinutes} min read</span>
                       </div>
                       <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, marginTop: 20, color: '#0a1628', fontWeight: 700, fontSize: 13 }}>
                         Read More <ArrowRight size={14} />
@@ -101,8 +100,7 @@ export default async function BlogPage() {
                               {post.excerpt}
                             </p>
                           )}
-                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: 11, color: '#94a3b8', marginTop: 'auto' }}>
-                            <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><Clock size={11} />{post.readingMinutes} min</span>
+                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', fontSize: 11, color: '#94a3b8', marginTop: 'auto' }}>
                             <span style={{ display: 'flex', alignItems: 'center', gap: 4, color: '#0a1628', fontWeight: 600 }}>Read More <ArrowRight size={11} /></span>
                           </div>
                         </div>

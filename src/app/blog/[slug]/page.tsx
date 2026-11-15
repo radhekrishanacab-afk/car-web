@@ -5,7 +5,7 @@ import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import WhatsAppButton from '@/components/ui/WhatsAppButton'
 import { prisma } from '@/lib/prisma'
-import { Calendar, Clock, MessageCircle, Tag } from 'lucide-react'
+import { Calendar, MessageCircle, Tag } from 'lucide-react'
 
 interface PageProps { params: Promise<{ slug: string }> }
 
@@ -49,7 +49,6 @@ export default async function BlogPostPage({ params }: PageProps) {
               <h1 style={{ fontSize: 'clamp(1.5rem,4vw,2.25rem)', fontWeight: 800, color: '#fff', margin: '0 0 12px', lineHeight: 1.3 }}>{post.title}</h1>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16, fontSize: 13, color: '#cbd5e1' }}>
                 <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}><Calendar size={13} />{post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' }) : ''}</span>
-                <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}><Clock size={13} />{post.readingMinutes} min read</span>
                 <span style={{ color: '#94a3b8' }}>By {post.authorName}</span>
               </div>
             </div>
@@ -75,7 +74,6 @@ export default async function BlogPostPage({ params }: PageProps) {
               <h1 style={{ fontSize: 'clamp(1.5rem,4vw,2.25rem)', fontWeight: 800, color: '#0a1628', margin: '0 0 14px', lineHeight: 1.3 }}>{post.title}</h1>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16, fontSize: 13, color: '#94a3b8' }}>
                 <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}><Calendar size={13} />{post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' }) : ''}</span>
-                <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}><Clock size={13} />{post.readingMinutes} min read</span>
               </div>
             </div>
           )}
@@ -128,7 +126,6 @@ export default async function BlogPostPage({ params }: PageProps) {
                       </div>
                       <div style={{ padding: '14px 16px' }}>
                         <p style={{ fontSize: 13, fontWeight: 600, color: '#0a1628', margin: '0 0 6px', lineHeight: 1.4 }}>{r.title}</p>
-                        <p style={{ fontSize: 11, color: '#94a3b8', margin: 0 }}>{r.readingMinutes} min read</p>
                       </div>
                     </div>
                   </Link>

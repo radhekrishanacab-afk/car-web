@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { ArrowRight, Clock, MessageCircle } from 'lucide-react'
+import { ArrowRight, MessageCircle } from 'lucide-react'
 import { prisma } from '@/lib/prisma'
 
 async function getLatestPosts() {
@@ -81,10 +81,7 @@ export default async function BlogSection() {
                       {cardDescription}
                     </p>
                   )}
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 'auto', fontSize: 12, color: '#94a3b8' }}>
-                    <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                      <Clock size={11} /> {post.readingMinutes} min read
-                    </span>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginTop: 'auto', fontSize: 12, color: '#94a3b8' }}>
                     <Link href={`/blog/${post.slug}`} style={{ display: 'inline-flex', alignItems: 'center', gap: 4, color: '#0a1628', fontWeight: 600, textDecoration: 'none' }}>
                       Read More <ArrowRight size={11} />
                     </Link>
