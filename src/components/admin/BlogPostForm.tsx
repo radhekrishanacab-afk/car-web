@@ -174,17 +174,29 @@ export default function BlogPostForm({ post }: Props) {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">State</label>
-            <select value={form.state} onChange={e => { set('state', e.target.value); set('district', '') }} className={inp}>
-              <option value="">Select State</option>
-              {states.map(s => <option key={s.id} value={s.name}>{s.name}</option>)}
-            </select>
+            <input
+              list="state-options"
+              value={form.state}
+              onChange={e => { set('state', e.target.value); set('district', '') }}
+              placeholder="Select or type state"
+              className={inp}
+            />
+            <datalist id="state-options">
+              {states.map(s => <option key={s.id} value={s.name} />)}
+            </datalist>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">District</label>
-            <select value={form.district} onChange={e => set('district', e.target.value)} className={inp}>
-              <option value="">Select District</option>
-              {filteredDistricts.map(d => <option key={d.id} value={d.name}>{d.name}</option>)}
-            </select>
+            <input
+              list="district-options"
+              value={form.district}
+              onChange={e => set('district', e.target.value)}
+              placeholder="Select or type district"
+              className={inp}
+            />
+            <datalist id="district-options">
+              {filteredDistricts.map(d => <option key={d.id} value={d.name} />)}
+            </datalist>
           </div>
         </div>
         <div className="flex flex-wrap items-center gap-6">
@@ -198,8 +210,9 @@ export default function BlogPostForm({ post }: Props) {
           </label>
         </div>
         <p className="text-xs text-gray-400">
-          Both are optional and hidden by default. District options depend on the selected state.
-          You can also turn them on or off for every post together from the Blog Posts list.
+          Type a custom name or pick a suggestion. Both are optional and hidden by default.
+          District suggestions depend on the selected state. You can also turn them on or off
+          for every post together from the Blog Posts list.
         </p>
       </div>
 
