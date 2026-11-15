@@ -13,6 +13,7 @@ const BlogSchema = z.object({
   tags: z.string().max(500).optional().nullable(),
   status: z.enum(['DRAFT', 'PUBLISHED']).optional(),
   isFeatured: z.boolean().optional(),
+  homepagePosition: z.number().int().min(1).max(3).optional().nullable(),
   readingMinutes: z.number().int().min(1).max(60).optional(),
   authorName: z.string().max(100).optional(),
   seoTitle: z.string().max(120).optional().nullable(),
@@ -51,12 +52,23 @@ export async function POST(req: NextRequest) {
   const slug = d.slug ?? slugify(d.title)
   const existing = await prisma.blogPost.findUnique({ where: { slug } })
   if (existing) return Response.json({ error: 'Slug already exists' }, { status: 409 })
+
+  // If a homepage position is set, clear it from any other post first
+  if (d.homepagePosition) {
+    await prisma.blogPost.updateMany({
+      where: { homepagePosition: d.homepagePosition },
+      data: { homepagePosition: null },
+    })
+  }
+
   const post = await prisma.blogPost.create({
     data: {
       title: d.title, slug, excerpt: d.excerpt ?? null, content: d.content,
       featuredImage: d.featuredImage ?? null, category: d.category ?? null,
       tags: d.tags ?? null, status: d.status ?? 'DRAFT',
-      isFeatured: d.isFeatured ?? false, readingMinutes: d.readingMinutes ?? 3,
+      isFeatured: d.isFeatured ?? false,
+      homepagePosition: d.homepagePosition ?? null,
+      readingMinutes: d.readingMinutes ?? 3,
       authorName: d.authorName ?? 'Radhe Krishna Cab',
       seoTitle: d.seoTitle ?? null, seoDescription: d.seoDescription ?? null,
       publishedAt: d.status === 'PUBLISHED' ? new Date() : null,

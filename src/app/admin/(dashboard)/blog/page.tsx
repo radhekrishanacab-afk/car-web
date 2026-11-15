@@ -69,6 +69,7 @@ export default async function BlogAdminPage({ searchParams }: PageProps) {
                 <th className="px-4 py-3 font-medium text-gray-500">Category</th>
                 <th className="px-4 py-3 font-medium text-gray-500">Status</th>
                 <th className="px-4 py-3 font-medium text-gray-500">Featured</th>
+                <th className="px-4 py-3 font-medium text-gray-500">Homepage</th>
                 <th className="px-4 py-3 font-medium text-gray-500">Date</th>
                 <th className="px-4 py-3 font-medium text-gray-500">Actions</th>
               </tr>
@@ -88,6 +89,15 @@ export default async function BlogAdminPage({ searchParams }: PageProps) {
                   </td>
                   <td className="px-4 py-3">
                     {p.isFeatured ? <Eye className="w-4 h-4 text-amber-500" /> : <EyeOff className="w-4 h-4 text-gray-300" />}
+                  </td>
+                  <td className="px-4 py-3">
+                    {p.homepagePosition ? (
+                      <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-700">
+                        Position {p.homepagePosition}
+                      </span>
+                    ) : (
+                      <span className="text-xs text-gray-400">—</span>
+                    )}
                   </td>
                   <td className="px-4 py-3 text-gray-500 text-xs">
                     {new Date(p.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}

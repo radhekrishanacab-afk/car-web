@@ -12,6 +12,7 @@ const UpdateSchema = z.object({
   tags: z.string().max(500).optional().nullable(),
   status: z.enum(['DRAFT', 'PUBLISHED']).optional(),
   isFeatured: z.boolean().optional(),
+  homepagePosition: z.number().int().min(1).max(3).optional().nullable(),
   readingMinutes: z.number().int().min(1).max(60).optional(),
   authorName: z.string().max(100).optional(),
   seoTitle: z.string().max(120).optional().nullable(),
@@ -37,6 +38,15 @@ export async function PATCH(req: NextRequest, ctx: RouteContext<'/api/admin/blog
   const d = parsed.data
   const existing = await prisma.blogPost.findUnique({ where: { id: parseInt(id) } })
   if (!existing) return Response.json({ error: 'Not found' }, { status: 404 })
+
+  // If a homepage position is being set, clear it from any other post first
+  if (d.homepagePosition) {
+    await prisma.blogPost.updateMany({
+      where: { homepagePosition: d.homepagePosition, NOT: { id: parseInt(id) } },
+      data: { homepagePosition: null },
+    })
+  }
+
   const post = await prisma.blogPost.update({
     where: { id: parseInt(id) },
     data: {

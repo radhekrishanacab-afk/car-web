@@ -3,11 +3,24 @@ import { ArrowRight, Clock } from 'lucide-react'
 import { prisma } from '@/lib/prisma'
 
 async function getLatestPosts() {
-  return prisma.blogPost.findMany({
-    where: { status: 'PUBLISHED' },
-    orderBy: [{ isFeatured: 'desc' }, { publishedAt: 'desc' }],
+  // Fetch posts that have an explicit homepage position set (1, 2, or 3)
+  const positioned = await prisma.blogPost.findMany({
+    where: { status: 'PUBLISHED', homepagePosition: { not: null } },
+    orderBy: { homepagePosition: 'asc' },
     take: 3,
   }).catch(() => [])
+
+  // If fewer than 3 positioned posts, fill up with latest published posts
+  if (positioned.length < 3) {
+    const positionedIds = new Set(positioned.map(p => p.id))
+    const fillers = await prisma.blogPost.findMany({
+      where: { status: 'PUBLISHED', id: { notIn: [...positionedIds] } },
+      orderBy: [{ isFeatured: 'desc' }, { publishedAt: 'desc' }],
+      take: 3 - positioned.length,
+    }).catch(() => [])
+    return [...positioned, ...fillers]
+  }
+  return positioned
 }
 
 export default async function BlogSection() {
