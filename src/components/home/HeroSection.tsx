@@ -459,9 +459,6 @@ export default function HeroSection({ vehicles: _vehicles }: Props) {
                     <h2 style={{ fontSize: 21, fontWeight: 700, color: '#10264A', margin: 0, letterSpacing: '-0.01em' }}>
                       Book Your Cab
                     </h2>
-                    <p style={{ fontSize: 13, color: '#64748b', margin: '4px 0 0' }}>
-                      Fast one-way &amp; outstation cab booking
-                    </p>
                   </div>
 
                   {/* Name + Phone */}
