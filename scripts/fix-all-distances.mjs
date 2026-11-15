@@ -26,6 +26,11 @@ const APPLY = process.argv.includes('--apply')
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
 
+// Manually verified coordinates for tiny villages that geocoders can't find
+const MANUAL_COORDS = {
+  'Bagodara': { lat: 22.5167, lon: 72.1333 }, // Dholka taluka, Ahmedabad dist.
+}
+
 // Correct names for cities whose DB spelling is unusual / hard to geocode
 const GEO_OVERRIDE = {
   'Abu': 'Mount Abu, Rajasthan, India',
@@ -75,6 +80,10 @@ async function loadCoords(cities) {
   if (existsSync(CACHE_FILE)) {
     try { cache = JSON.parse(readFileSync(CACHE_FILE, 'utf8')) } catch { cache = {} }
   }
+  // Apply manually-known coordinates first
+  for (const [name, co] of Object.entries(MANUAL_COORDS)) {
+    if (!cache[name]) cache[name] = co
+  }
 
   let added = 0
   for (const c of cities) {
@@ -101,7 +110,10 @@ async function osrmTable(coords, srcIdx, dstIdx, attempt = 1) {
     `?sources=${srcIdx.join(';')}&destinations=${dstIdx.join(';')}&annotations=distance`
   try {
     const res = await fetch(url)
-    if (!res.ok) throw new Error('HTTP ' + res.status)
+    if (!res.ok) {
+      const txt = await res.text().catch(() => '')
+      throw new Error('HTTP ' + res.status + ' ' + txt.slice(0, 120))
+    }
     const data = await res.json()
     if (data.code !== 'Ok') throw new Error(data.code || 'OSRM error')
     return data.distances // meters
@@ -137,8 +149,8 @@ async function buildMatrix(cities, coordsByName) {
         dstIdx = dstChunk.map((_, k) => srcChunk.length + k)
       }
 
-      const missing = coords.some((c) => !c)
-      if (missing) continue
+      // Skip blocks that contain a city we could not geocode
+      if (coords.some((c) => c == null || c.lat == null || c.lon == null)) continue
 
       const dist = await osrmTable(coords, srcIdx, dstIdx)
       if (!dist) continue
@@ -206,6 +218,23 @@ async function main() {
     .filter((c) => interesting.includes(c.from) || interesting.includes(c.to))
     .slice(0, 15)
     .forEach((c) => console.log(`  ${c.from} → ${c.to}:  ${c.old} km  →  ${c.km} km`))
+
+  // Explicit verification pairs
+  const verify = [
+    ['Amreli', 'Bagasara'], ['Bagasara', 'Amreli'], ['Amreli', 'Rajkot'],
+    ['Bhavnagar', 'Sihor'], ['Ahmedabad', 'Surat'], ['Ahmedabad', 'Rajkot'],
+    ['Ahmedabad', 'Bagodara'], ['Somnath', 'Veraval'],
+  ]
+  console.log('\nVerification (key routes):')
+  for (const [o, d] of verify) {
+    const found = changes.find((c) => c.from === o && c.to === d)
+    if (found) console.log(`  ${o} → ${d}:  ${found.old} km  →  ${found.km} km`)
+    else {
+      const i = idxByName.get(o), j = idxByName.get(d)
+      const km = i != null && j != null && matrix[i][j] != null ? Math.max(1, Math.round(matrix[i][j] / 1000)) : null
+      console.log(`  ${o} → ${d}:  ${km} km (unchanged)`)
+    }
+  }
 
   if (!APPLY) {
     console.log('\n(dry run — re-run with --apply to write)')
