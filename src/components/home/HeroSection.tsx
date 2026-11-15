@@ -190,9 +190,10 @@ export default function HeroSection({ vehicles: _vehicles }: Props) {
           width: 100%;
           max-width: 470px;
           background: #ffffff;
-          border-radius: 20px;
+          border: 1px solid #dbeafe;
+          border-radius: 18px;
           padding: 22px 22px 20px;
-          box-shadow: 0 24px 60px -10px rgba(0, 0, 0, 0.48), 0 0 0 1px rgba(255, 255, 255, 0.15);
+          box-shadow: 0 24px 60px -12px rgba(0, 0, 0, 0.42), 0 0 0 1px rgba(8, 169, 238, 0.08);
         }
 
         .form-input-box {
@@ -213,6 +214,31 @@ export default function HeroSection({ vehicles: _vehicles }: Props) {
         .form-input-box.has-error {
           border-color: #ef4444;
           background: #fff5f5;
+        }
+        .booking-submit {
+          width: 100%;
+          min-height: 50px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 9px;
+          padding: 13px 20px;
+          border-radius: 10px;
+          font-size: 14.5px;
+          font-weight: 700;
+          box-shadow: 0 4px 16px rgba(8, 169, 238, 0.28);
+        }
+        .booking-submit:not(:disabled):hover {
+          background: #0798d4;
+          border-color: #0798d4;
+          transform: translateY(-1px);
+          box-shadow: 0 6px 18px rgba(8, 169, 238, 0.34);
+        }
+        .booking-submit:disabled {
+          background: #94a3b8;
+          border-color: #94a3b8;
+          cursor: not-allowed;
+          box-shadow: none;
         }
 
         @media (max-width: 1023px) {
@@ -265,7 +291,7 @@ export default function HeroSection({ vehicles: _vehicles }: Props) {
             max-width: 100% !important;
             margin: 0 auto;
             padding: 28px 24px 24px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+            box-shadow: 0 20px 50px rgba(8, 169, 238, 0.12), 0 0 0 1px rgba(16, 38, 74, 0.06);
           }
         }
         @media (max-width: 640px) {
@@ -496,7 +522,7 @@ export default function HeroSection({ vehicles: _vehicles }: Props) {
                         Pickup Location *
                       </label>
                       <div className={`form-input-box ${errors.pickup ? 'has-error' : ''}`}>
-                        <MapPin size={14} color="#10b981" style={{ position: 'absolute', left: 11, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} />
+                        <MapPin size={14} color="#08A9EE" style={{ position: 'absolute', left: 11, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} />
                         <input
                           type="text"
                           value={form.pickup}
@@ -517,7 +543,7 @@ export default function HeroSection({ vehicles: _vehicles }: Props) {
                         Drop Location *
                       </label>
                       <div className={`form-input-box ${errors.drop ? 'has-error' : ''}`}>
-                        <MapPin size={14} color="#ef4444" style={{ position: 'absolute', left: 11, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} />
+                        <MapPin size={14} color="#08A9EE" style={{ position: 'absolute', left: 11, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} />
                         <input
                           type="text"
                           value={form.drop}
@@ -577,7 +603,7 @@ export default function HeroSection({ vehicles: _vehicles }: Props) {
                     </div>
                   </div>
 
-                  {/* Vehicle Selection with the 9 specific options */}
+                  {/* Vehicle selection */}
                   <div style={{ marginBottom: 18 }}>
                     <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: 4 }}>
                       Select Vehicle
@@ -606,20 +632,7 @@ export default function HeroSection({ vehicles: _vehicles }: Props) {
                   <button
                     type="submit"
                     disabled={loading}
-                    style={{
-                      width: '100%',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 9,
-                      padding: '13px 20px',
-                      background: loading ? '#94a3b8' : 'linear-gradient(135deg, #08A9EE 0%, #0284c7 100%)',
-                      color: '#ffffff',
-                      border: 'none',
-                      borderRadius: 10,
-                      fontWeight: 700,
-                      fontSize: 14.5,
-                      cursor: loading ? 'not-allowed' : 'pointer',
-                      boxShadow: '0 8px 24px -4px rgba(8, 169, 238, 0.45)',
-                      transition: 'all 0.18s ease',
-                    }}
+                    className="btn btn-primary booking-submit"
                   >
                     <MessageCircle size={18} />
                     <span>{loading ? 'Opening WhatsApp…' : 'Book Your Cab on WhatsApp'}</span>

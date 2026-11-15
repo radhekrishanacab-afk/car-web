@@ -13,7 +13,6 @@ const PHONE = process.env.NEXT_PUBLIC_BUSINESS_PHONE ?? '+91 97230 97832'
 
 export interface VehicleData {
   id: string
-  number: string
   name: string
   seats: string
   passengers: number
@@ -28,10 +27,9 @@ export interface VehicleData {
   features: string[]
 }
 
-export const ALL_9_VEHICLES: VehicleData[] = [
+export const FLEET_VEHICLES: VehicleData[] = [
   {
     id: 'swift-dzire',
-    number: '01',
     name: 'Swift Dzire',
     seats: '4+1 Seaters',
     passengers: 4,
@@ -47,7 +45,6 @@ export const ALL_9_VEHICLES: VehicleData[] = [
   },
   {
     id: 'hyundai-aura',
-    number: '02',
     name: 'Hyundai Aura',
     seats: '4+1 Seaters',
     passengers: 4,
@@ -63,7 +60,6 @@ export const ALL_9_VEHICLES: VehicleData[] = [
   },
   {
     id: 'maruti-suzuki-ertiga',
-    number: '03',
     name: 'Maruti Suzuki Ertiga',
     seats: '6+1 Seaters',
     passengers: 6,
@@ -79,7 +75,6 @@ export const ALL_9_VEHICLES: VehicleData[] = [
   },
   {
     id: 'kia-carens',
-    number: '04',
     name: 'Kia Carens',
     seats: '6+1 Seaters',
     passengers: 6,
@@ -95,7 +90,6 @@ export const ALL_9_VEHICLES: VehicleData[] = [
   },
   {
     id: 'toyota-innova-cresta',
-    number: '05',
     name: 'Toyota Innova Cresta',
     seats: '6+1 Seaters',
     passengers: 6,
@@ -111,7 +105,6 @@ export const ALL_9_VEHICLES: VehicleData[] = [
   },
   {
     id: 'tata-winger',
-    number: '06',
     name: 'Tata Winger (12 Seater)',
     seats: '12 Seaters',
     passengers: 12,
@@ -127,7 +120,6 @@ export const ALL_9_VEHICLES: VehicleData[] = [
   },
   {
     id: 'tempo-traveller-14',
-    number: '07',
     name: 'Tempo Traveller (14 Seater)',
     seats: '14 Seaters',
     passengers: 14,
@@ -143,7 +135,6 @@ export const ALL_9_VEHICLES: VehicleData[] = [
   },
   {
     id: 'tempo-traveller-17',
-    number: '08',
     name: 'Tempo Traveller (17 Seater)',
     seats: '17 Seaters',
     passengers: 17,
@@ -159,7 +150,6 @@ export const ALL_9_VEHICLES: VehicleData[] = [
   },
   {
     id: 'urbania-traveller',
-    number: '09',
     name: 'Urbania Traveller (17 Seater)',
     seats: '17 Seaters',
     passengers: 17,
@@ -180,17 +170,17 @@ export default function VehicleSliderSection() {
   const [filterCat, setFilterCat] = useState<'all' | 'sedan' | 'suv' | 'traveller'>('all')
 
   const rawPhone = PHONE.replace(/[^0-9+]/g, '')
-  const activeCar = ALL_9_VEHICLES[activeIdx]
+  const activeCar = FLEET_VEHICLES[activeIdx]
 
   const nextCar = () => {
-    setActiveIdx((prev) => (prev >= ALL_9_VEHICLES.length - 1 ? 0 : prev + 1))
+    setActiveIdx((prev) => (prev >= FLEET_VEHICLES.length - 1 ? 0 : prev + 1))
   }
 
   const prevCar = () => {
-    setActiveIdx((prev) => (prev <= 0 ? ALL_9_VEHICLES.length - 1 : prev - 1))
+    setActiveIdx((prev) => (prev <= 0 ? FLEET_VEHICLES.length - 1 : prev - 1))
   }
 
-  const visibleGrid = ALL_9_VEHICLES.filter((v) => {
+  const visibleGrid = FLEET_VEHICLES.filter((v) => {
     if (filterCat === 'all') return true
     return v.category === filterCat
   })
@@ -219,12 +209,12 @@ export default function VehicleSliderSection() {
           <div className="inline-flex items-center gap-2 bg-[#08A9EE]/15 border border-[#08A9EE]/30 px-3.5 py-1.5 rounded-full mb-3">
             <Sparkles size={13} className="text-[#08A9EE]" />
             <span className="text-xs font-extrabold text-[#08A9EE] tracking-wider uppercase">
-              Our Fleet of 9 Distinct Vehicles
+              Our Verified Fleet
             </span>
           </div>
 
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white leading-tight mb-3 tracking-tight">
-            Choose Your Ride from <span className="text-[#08A9EE]">9 Verified Vehicles</span>
+            Choose Your Ride <span className="text-[#08A9EE]">for Every Journey</span>
           </h2>
 
           <p className="text-sm sm:text-base text-gray-300 max-w-2xl mx-auto leading-relaxed">
@@ -232,9 +222,9 @@ export default function VehicleSliderSection() {
           </p>
         </div>
 
-        {/* 9-Vehicle Quick Navigation Bar — Centered on Desktop, Swipeable on Mobile */}
+        {/* Vehicle Quick Navigation Bar — Centered on Desktop, Swipeable on Mobile */}
         <div className="flex items-center justify-start sm:justify-center gap-2 overflow-x-auto pb-3 mb-8 scrollbar-none w-full">
-          {ALL_9_VEHICLES.map((v, i) => {
+          {FLEET_VEHICLES.map((v, i) => {
             const isSelected = i === activeIdx
             return (
               <button
@@ -389,7 +379,7 @@ export default function VehicleSliderSection() {
           </div>
         </div>
 
-        {/* ── ALL 9 CARS QUICK EXPLORER (GRID) ── */}
+        {/* ── FLEET QUICK EXPLORER (GRID) ── */}
         <div className="mt-8">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6 text-center sm:text-left">
             <div>
@@ -404,7 +394,7 @@ export default function VehicleSliderSection() {
             {/* Filter by Category */}
             <div className="flex items-center justify-center gap-2 flex-wrap">
               {[
-                { id: 'all', label: 'All 9' },
+                { id: 'all', label: 'All Vehicles' },
                 { id: 'sedan', label: 'Sedans (4+1)' },
                 { id: 'suv', label: 'MUVs & SUVs (6+1)' },
                 { id: 'traveller', label: 'Travellers (12-17)' },
@@ -424,10 +414,10 @@ export default function VehicleSliderSection() {
             </div>
           </div>
 
-          {/* 9 Unique Cards Grid — Perfectly Centered on Mobile */}
+          {/* Vehicle Cards Grid — Perfectly Centered on Mobile */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {displayedGrid.map((v) => {
-              const actualIdx = ALL_9_VEHICLES.findIndex((car) => car.id === v.id)
+              const actualIdx = FLEET_VEHICLES.findIndex((car) => car.id === v.id)
               const isSelected = actualIdx === activeIdx
 
               return (

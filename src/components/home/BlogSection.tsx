@@ -92,7 +92,7 @@ export default async function BlogSection() {
                       Read More <ArrowRight size={11} />
                     </Link>
                   </div>
-                  <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="btn btn-green"
+                  <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="btn btn-primary"
                     style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginTop: 16, padding: '10px 12px', borderRadius: 8, fontSize: 13, fontWeight: 700, textDecoration: 'none' }}>
                     <MessageCircle size={15} /> Enquire on WhatsApp
                   </a>

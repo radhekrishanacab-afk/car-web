@@ -78,7 +78,7 @@ export default function AboutFleetSection() {
           </h2>
 
           <p className="text-sm sm:text-base text-gray-500 max-w-xl mx-auto leading-relaxed">
-            Every car in our fleet is verified, sanitized before departure, and driven by professional chauffeurs. Explore our top choices below or view our full 9-vehicle fleet.
+            Every car in our fleet is verified, sanitized before departure, and driven by professional chauffeurs. Explore our top choices below or browse our full vehicle fleet.
           </p>
         </div>
 
@@ -164,7 +164,7 @@ export default function AboutFleetSection() {
             href="/vehicles"
             className="btn btn-primary inline-flex items-center gap-2 px-8 py-3.5 text-sm sm:text-base font-bold shadow-lg shadow-[#08A9EE]/30 hover:scale-105 transition-all"
           >
-            <span>View All 9 Fleet Vehicles</span>
+            <span>View All Vehicles</span>
             <ArrowRight size={16} />
           </Link>
         </div>

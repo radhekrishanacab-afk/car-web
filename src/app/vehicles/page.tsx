@@ -153,7 +153,7 @@ export default function VehiclesPage() {
               Vehicles for Every <span style={{ color: '#08A9EE' }}>Journey</span>
             </h1>
             <p style={{ color: 'rgba(255,255,255,0.68)', fontSize: '1rem', lineHeight: 1.8, maxWidth: '38rem' }}>
-              Explore our fleet of 9 well-maintained vehicles — from compact sedans to executive 17-seater luxury travellers. Clean, verified, and driven by professional chauffeurs.
+              Explore our range of well-maintained vehicles — from compact sedans to executive 17-seater luxury travellers. Clean, verified, and driven by professional chauffeurs.
             </p>
           </div>
         </section>
