@@ -5,7 +5,7 @@ import { z } from 'zod'
 import {
   MessageCircle, User, Phone, Mail,
   CheckCircle2, AlertCircle,
-  MapPin, Calendar, LocateFixed, Loader2, Clock, Car, ChevronDown,
+  MapPin, Calendar, Clock, Car, ChevronDown,
 } from 'lucide-react'
 
 export const VEHICLE_OPTIONS = [
@@ -61,26 +61,6 @@ function formatTime(isoTime?: string): string {
   return `${h12}:${m} ${ampm}`
 }
 
-/* ── Reverse geocode using OpenStreetMap Nominatim ── */
-async function reverseGeocode(lat: number, lon: number): Promise<string> {
-  try {
-    const res = await fetch(
-      `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&accept-language=en`,
-      { headers: { 'User-Agent': 'RadheKrishnaCab/1.0' } }
-    )
-    const data = await res.json()
-    const a = data.address ?? {}
-    const parts = [
-      a.neighbourhood || a.suburb || a.village || a.road,
-      a.city || a.town || a.county,
-      a.state,
-    ].filter(Boolean)
-    return parts.join(', ') || data.display_name?.split(',').slice(0, 3).join(',') || `${lat.toFixed(4)}, ${lon.toFixed(4)}`
-  } catch {
-    return `${lat.toFixed(4)}, ${lon.toFixed(4)}`
-  }
-}
-
 /* ── WhatsApp message — clean, readable ── */
 function buildWAMessage(d: FormData): string {
   const lines = [
@@ -108,38 +88,10 @@ export default function ContactForm() {
   const [errors, setErrors]       = useState<FieldErrors>({})
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading]     = useState(false)
-  const [locating, setLocating]   = useState<'pickup' | 'drop' | null>(null)
 
   const update = (f: keyof FormData, v: string) => {
     setForm(p => ({ ...p, [f]: v }))
     if (errors[f]) setErrors(p => ({ ...p, [f]: undefined }))
-  }
-
-  /* ── Get current location → reverse geocode → fill field ── */
-  const handleUseMyLocation = (field: 'pickup' | 'drop') => {
-    if (!navigator.geolocation) {
-      alert('Location not supported in your browser.')
-      return
-    }
-    setLocating(field)
-    navigator.geolocation.getCurrentPosition(
-      async (pos) => {
-        const { latitude, longitude } = pos.coords
-        const address = await reverseGeocode(latitude, longitude)
-        const mapsLink = `https://maps.google.com/?q=${latitude},${longitude}`
-        update(field, `${address} (${mapsLink})`)
-        setLocating(null)
-      },
-      (err) => {
-        setLocating(null)
-        if (err.code === 1) {
-          alert('Location permission denied. Please type your location manually.')
-        } else {
-          alert('Could not get your location. Please type it manually.')
-        }
-      },
-      { timeout: 10000, enableHighAccuracy: true }
-    )
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -330,35 +282,11 @@ export default function ContactForm() {
                 onChange={e => update('pickup', e.target.value)}
                 placeholder="City or area name"
                 style={{
-                  width: '100%', padding: '12px 96px 12px 36px',
+                  width: '100%', padding: '12px 12px 12px 36px',
                   background: 'transparent', border: 'none',
                   fontSize: '0.9375rem', color: '#10264A', outline: 'none', fontWeight: 500,
                 }}
               />
-              <button
-                type="button"
-                onClick={() => handleUseMyLocation('pickup')}
-                disabled={locating === 'pickup'}
-                title="Use current location"
-                style={{
-                  position: 'absolute', right: '0.375rem', top: '50%',
-                  transform: 'translateY(-50%)',
-                  display: 'flex', alignItems: 'center', gap: '0.25rem',
-                  padding: '0.3rem 0.55rem',
-                  background: locating === 'pickup' ? '#e5e7eb' : '#EAF6FF',
-                  color: '#0369a1',
-                  border: '1px solid rgba(8,169,238,0.3)',
-                  borderRadius: '0.5rem',
-                  fontSize: '0.6875rem', fontWeight: 700,
-                  cursor: locating === 'pickup' ? 'not-allowed' : 'pointer',
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                {locating === 'pickup'
-                  ? <><Loader2 size={11} style={{ animation: 'spin 1s linear infinite' }} /> Locating…</>
-                  : <><LocateFixed size={11} /> My Location</>
-                }
-              </button>
             </div>
             {errors.pickup && (
               <p style={{ margin: '0.25rem 0 0', fontSize: '0.75rem', color: '#ef4444', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
@@ -379,35 +307,11 @@ export default function ContactForm() {
                 onChange={e => update('drop', e.target.value)}
                 placeholder="Destination city or area"
                 style={{
-                  width: '100%', padding: '12px 96px 12px 36px',
+                  width: '100%', padding: '12px 12px 12px 36px',
                   background: 'transparent', border: 'none',
                   fontSize: '0.9375rem', color: '#10264A', outline: 'none', fontWeight: 500,
                 }}
               />
-              <button
-                type="button"
-                onClick={() => handleUseMyLocation('drop')}
-                disabled={locating === 'drop'}
-                title="Use current location"
-                style={{
-                  position: 'absolute', right: '0.375rem', top: '50%',
-                  transform: 'translateY(-50%)',
-                  display: 'flex', alignItems: 'center', gap: '0.25rem',
-                  padding: '0.3rem 0.55rem',
-                  background: locating === 'drop' ? '#e5e7eb' : '#EAF6FF',
-                  color: '#0369a1',
-                  border: '1px solid rgba(8,169,238,0.3)',
-                  borderRadius: '0.5rem',
-                  fontSize: '0.6875rem', fontWeight: 700,
-                  cursor: locating === 'drop' ? 'not-allowed' : 'pointer',
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                {locating === 'drop'
-                  ? <><Loader2 size={11} style={{ animation: 'spin 1s linear infinite' }} /> Locating…</>
-                  : <><LocateFixed size={11} /> My Location</>
-                }
-              </button>
             </div>
             {errors.drop && (
               <p style={{ margin: '0.25rem 0 0', fontSize: '0.75rem', color: '#ef4444', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>

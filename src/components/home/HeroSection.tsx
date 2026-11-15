@@ -198,6 +198,7 @@ export default function HeroSection({ vehicles: _vehicles }: Props) {
 
         .form-input-box {
           position: relative;
+          min-height: 44px;
           background: #f8fafc;
           border: 1.5px solid #e2e8f0;
           border-radius: 10px;
@@ -217,7 +218,7 @@ export default function HeroSection({ vehicles: _vehicles }: Props) {
         }
         .booking-submit {
           width: 100%;
-          min-height: 50px;
+          min-height: 48px;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -454,25 +455,19 @@ export default function HeroSection({ vehicles: _vehicles }: Props) {
               ) : (
                 <form onSubmit={handleSubmit} noValidate>
 
-                  {/* Clean, Modern Header without clutter badges */}
-                  <div style={{ marginBottom: 18, borderBottom: '1px solid #f1f5f9', paddingBottom: 14 }}>
-                    <div style={{
-                      height: 3, width: 36,
-                      background: 'linear-gradient(90deg, #08A9EE, #10264A)',
-                      borderRadius: 2, marginBottom: 8,
-                    }} />
-                    <h2 style={{ fontSize: 21, fontWeight: 800, color: '#10264A', margin: 0, letterSpacing: '-0.01em' }}>
+                  <div style={{ marginBottom: 16, borderBottom: '1px solid #e2e8f0', paddingBottom: 12 }}>
+                    <h2 style={{ fontSize: 21, fontWeight: 700, color: '#10264A', margin: 0, letterSpacing: '-0.01em' }}>
                       Book Your Cab
                     </h2>
-                    <p style={{ fontSize: 12.5, color: '#64748b', margin: '4px 0 0' }}>
+                    <p style={{ fontSize: 13, color: '#64748b', margin: '4px 0 0' }}>
                       Fast one-way &amp; outstation cab booking
                     </p>
                   </div>
 
                   {/* Name + Phone */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mb-2.5">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
                     <div>
-                      <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: 4 }}>
+                      <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#10264A', marginBottom: 6 }}>
                         Your Name *
                       </label>
                       <div className={`form-input-box ${errors.name ? 'has-error' : ''}`}>
@@ -483,9 +478,9 @@ export default function HeroSection({ vehicles: _vehicles }: Props) {
                           onChange={(e) => update('name', e.target.value)}
                           placeholder="Full Name"
                           style={{
-                            width: '100%', padding: '9px 10px 9px 32px',
+                            width: '100%', height: 44, padding: '10px 12px 10px 36px',
                             background: 'transparent', border: 'none',
-                            fontSize: 13, color: '#0f172a', outline: 'none', fontWeight: 500,
+                            fontSize: 14, color: '#10264A', outline: 'none', fontWeight: 500,
                           }}
                         />
                       </div>
@@ -493,7 +488,7 @@ export default function HeroSection({ vehicles: _vehicles }: Props) {
                     </div>
 
                     <div>
-                      <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: 4 }}>
+                      <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#10264A', marginBottom: 6 }}>
                         Mobile Number *
                       </label>
                       <div className={`form-input-box ${errors.phone ? 'has-error' : ''}`}>
@@ -505,9 +500,9 @@ export default function HeroSection({ vehicles: _vehicles }: Props) {
                           onChange={(e) => update('phone', e.target.value.replace(/\D/g, ''))}
                           placeholder="10-digit Mobile"
                           style={{
-                            width: '100%', padding: '9px 10px 9px 32px',
+                            width: '100%', height: 44, padding: '10px 12px 10px 36px',
                             background: 'transparent', border: 'none',
-                            fontSize: 13, color: '#0f172a', outline: 'none', fontWeight: 500,
+                            fontSize: 14, color: '#10264A', outline: 'none', fontWeight: 500,
                           }}
                         />
                       </div>
@@ -516,9 +511,9 @@ export default function HeroSection({ vehicles: _vehicles }: Props) {
                   </div>
 
                   {/* Pickup + Drop Location */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mb-2.5">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
                     <div>
-                      <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: 4 }}>
+                      <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#10264A', marginBottom: 6 }}>
                         Pickup Location *
                       </label>
                       <div className={`form-input-box ${errors.pickup ? 'has-error' : ''}`}>
@@ -529,9 +524,9 @@ export default function HeroSection({ vehicles: _vehicles }: Props) {
                           onChange={(e) => update('pickup', e.target.value)}
                           placeholder="From City / Area"
                           style={{
-                            width: '100%', padding: '9px 10px 9px 32px',
+                            width: '100%', height: 44, padding: '10px 12px 10px 36px',
                             background: 'transparent', border: 'none',
-                            fontSize: 13, color: '#0f172a', outline: 'none', fontWeight: 500,
+                            fontSize: 14, color: '#10264A', outline: 'none', fontWeight: 500,
                           }}
                         />
                       </div>
@@ -539,7 +534,7 @@ export default function HeroSection({ vehicles: _vehicles }: Props) {
                     </div>
 
                     <div>
-                      <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: 4 }}>
+                      <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#10264A', marginBottom: 6 }}>
                         Drop Location *
                       </label>
                       <div className={`form-input-box ${errors.drop ? 'has-error' : ''}`}>
@@ -550,9 +545,9 @@ export default function HeroSection({ vehicles: _vehicles }: Props) {
                           onChange={(e) => update('drop', e.target.value)}
                           placeholder="To City / Area"
                           style={{
-                            width: '100%', padding: '9px 10px 9px 32px',
+                            width: '100%', height: 44, padding: '10px 12px 10px 36px',
                             background: 'transparent', border: 'none',
-                            fontSize: 13, color: '#0f172a', outline: 'none', fontWeight: 500,
+                            fontSize: 14, color: '#10264A', outline: 'none', fontWeight: 500,
                           }}
                         />
                       </div>
@@ -561,9 +556,9 @@ export default function HeroSection({ vehicles: _vehicles }: Props) {
                   </div>
 
                   {/* Travel Date + Pickup Time */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mb-2.5">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
                     <div>
-                      <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: 4 }}>
+                      <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#10264A', marginBottom: 6 }}>
                         Travel Date *
                       </label>
                       <div className={`form-input-box ${errors.date ? 'has-error' : ''}`}>
@@ -574,9 +569,9 @@ export default function HeroSection({ vehicles: _vehicles }: Props) {
                           value={form.date}
                           onChange={(e) => update('date', e.target.value)}
                           style={{
-                            width: '100%', padding: '9px 8px 9px 32px',
+                            width: '100%', height: 44, padding: '10px 8px 10px 36px',
                             background: 'transparent', border: 'none',
-                            fontSize: 12.5, color: '#0f172a', outline: 'none', fontWeight: 500,
+                            fontSize: 14, color: '#10264A', outline: 'none', fontWeight: 500,
                           }}
                         />
                       </div>
@@ -584,7 +579,7 @@ export default function HeroSection({ vehicles: _vehicles }: Props) {
                     </div>
 
                     <div>
-                      <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: 4 }}>
+                      <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#10264A', marginBottom: 6 }}>
                         Pickup Time
                       </label>
                       <div className="form-input-box">
@@ -594,9 +589,9 @@ export default function HeroSection({ vehicles: _vehicles }: Props) {
                           value={form.time}
                           onChange={(e) => update('time', e.target.value)}
                           style={{
-                            width: '100%', padding: '9px 8px 9px 32px',
+                            width: '100%', height: 44, padding: '10px 8px 10px 36px',
                             background: 'transparent', border: 'none',
-                            fontSize: 12.5, color: '#0f172a', outline: 'none', fontWeight: 500,
+                            fontSize: 14, color: '#10264A', outline: 'none', fontWeight: 500,
                           }}
                         />
                       </div>
@@ -604,8 +599,8 @@ export default function HeroSection({ vehicles: _vehicles }: Props) {
                   </div>
 
                   {/* Vehicle selection */}
-                  <div style={{ marginBottom: 18 }}>
-                    <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: 4 }}>
+                  <div style={{ marginBottom: 16 }}>
+                    <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#10264A', marginBottom: 6 }}>
                       Select Vehicle
                     </label>
                     <div className="form-input-box" style={{ position: 'relative' }}>
@@ -614,9 +609,9 @@ export default function HeroSection({ vehicles: _vehicles }: Props) {
                         value={form.vehicle}
                         onChange={(e) => update('vehicle', e.target.value)}
                         style={{
-                          width: '100%', padding: '10px 32px 10px 34px',
+                          width: '100%', height: 44, padding: '10px 32px 10px 36px',
                           background: 'transparent', border: 'none',
-                          fontSize: 13, color: '#0f172a', outline: 'none',
+                          fontSize: 14, color: '#10264A', outline: 'none',
                           fontWeight: 600, cursor: 'pointer', appearance: 'none',
                         }}
                       >

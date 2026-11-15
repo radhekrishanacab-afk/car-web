@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet'
 import type { LatLng } from 'leaflet'
-import { CheckCircle2, X, LocateFixed, Loader2 } from 'lucide-react'
+import { CheckCircle2, X } from 'lucide-react'
 
 /* Fix leaflet default marker icon (missing in webpack/Next.js) */
 function fixLeafletIcon() {
@@ -54,17 +54,11 @@ export default function LocationPicker({ label, onConfirm, onClose }: Props) {
   const [pin, setPin]               = useState<LatLng | null>(null)
   const [address, setAddress]       = useState<string>('')
   const [geocoding, setGeocoding]   = useState(false)
-  const [gpsLoading, setGpsLoading] = useState(false)
-  const [center, setCenter]         = useState<[number, number]>([22.3072, 73.1812]) // Gujarat default
+  const center: [number, number] = [22.3072, 73.1812]
 
   useEffect(() => {
     fixLeafletIcon()
     setMounted(true)
-    // Try to get user location for initial map center
-    navigator.geolocation?.getCurrentPosition(
-      (pos) => setCenter([pos.coords.latitude, pos.coords.longitude]),
-      () => {} // keep default on error
-    )
   }, [])
 
   const handlePick = async (ll: LatLng) => {
@@ -73,31 +67,6 @@ export default function LocationPicker({ label, onConfirm, onClose }: Props) {
     const addr = await reverseGeocode(ll.lat, ll.lng)
     setAddress(addr)
     setGeocoding(false)
-  }
-
-  const handleGPS = () => {
-    if (!navigator.geolocation) return
-    setGpsLoading(true)
-    navigator.geolocation.getCurrentPosition(
-      async (pos) => {
-        const { latitude: lat, longitude: lng } = pos.coords
-        // eslint-disable-next-line @typescript-eslint/no-require-imports
-        const L = require('leaflet')
-        const ll = L.latLng(lat, lng)
-        setCenter([lat, lng])
-        setPin(ll)
-        setGeocoding(true)
-        setGpsLoading(false)
-        const addr = await reverseGeocode(lat, lng)
-        setAddress(addr)
-        setGeocoding(false)
-      },
-      () => {
-        setGpsLoading(false)
-        alert('Could not get your location. Please tap on the map.')
-      },
-      { timeout: 10000, enableHighAccuracy: true }
-    )
   }
 
   const handleConfirm = () => {
@@ -155,30 +124,10 @@ export default function LocationPicker({ label, onConfirm, onClose }: Props) {
           </button>
         </div>
 
-        {/* GPS button */}
+        {/* Map instructions */}
         <div style={{ padding: '0.75rem 1.25rem', background: '#f8fafc', borderBottom: '1px solid #f1f5f9' }}>
-          <button
-            type="button"
-            onClick={handleGPS}
-            disabled={gpsLoading}
-            style={{
-              display: 'flex', alignItems: 'center', gap: '0.5rem',
-              padding: '0.5rem 1rem',
-              background: gpsLoading ? '#e5e7eb' : '#EAF6FF',
-              color: '#0369a1',
-              border: '1px solid rgba(8,169,238,0.35)',
-              borderRadius: '0.625rem',
-              fontSize: '0.8125rem', fontWeight: 700,
-              cursor: gpsLoading ? 'not-allowed' : 'pointer',
-            }}
-          >
-            {gpsLoading
-              ? <><Loader2 size={14} style={{ animation: 'spin 1s linear infinite' }} /> Getting location…</>
-              : <><LocateFixed size={14} /> Use My Current Location</>
-            }
-          </button>
-          <p style={{ fontSize: '0.75rem', color: '#9CA3AF', marginTop: '0.375rem' }}>
-            Or tap anywhere on the map to drop a pin
+          <p style={{ fontSize: '0.8125rem', color: '#64748b', margin: 0 }}>
+            Tap anywhere on the map to drop a pin
           </p>
         </div>
 
