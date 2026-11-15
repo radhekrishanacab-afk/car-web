@@ -5,8 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import {
   Users, Phone, MessageCircle,
-  ArrowRight, ChevronLeft, ChevronRight, ChevronDown, ChevronUp,
-  Luggage, CheckCircle2, Sparkles
+  ArrowRight, ChevronLeft, ChevronRight, Luggage, CheckCircle2, Sparkles
 } from 'lucide-react'
 
 const WA    = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '919723097832'
@@ -179,7 +178,6 @@ export const ALL_9_VEHICLES: VehicleData[] = [
 export default function VehicleSliderSection() {
   const [activeIdx, setActiveIdx] = useState(0)
   const [filterCat, setFilterCat] = useState<'all' | 'sedan' | 'suv' | 'traveller'>('all')
-  const [showAllVehicles, setShowAllVehicles] = useState(false)
 
   const rawPhone = PHONE.replace(/[^0-9+]/g, '')
   const activeCar = ALL_9_VEHICLES[activeIdx]
@@ -196,7 +194,7 @@ export default function VehicleSliderSection() {
     if (filterCat === 'all') return true
     return v.category === filterCat
   })
-  const displayedGrid = showAllVehicles ? visibleGrid : visibleGrid.slice(0, 3)
+  const displayedGrid = visibleGrid.slice(0, 3)
 
   return (
     <section className="py-16 lg:py-24 relative overflow-hidden" style={{
@@ -396,10 +394,10 @@ export default function VehicleSliderSection() {
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6 text-center sm:text-left">
             <div>
               <h3 className="text-xl sm:text-2xl font-extrabold text-white mb-1">
-                Explore All 9 Fleet Vehicles
+                Explore Our Fleet
               </h3>
               <p className="text-xs sm:text-sm text-gray-400">
-                Click on any card to view full specifications in the spotlight above.
+                Choose a vehicle below, or browse our full fleet and rates.
               </p>
             </div>
 
@@ -413,10 +411,7 @@ export default function VehicleSliderSection() {
               ].map((f) => (
                 <button
                   key={f.id}
-                  onClick={() => {
-                    setFilterCat(f.id as typeof filterCat)
-                    setShowAllVehicles(false)
-                  }}
+                  onClick={() => setFilterCat(f.id as typeof filterCat)}
                   className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
                     filterCat === f.id
                       ? 'bg-[#08A9EE] text-white'
@@ -430,7 +425,7 @@ export default function VehicleSliderSection() {
           </div>
 
           {/* 9 Unique Cards Grid — Perfectly Centered on Mobile */}
-          <div id="fleet-vehicle-grid" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {displayedGrid.map((v) => {
               const actualIdx = ALL_9_VEHICLES.findIndex((car) => car.id === v.id)
               const isSelected = actualIdx === activeIdx
@@ -489,23 +484,6 @@ export default function VehicleSliderSection() {
             })}
           </div>
 
-          {visibleGrid.length > 3 && (
-            <div className="mt-7 flex flex-col items-center gap-2">
-              <p className="text-xs font-medium text-gray-400" aria-live="polite">
-                Showing {displayedGrid.length} of {visibleGrid.length} vehicles
-              </p>
-              <button
-                type="button"
-                aria-expanded={showAllVehicles}
-                aria-controls="fleet-vehicle-grid"
-                onClick={() => setShowAllVehicles((showingAll) => !showingAll)}
-                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[#08A9EE]/50 bg-[#08A9EE]/10 px-5 py-2.5 text-sm font-bold text-[#38bdf8] transition-colors hover:border-[#08A9EE] hover:bg-[#08A9EE]/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#08A9EE] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0c1833]"
-              >
-                {showAllVehicles ? 'Show fewer vehicles' : `Show all ${visibleGrid.length} vehicles`}
-                {showAllVehicles ? <ChevronUp size={17} /> : <ChevronDown size={17} />}
-              </button>
-            </div>
-          )}
         </div>
 
         {/* Bottom Banner */}
@@ -517,7 +495,7 @@ export default function VehicleSliderSection() {
             href="/vehicles"
             className="text-sm font-bold text-[#08A9EE] hover:text-[#38bdf8] inline-flex items-center gap-1.5 transition-colors"
           >
-            <span>View All 9 Specifications &amp; Rates</span>
+            <span>View all vehicles &amp; rates</span>
             <ArrowRight size={15} />
           </Link>
         </div>
