@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useSyncExternalStore } from 'react'
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet'
 import type { LatLng } from 'leaflet'
 import { CheckCircle2, X } from 'lucide-react'
@@ -49,16 +49,23 @@ interface Props {
   onClose: () => void
 }
 
+const subscribeToMount = () => () => {}
+const getClientMountSnapshot = () => true
+const getServerMountSnapshot = () => false
+
 export default function LocationPicker({ label, onConfirm, onClose }: Props) {
-  const [mounted, setMounted]       = useState(false)
+  const mounted = useSyncExternalStore(
+    subscribeToMount,
+    getClientMountSnapshot,
+    getServerMountSnapshot
+  )
   const [pin, setPin]               = useState<LatLng | null>(null)
   const [address, setAddress]       = useState<string>('')
   const [geocoding, setGeocoding]   = useState(false)
-  const center: [number, number] = [22.3072, 73.1812]
+  const [center] = useState<[number, number]>([22.3072, 73.1812])
 
   useEffect(() => {
     fixLeafletIcon()
-    setMounted(true)
   }, [])
 
   const handlePick = async (ll: LatLng) => {
