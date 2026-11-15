@@ -264,7 +264,12 @@ model BlogPost {
   tags            String?
   status          String   @default("DRAFT")   // DRAFT | PUBLISHED
   isFeatured      Boolean  @default(false)
-  homepagePosition Int?                       // null = hidden from homepage, 1/2/3 = display position
+  homepagePosition Int?                       // null = hidden from homepage, 1-4 = display position
+  homepageTitle    String?
+  homepageDescription String?
+  homepageImage   String?
+  homepageButtonLabel String?
+  homepageWhatsappMessage String?
   readingMinutes  Int      @default(3)
   authorName      String   @default("Radhe Krishna Cab")
   seoTitle        String?
@@ -272,4 +277,11 @@ model BlogPost {
   publishedAt     DateTime?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
+}
+
+model HomepageBlogSettings {
+  id          Int      @id @default(1)
+  heading     String   @default("TRAVEL BLOG")
+  description String   @default("Tips, Guides & Destinations")
+  updatedAt   DateTime @updatedAt
 }

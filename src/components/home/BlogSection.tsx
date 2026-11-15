@@ -1,31 +1,25 @@
 import Link from 'next/link'
-import { ArrowRight, Clock } from 'lucide-react'
+import { ArrowRight, Clock, MessageCircle } from 'lucide-react'
 import { prisma } from '@/lib/prisma'
 
 async function getLatestPosts() {
-  // Fetch posts that have an explicit homepage position set (1, 2, or 3)
-  const positioned = await prisma.blogPost.findMany({
+  return prisma.blogPost.findMany({
     where: { status: 'PUBLISHED', homepagePosition: { not: null } },
     orderBy: { homepagePosition: 'asc' },
-    take: 3,
+    take: 4,
   }).catch(() => [])
-
-  // If fewer than 3 positioned posts, fill up with latest published posts
-  if (positioned.length < 3) {
-    const positionedIds = new Set(positioned.map(p => p.id))
-    const fillers = await prisma.blogPost.findMany({
-      where: { status: 'PUBLISHED', id: { notIn: [...positionedIds] } },
-      orderBy: [{ isFeatured: 'desc' }, { publishedAt: 'desc' }],
-      take: 3 - positioned.length,
-    }).catch(() => [])
-    return [...positioned, ...fillers]
-  }
-  return positioned
 }
 
 export default async function BlogSection() {
-  const posts = await getLatestPosts()
+  const [posts, sectionSettings, contactSettings] = await Promise.all([
+    getLatestPosts(),
+    prisma.homepageBlogSettings.findUnique({ where: { id: 1 } }).catch(() => null),
+    prisma.contactSettings.findFirst().catch(() => null),
+  ])
   if (posts.length === 0) return null
+  const heading = sectionSettings?.heading ?? 'TRAVEL BLOG'
+  const description = sectionSettings?.description ?? 'Tips, Guides & Destinations'
+  const whatsappNumber = (contactSettings?.whatsappNumber ?? process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '919723097832').replace(/\D/g, '')
 
   return (
     <section style={{ background: '#f8fafc', padding: '64px 16px' }}>
@@ -34,9 +28,9 @@ export default async function BlogSection() {
         {/* Header */}
         <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginBottom: 36 }}>
           <div>
-            <p style={{ fontSize: 12, fontWeight: 700, color: '#f59e0b', letterSpacing: '0.1em', marginBottom: 6 }}>TRAVEL BLOG</p>
+            <p style={{ fontSize: 12, fontWeight: 700, color: '#f59e0b', letterSpacing: '0.1em', marginBottom: 6 }}>{heading}</p>
             <h2 style={{ fontSize: 'clamp(1.5rem,3vw,2rem)', fontWeight: 800, color: '#0a1628', margin: 0, lineHeight: 1.2 }}>
-              Tips, Guides &amp; <span style={{ color: '#f59e0b' }}>Destinations</span>
+              {description}
             </h2>
           </div>
           <Link href="/blog"
@@ -46,10 +40,16 @@ export default async function BlogSection() {
         </div>
 
         {/* Cards */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(300px,1fr))', gap: 24 }}>
-          {posts.map((post, i) => (
-            <Link key={post.id} href={`/blog/${post.slug}`} style={{ textDecoration: 'none' }}>
-              <div style={{
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(250px,1fr))', gap: 24 }}>
+          {posts.map((post) => {
+            const title = post.homepageTitle || post.title
+            const cardDescription = post.homepageDescription || post.excerpt
+            const image = post.homepageImage || post.featuredImage
+            const message = post.homepageWhatsappMessage || `Hello! I saw "${title}" on your website and would like more information.`
+            const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`
+
+            return (
+              <article key={post.id} style={{
                 background: '#fff', borderRadius: 16, overflow: 'hidden',
                 border: '1px solid #e2e8f0', boxShadow: '0 2px 12px rgba(10,22,40,.06)',
                 display: 'flex', flexDirection: 'column', height: '100%',
@@ -57,12 +57,12 @@ export default async function BlogSection() {
               }}>
                 {/* Image */}
                 <div style={{ position: 'relative', height: 200, background: '#e8edf5', flexShrink: 0 }}>
-                  {post.featuredImage
+                  {image
                     // eslint-disable-next-line @next/next/no-img-element
-                    ? <img src={post.featuredImage} alt={post.title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                    ? <img src={image} alt={title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
                     : <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', fontSize: 48 }}>✍️</div>
                   }
-                  {i === 0 && post.isFeatured && (
+                  {post.isFeatured && (
                     <div style={{ position: 'absolute', top: 12, left: 12, background: '#f59e0b', color: '#0a1628', fontSize: 10, fontWeight: 700, padding: '3px 10px', borderRadius: 50 }}>
                       FEATURED
                     </div>
@@ -77,25 +77,29 @@ export default async function BlogSection() {
                 {/* Content */}
                 <div style={{ padding: '20px 22px', flex: 1, display: 'flex', flexDirection: 'column' }}>
                   <h3 style={{ fontSize: 15, fontWeight: 700, color: '#0a1628', margin: '0 0 8px', lineHeight: 1.4 }}>
-                    {post.title}
+                    {title}
                   </h3>
-                  {post.excerpt && (
+                  {cardDescription && (
                     <p style={{ fontSize: 13, color: '#64748b', lineHeight: 1.6, margin: '0 0 14px', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', flex: 1 }}>
-                      {post.excerpt}
+                      {cardDescription}
                     </p>
                   )}
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 'auto', fontSize: 12, color: '#94a3b8' }}>
                     <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
                       <Clock size={11} /> {post.readingMinutes} min read
                     </span>
-                    <span style={{ display: 'flex', alignItems: 'center', gap: 4, color: '#0a1628', fontWeight: 600 }}>
+                    <Link href={`/blog/${post.slug}`} style={{ display: 'inline-flex', alignItems: 'center', gap: 4, color: '#0a1628', fontWeight: 600, textDecoration: 'none' }}>
                       Read More <ArrowRight size={11} />
-                    </span>
+                    </Link>
                   </div>
+                  <a href={whatsappUrl} target="_blank" rel="noopener noreferrer"
+                    style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginTop: 16, padding: '10px 12px', background: '#16a34a', color: '#fff', borderRadius: 8, fontSize: 13, fontWeight: 700, textDecoration: 'none' }}>
+                    <MessageCircle size={15} /> {post.homepageButtonLabel || 'Enquire on WhatsApp'}
+                  </a>
                 </div>
-              </div>
-            </Link>
-          ))}
+              </article>
+            )
+          })}
         </div>
 
       </div>

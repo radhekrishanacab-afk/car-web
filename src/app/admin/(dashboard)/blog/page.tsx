@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { prisma } from '@/lib/prisma'
 import { Plus, FileText, Eye, EyeOff } from 'lucide-react'
 import DeleteBlogPost from '@/components/admin/DeleteBlogPost'
+import HomepageBlogSettingsForm from '@/components/admin/HomepageBlogSettingsForm'
 
 export const metadata: Metadata = { title: 'Blog Posts' }
 
@@ -21,9 +22,10 @@ export default async function BlogAdminPage({ searchParams }: PageProps) {
   if (status) where.status = status
   if (search) where.OR = [{ title: { contains: search, mode: 'insensitive' } }, { category: { contains: search, mode: 'insensitive' } }]
 
-  const [posts, total] = await Promise.all([
+  const [posts, total, homepageSettings] = await Promise.all([
     prisma.blogPost.findMany({ where, orderBy: { createdAt: 'desc' }, skip: (page-1)*perPage, take: perPage }),
     prisma.blogPost.count({ where }),
+    prisma.homepageBlogSettings.findUnique({ where: { id: 1 } }).catch(() => null),
   ])
   const pages = Math.ceil(total / perPage)
 
@@ -39,6 +41,11 @@ export default async function BlogAdminPage({ searchParams }: PageProps) {
           <Plus className="w-4 h-4" /> New Post
         </Link>
       </div>
+
+      <HomepageBlogSettingsForm
+        initialHeading={homepageSettings?.heading ?? 'TRAVEL BLOG'}
+        initialDescription={homepageSettings?.description ?? 'Tips, Guides & Destinations'}
+      />
 
       {/* Filters */}
       <form className="flex flex-wrap gap-3 mb-6">

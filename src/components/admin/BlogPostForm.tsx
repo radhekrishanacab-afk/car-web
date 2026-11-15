@@ -16,6 +16,11 @@ interface BlogPost {
   status: string
   isFeatured: boolean
   homepagePosition: number | null
+  homepageTitle: string | null
+  homepageDescription: string | null
+  homepageImage: string | null
+  homepageButtonLabel: string | null
+  homepageWhatsappMessage: string | null
   readingMinutes: number
   authorName: string
   seoTitle: string | null
@@ -28,6 +33,22 @@ interface Props {
 
 function slugify(t: string) {
   return t.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '').replace(/-+/g, '-').slice(0, 200)
+}
+
+async function optimizeImage(file: File): Promise<string> {
+  if (!file.type.startsWith('image/')) throw new Error('Please select an image file.')
+  if (file.size > 10 * 1024 * 1024) throw new Error('Image must be smaller than 10 MB.')
+
+  const bitmap = await createImageBitmap(file)
+  const scale = Math.min(1, 1400 / bitmap.width, 900 / bitmap.height)
+  const canvas = document.createElement('canvas')
+  canvas.width = Math.round(bitmap.width * scale)
+  canvas.height = Math.round(bitmap.height * scale)
+  const context = canvas.getContext('2d')
+  if (!context) throw new Error('Could not process this image.')
+  context.drawImage(bitmap, 0, 0, canvas.width, canvas.height)
+  bitmap.close()
+  return canvas.toDataURL('image/webp', 0.82)
 }
 
 export default function BlogPostForm({ post }: Props) {
@@ -45,12 +66,19 @@ export default function BlogPostForm({ post }: Props) {
     status:         post?.status ?? 'DRAFT',
     isFeatured:     post?.isFeatured ?? false,
     homepagePosition: post?.homepagePosition != null ? String(post.homepagePosition) : '',
+    homepageTitle: post?.homepageTitle ?? '',
+    homepageDescription: post?.homepageDescription ?? '',
+    homepageImage: post?.homepageImage ?? '',
+    homepageButtonLabel: post?.homepageButtonLabel ?? 'Enquire on WhatsApp',
+    homepageWhatsappMessage: post?.homepageWhatsappMessage ?? '',
     readingMinutes: String(post?.readingMinutes ?? 3),
     authorName:     post?.authorName ?? 'Radhe Krishna Cab',
     seoTitle:       post?.seoTitle ?? '',
     seoDescription: post?.seoDescription ?? '',
   })
   const [loading,     setLoading]     = useState(false)
+  const [uploading,   setUploading]   = useState(false)
+  const [uploadError, setUploadError] = useState('')
   const [saved,       setSaved]       = useState(false)
   const [serverError, setServerError] = useState('')
 
@@ -85,6 +113,11 @@ export default function BlogPostForm({ post }: Props) {
           status:         form.status,
           isFeatured:     form.isFeatured,
           homepagePosition: form.homepagePosition === '' ? null : parseInt(form.homepagePosition),
+          homepageTitle: form.homepageTitle.trim() || null,
+          homepageDescription: form.homepageDescription.trim() || null,
+          homepageImage: form.homepageImage.trim() || null,
+          homepageButtonLabel: form.homepageButtonLabel.trim() || null,
+          homepageWhatsappMessage: form.homepageWhatsappMessage.trim() || null,
           readingMinutes: parseInt(form.readingMinutes) || 3,
           authorName:     form.authorName.trim() || 'Radhe Krishna Cab',
           seoTitle:       form.seoTitle.trim() || null,
@@ -211,18 +244,77 @@ export default function BlogPostForm({ post }: Props) {
           Mark as Featured (shown prominently on blog listing)
         </label>
 
-        {/* Homepage Position */}
+        {/* Homepage card controls */}
         <div className="pt-3 border-t border-gray-100">
-          <label className="block text-sm font-medium text-gray-700 mb-1">Homepage Display Position</label>
+          <h3 className="text-sm font-semibold text-gray-800 mb-1">Homepage Blog Card</h3>
+          <p className="text-xs text-gray-500 mb-3">
+            Choose whether this post appears on the homepage and set its order. Each position can be used by one post.
+          </p>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Display Position</label>
           <select value={form.homepagePosition} onChange={e => set('homepagePosition', e.target.value)} className={inp}>
             <option value="">— Do not show on homepage —</option>
-            <option value="1">Position 1 (First / Left)</option>
-            <option value="2">Position 2 (Middle)</option>
-            <option value="3">Position 3 (Last / Right)</option>
+            <option value="1">Position 1 (First)</option>
+            <option value="2">Position 2 (Second)</option>
+            <option value="3">Position 3 (Third)</option>
+            <option value="4">Position 4 (Fourth)</option>
           </select>
-          <p className="text-xs text-gray-400 mt-1">
-            Choose where this post appears on the homepage blog section. Only published posts with a position set will show. Up to 3 posts can be displayed.
-          </p>
+          <div className="mt-4 space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Homepage Card Image</label>
+              <input
+                type="file"
+                accept="image/*"
+                disabled={uploading}
+                onChange={async e => {
+                  const file = e.target.files?.[0]
+                  if (!file) return
+                  setUploading(true)
+                  setUploadError('')
+                  try {
+                    set('homepageImage', await optimizeImage(file))
+                  } catch (error) {
+                    setUploadError(error instanceof Error ? error.message : 'Image upload failed.')
+                  } finally {
+                    setUploading(false)
+                    e.target.value = ''
+                  }
+                }}
+                className="block w-full text-sm text-gray-600 file:mr-3 file:rounded-lg file:border-0 file:bg-gray-100 file:px-4 file:py-2 file:text-sm file:font-medium hover:file:bg-gray-200"
+              />
+              <p className="text-xs text-gray-400 mt-1">Select an image (max 10 MB). It is optimized before saving.</p>
+              {uploading && <p className="text-xs text-blue-600 mt-1">Processing image…</p>}
+              {uploadError && <p className="text-xs text-red-600 mt-1">{uploadError}</p>}
+              <label className="block text-xs font-medium text-gray-500 mt-3 mb-1">Or use an image URL</label>
+              <input type="text" value={form.homepageImage} onChange={e => set('homepageImage', e.target.value)} placeholder="https://… or /images/…" className={inp} />
+              {form.homepageImage && (
+                <div className="mt-3 h-40 rounded-lg overflow-hidden border border-gray-200">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={form.homepageImage} alt="Homepage card preview" className="w-full h-full object-cover" />
+                </div>
+              )}
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Homepage Card Heading</label>
+              <input type="text" value={form.homepageTitle} onChange={e => set('homepageTitle', e.target.value)} placeholder={form.title || 'Defaults to post title'} className={inp} />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Homepage Card Description</label>
+              <textarea value={form.homepageDescription} onChange={e => set('homepageDescription', e.target.value)} rows={3} placeholder={form.excerpt || 'Defaults to post excerpt'} className={`${inp} resize-y`} />
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">WhatsApp Button Label</label>
+                <input type="text" value={form.homepageButtonLabel} onChange={e => set('homepageButtonLabel', e.target.value)} placeholder="Enquire on WhatsApp" className={inp} />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">WhatsApp Message</label>
+                <input type="text" value={form.homepageWhatsappMessage} onChange={e => set('homepageWhatsappMessage', e.target.value)} placeholder="Defaults to a message about this post" className={inp} />
+              </div>
+            </div>
+            <p className="text-xs text-gray-400">
+              The button opens WhatsApp using the number saved under Admin → Settings.
+            </p>
+          </div>
         </div>
       </div>
 
