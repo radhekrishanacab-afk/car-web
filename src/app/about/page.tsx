@@ -3,6 +3,7 @@ import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import WhatsAppButton from '@/components/ui/WhatsAppButton'
 import AboutFleetSection from '@/components/about/AboutFleetSection'
+import styles from '@/components/about/AboutContent.module.css'
 import Link from 'next/link'
 import Image from 'next/image'
 import {
@@ -125,23 +126,15 @@ export default function AboutPage() {
               </div>
 
               {/* Content */}
-              <div className="text-center">
+              <div className={styles.copyBlock}>
                 <span className="section-overline">OUR STORY</span>
                 <h2 style={{ color: '#10264A', marginTop: '0.5rem', marginBottom: '1.125rem', lineHeight: 1.25 }}>
                   Your Trusted Travel<br />
                   <span style={{ color: '#08A9EE' }}>Partner in India</span>
                 </h2>
-                <p style={{
-                  display: 'block',
-                  width: '100%',
-                  boxSizing: 'border-box',
+                <p className={styles.description} style={{
                   color: '#6B7280',
                   fontSize: '1rem',
-                  lineHeight: 1.75,
-                  margin: '0 auto 1.5rem',
-                  paddingTop: '0.5rem',
-                  maxWidth: '32rem',
-                  textAlign: 'center',
                 }}>
                   Radhe Krishna Cab is a professional taxi and outstation cab service
                   operating across India since 2020. We connect cities with safe,
@@ -152,7 +145,7 @@ export default function AboutPage() {
                 </p>
 
                 {/* Checklist */}
-                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8 max-w-lg mx-auto text-left list-none p-0">
+                <ul className={`grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8 text-left list-none p-0 ${styles.features}`}>
                   {features.map((f) => (
                     <li key={f} className="flex items-start gap-2">
                       <CheckCircle2 size={16} color="#08A9EE" className="shrink-0 mt-0.5" />
@@ -161,7 +154,7 @@ export default function AboutPage() {
                   ))}
                 </ul>
 
-                <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 max-w-lg mx-auto">
+                <div className={`${styles.actions} flex flex-col sm:flex-row items-stretch sm:items-center gap-3`}>
                   <a href={`tel:${rawPhone}`} className="btn btn-primary">
                     <Phone size={15} /> Call Now: {PHONE}
                   </a>
