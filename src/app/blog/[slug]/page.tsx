@@ -24,6 +24,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 const WA = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '919723097832'
 
+function buildWhatsAppMsg(post: { title: string; state?: string | null; district?: string | null; showState?: boolean; showDistrict?: boolean; category?: string | null }): string {
+  const loc = blogLocationLabel(post as Parameters<typeof blogLocationLabel>[0])
+  const parts: string[] = ['Hello! 👋 I read your blog post on Radhe Krishna Cab website.']
+  parts.push(`\n📖 *${post.title}*`)
+  if (loc) parts.push(`📍 Location: ${loc}`)
+  parts.push('\nI would like to book a cab for this trip. Please share availability and fare details.')
+  return parts.join('\n')
+}
+
 export default async function BlogPostPage({ params }: PageProps) {
   const { slug } = await params
   const post = await prisma.blogPost.findUnique({ where: { slug } }).catch(() => null)
@@ -100,7 +109,7 @@ export default async function BlogPostPage({ params }: PageProps) {
               <h2>Plan your trip with Radhe Krishna Cab</h2>
               <p>Comfortable AC vehicles, verified drivers and 24/7 support.</p>
             </div>
-            <a href={`https://wa.me/${WA}?text=${encodeURIComponent('Hello! I read your blog and want to book a taxi.')}`}
+            <a href={`https://wa.me/${WA}?text=${encodeURIComponent(buildWhatsAppMsg(post))}`}
               target="_blank" rel="noopener noreferrer" className={styles.whatsappButton}>
               <MessageCircle size={18} /> Book on WhatsApp
             </a>
@@ -123,7 +132,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                         {r.featuredImage
                           // eslint-disable-next-line @next/next/no-img-element
                           ? <img src={r.featuredImage} alt={r.title} />
-                          : <div className={styles.imageFallback}>✍️</div>}
+                          : <div className={styles.imageFallback} />}
                       </div>
                       <div className={styles.relatedBody}>
                         {r.showCategory && r.category && <p className={styles.cardCategory}>{r.category}</p>}

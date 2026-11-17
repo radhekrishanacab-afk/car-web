@@ -46,9 +46,16 @@ export default async function BlogSection() {
             const title = post.title
             const cardDescription = post.excerpt
             const image = post.featuredImage
-            const message = `Hello! I saw "${title}" on your website and would like more information.`
+            const loc = blogLocationLabel(post)
+            const msgParts = [
+              `Hello! 👋 I read your blog post on Radhe Krishna Cab website.`,
+              `\n📖 *${title}*`,
+            ]
+            if (loc) msgParts.push(`📍 Location: ${loc}`)
+            msgParts.push('\nI would like to book a cab for this trip. Please share fare details.')
+            const message = msgParts.join('\n')
             const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`
-            const location = blogLocationLabel(post)
+            const location = loc
 
             return (
               <article key={post.id} style={{
@@ -62,7 +69,7 @@ export default async function BlogSection() {
                   {image
                     // eslint-disable-next-line @next/next/no-img-element
                     ? <img src={image} alt={title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-                    : <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', fontSize: 48 }}>✍️</div>
+                    : <div style={{ width: '100%', height: '100%', background: '#e2e8f0' }} />
                   }
                   {post.isFeatured && (
                     <div style={{ position: 'absolute', top: 12, left: 12, background: SITE_CYAN, color: '#fff', fontSize: 10, fontWeight: 700, padding: '3px 10px', borderRadius: 50 }}>
