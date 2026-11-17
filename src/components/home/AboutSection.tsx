@@ -19,7 +19,7 @@ export default function AboutSection() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
 
           {/* ── Image Column ── */}
-          <div className="relative order-2 lg:order-1 max-w-xl mx-auto lg:max-w-none w-full">
+          <div className="relative order-2 lg:order-1 max-w-xl mx-auto lg:max-w-none w-full" data-reveal="left">
             <div style={{
               borderRadius: '1.25rem',
               overflow: 'hidden',
@@ -40,7 +40,7 @@ export default function AboutSection() {
           </div>
 
           {/* ── Content Column ── */}
-          <div className={`${styles.copyBlock} order-1 lg:order-2`}>
+          <div className={`${styles.copyBlock} order-1 lg:order-2`} data-reveal="right">
             <span className="section-overline">ABOUT US</span>
 
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#10264A] leading-tight mt-2 mb-4">

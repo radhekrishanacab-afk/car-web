@@ -41,7 +41,7 @@ export default async function BlogSection() {
         </div>
 
         {/* Cards */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(250px,1fr))', gap: 24 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(250px,1fr))', gap: 24 }} data-reveal-stagger>
           {posts.map((post) => {
             const title = post.title
             const cardDescription = post.excerpt

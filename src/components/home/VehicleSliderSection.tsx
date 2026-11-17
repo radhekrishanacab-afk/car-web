@@ -400,7 +400,7 @@ export default function VehicleSliderSection() {
           </div>
 
           {/* Vehicle Cards Grid — Perfectly Centered on Mobile */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6" data-reveal-stagger>
             {displayedGrid.map((v) => {
               const actualIdx = FLEET_VEHICLES.findIndex((car) => car.id === v.id)
               const isSelected = actualIdx === activeIdx

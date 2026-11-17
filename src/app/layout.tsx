@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Plus_Jakarta_Sans } from 'next/font/google'
 import './globals.css'
 import 'leaflet/dist/leaflet.css'
+import ScrollReveal from '@/components/ui/ScrollReveal'
 
 /**
  * Plus Jakarta Sans — same font family as navyarides.com
@@ -33,7 +34,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<'/'>) {
   return (
     <html lang="en" className={`${plusJakarta.variable} h-full`}>
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        {children}
+        <ScrollReveal />
+      </body>
     </html>
   )
 }

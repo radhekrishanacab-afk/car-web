@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
@@ -146,9 +146,9 @@ export default function RoutesClient({ cities, popularCities, total, page, pages
           <form
             onSubmit={handleSearch}
             onBlur={() => window.setTimeout(() => setSuggestionsOpen(false), 140)}
-            style={{ maxWidth: 540, margin: '0 auto', position: 'relative', display: 'flex', gap: 0, zIndex: 10 }}
+            style={{ maxWidth: 560, margin: '0 auto', position: 'relative', display: 'flex', gap: 0, zIndex: 10 }}
           >
-            <div style={{ position: 'relative', flex: 1 }}>
+            <div style={{ position: 'relative', flex: '1 1 auto', minWidth: 0 }}>
               <Search size={16} style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: '#94a3b8', pointerEvents: 'none' }} />
               <input
                 type="text"
@@ -172,13 +172,15 @@ export default function RoutesClient({ cities, popularCities, total, page, pages
                 aria-controls="route-search-suggestions"
                 aria-activedescendant={activeSuggestion >= 0 ? `route-suggestion-${activeSuggestion}` : undefined}
                 autoComplete="off"
-                placeholder="Search a city or route — e.g. Surat to Vadodara"
+                placeholder="Search city or route"
                 style={{ width: '100%', padding: '13px 14px 13px 40px', borderRadius: '10px 0 0 10px', border: 'none', fontSize: 14, outline: 'none', boxSizing: 'border-box', background: '#ffffff', color: '#0f172a' }}
               />
             </div>
             <button type="submit"
-              style={{ background: '#08a9ee', color: '#ffffff', fontWeight: 700, fontSize: 14, padding: '0 24px', borderRadius: '0 10px 10px 0', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}>
-              Search
+              className="route-search-btn"
+              style={{ background: '#08a9ee', color: '#ffffff', fontWeight: 700, fontSize: 14, padding: '0 26px', borderRadius: '0 10px 10px 0', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
+              <Search size={16} />
+              <span className="route-search-btn-text">Search</span>
             </button>
             {suggestionsOpen && search.trim().length >= 2 && (
               <div
