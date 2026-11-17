@@ -20,7 +20,7 @@ export default function AboutSection() {
 
           {/* ── Image Column ── */}
           <div className="relative order-2 lg:order-1 max-w-xl mx-auto lg:max-w-none w-full" data-reveal="left">
-            <div style={{
+            <div className="zoom-hover" style={{
               borderRadius: '1.25rem',
               overflow: 'hidden',
               boxShadow: '0 12px 35px rgba(0,0,0,0.08)',

@@ -3,6 +3,7 @@ import { Plus_Jakarta_Sans } from 'next/font/google'
 import './globals.css'
 import 'leaflet/dist/leaflet.css'
 import ScrollReveal from '@/components/ui/ScrollReveal'
+import CustomCursor from '@/components/ui/CustomCursor'
 
 /**
  * Plus Jakarta Sans — same font family as navyarides.com
@@ -37,6 +38,7 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
       <body className="min-h-full flex flex-col">
         {children}
         <ScrollReveal />
+        <CustomCursor />
       </body>
     </html>
   )

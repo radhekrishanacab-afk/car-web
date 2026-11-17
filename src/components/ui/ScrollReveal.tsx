@@ -5,15 +5,22 @@ import { useEffect } from 'react'
 /**
  * ScrollReveal
  * ------------
- * Adds professional scroll-triggered entrance animations to every
- * <section> and any element carrying a data-reveal attribute.
+ * Professional scroll-triggered entrance animations.
  *
- *   data-reveal="left"   → slide in from left
- *   data-reveal="right"  → slide in from right
- *   data-reveal="up"     → slide up (default for sections)
+ * Supported directions via data-reveal attribute:
+ *   data-reveal="left"   → slide in from the left
+ *   data-reveal="right"  → slide in from the right
+ *   data-reveal="up"     → slide up from below
+ *   data-reveal="down"   → slide down from above
+ *   data-reveal="zoom"   → zoom + fade in (0.92 → 1)
  *   data-reveal="fade"   → fade only
  *
+ * Every <section> without an explicit data-reveal automatically gets an
+ * alternating direction (up → left → right → zoom …) for a dynamic flow.
+ *
  * Children of a [data-reveal-stagger] container animate one after another.
+ *
+ * Uses IntersectionObserver for performant, on-demand triggering.
  */
 export default function ScrollReveal() {
   useEffect(() => {
@@ -22,12 +29,10 @@ export default function ScrollReveal() {
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     if (prefersReduced) return
 
-    // Auto-apply a reveal direction to every <section> that does not
-    // already carry an explicit data-reveal attribute.
-    // First section (usually hero) slides up; subsequent sections
-    // alternate left → right → left for a professional, dynamic feel.
+    // Auto-assign an alternating reveal direction to every <section> that
+    // does not already declare one. Mix of slide + zoom keeps it lively.
     const sections = document.querySelectorAll('section:not([data-reveal])')
-    const directions = ['up', 'left', 'right', 'left', 'right', 'up', 'left', 'right']
+    const directions = ['up', 'left', 'right', 'zoom', 'up', 'left', 'right', 'zoom']
     sections.forEach((el, i) => {
       el.setAttribute('data-reveal', directions[i % directions.length])
     })
@@ -37,7 +42,6 @@ export default function ScrollReveal() {
     )
 
     if (!('IntersectionObserver' in window) || targets.length === 0) {
-      // Fallback: just show everything
       targets.forEach((el) => el.classList.add('reveal-visible'))
       return
     }
@@ -51,7 +55,7 @@ export default function ScrollReveal() {
           }
         })
       },
-      { threshold: 0.12, rootMargin: '0px 0px -60px 0px' }
+      { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
     )
 
     targets.forEach((el) => observer.observe(el))

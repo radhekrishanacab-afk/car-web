@@ -58,7 +58,7 @@ export default async function BlogSection() {
                 transition: 'transform 0.2s, box-shadow 0.2s',
               }}>
                 {/* Image */}
-                <div style={{ position: 'relative', height: 200, background: '#e8edf5', flexShrink: 0 }}>
+                <div className="zoom-hover" style={{ position: 'relative', height: 200, background: '#e8edf5', flexShrink: 0 }}>
                   {image
                     // eslint-disable-next-line @next/next/no-img-element
                     ? <img src={image} alt={title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
