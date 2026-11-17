@@ -1,12 +1,10 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import WhatsAppButton from '@/components/ui/WhatsAppButton'
 import { prisma } from '@/lib/prisma'
-import { ArrowRight, MapPin } from 'lucide-react'
-import { blogLocationLabel } from '@/lib/blog-location'
 import styles from './BlogPages.module.css'
+import BlogClientPage from './BlogClientPage'
 
 export const metadata: Metadata = {
   title: 'Blog — Travel Tips & Cab Guides | Radhe Krishna Cab',
@@ -14,100 +12,70 @@ export const metadata: Metadata = {
 }
 
 export default async function BlogPage() {
-  const posts = await prisma.blogPost.findMany({
+  const allPosts = await prisma.blogPost.findMany({
     where: { status: 'PUBLISHED' },
     orderBy: [{ isFeatured: 'desc' }, { publishedAt: 'desc' }],
   }).catch(() => [])
 
-  const featured = posts.find(p => p.isFeatured) ?? posts[0]
-  const rest = posts.filter(p => p.id !== featured?.id)
+  // Collect unique categories
+  const categories = Array.from(
+    new Set(
+      allPosts
+        .filter(p => p.showCategory && p.category)
+        .map(p => p.category as string)
+    )
+  ).sort()
+
+  const featured = allPosts.find(p => p.isFeatured) ?? allPosts[0]
+  // Max 8 posts total on homepage (1 featured + 7 in grid, or 8 in grid if no featured)
+  const rest = allPosts.filter(p => p.id !== featured?.id).slice(0, 7)
+
+  const postsForClient = allPosts.map(p => ({
+    id: p.id,
+    slug: p.slug,
+    title: p.title,
+    excerpt: p.excerpt,
+    featuredImage: p.featuredImage,
+    category: p.category,
+    showCategory: p.showCategory,
+    isFeatured: p.isFeatured,
+    city: (p as Record<string, unknown>).city as string | null ?? null,
+    state: (p as Record<string, unknown>).state as string | null ?? null,
+  }))
 
   return (
     <>
       <Header />
       <main className={styles.listPage}>
+        {/* ── Hero ── */}
         <section className={styles.listHero}>
-          <div className={styles.listHeroInner}>
-            <p className={styles.eyebrow}>Radhe Krishna Cab</p>
-            <h1>
-              Travel Blog & Cab Guides
+          <div className={`${styles.listHeroInner} ${styles.heroAnimate}`}>
+            <p className={`${styles.eyebrow} ${styles.slideUp}`}>Radhe Krishna Cab</p>
+            <h1 className={styles.slideUp} style={{ animationDelay: '0.1s' }}>
+              Travel Blog &amp; Cab Guides
             </h1>
-            <p className={styles.listHeroDescription}>
+            <p className={`${styles.listHeroDescription} ${styles.slideUp}`} style={{ animationDelay: '0.2s' }}>
               Tips, guides and stories to help you travel smarter across India.
             </p>
           </div>
         </section>
 
-        <div className={styles.listContent}>
-          {posts.length === 0 ? (
+        {allPosts.length === 0 ? (
+          <div className={styles.listContent}>
             <div className={styles.emptyState}>
               <p className={styles.emptyIcon}>✍️</p>
               <h2>No posts yet</h2>
               <p>Check back soon for travel tips and guides.</p>
             </div>
-          ) : (
-            <>
-              {featured && (
-                <Link href={`/blog/${featured.slug}`} className={styles.featuredLink}>
-                  <article className={styles.featuredCard}>
-                    <div className={styles.featuredImage}>
-                      {featured.featuredImage
-                        // eslint-disable-next-line @next/next/no-img-element
-                        ? <img src={featured.featuredImage} alt={featured.title} />
-                        : <div className={styles.imageFallback}>✍️</div>
-                      }
-                      <span className={styles.featuredBadge}>Featured</span>
-                    </div>
-                    <div className={styles.featuredBody}>
-                      {featured.showCategory && featured.category && <p className={styles.cardCategory}>{featured.category}</p>}
-                      {blogLocationLabel(featured) && (
-                        <p className={styles.cardLocation}><MapPin size={13} aria-hidden="true" />{blogLocationLabel(featured)}</p>
-                      )}
-                      <h2>{featured.title}</h2>
-                      {featured.excerpt && <p className={styles.featuredExcerpt}>{featured.excerpt}</p>}
-                      <span className={styles.readMore}>Read the guide <ArrowRight size={17} /></span>
-                    </div>
-                  </article>
-                </Link>
-              )}
-
-              {rest.length > 0 && (
-                <div className={styles.postGrid}>
-                  {rest.map(post => (
-                    <Link key={post.id} href={`/blog/${post.slug}`} className={styles.postLink}>
-                      <article className={styles.postCard}>
-                        <div className={styles.postImage}>
-                          {post.featuredImage
-                            // eslint-disable-next-line @next/next/no-img-element
-                            ? <img src={post.featuredImage} alt={post.title} />
-                            : <div className={styles.imageFallback}>✍️</div>
-                          }
-                          {post.showCategory && post.category && (
-                            <span className={styles.categoryBadge}>
-                              {post.category}
-                            </span>
-                          )}
-                        </div>
-                        <div className={styles.postBody}>
-                          {blogLocationLabel(post) && (
-                            <p className={styles.cardLocation}><MapPin size={13} aria-hidden="true" />{blogLocationLabel(post)}</p>
-                          )}
-                          <h2>{post.title}</h2>
-                          {post.excerpt && (
-                            <p className={styles.postExcerpt}>
-                              {post.excerpt}
-                            </p>
-                          )}
-                          <span className={styles.readMore}>Read the guide <ArrowRight size={16} /></span>
-                        </div>
-                      </article>
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </>
-          )}
-        </div>
+          </div>
+        ) : (
+          <BlogClientPage
+            posts={postsForClient}
+            categories={categories}
+            featured={featured ? postsForClient.find(p => p.id === featured.id)! : null}
+            rest={rest.map(p => postsForClient.find(r => r.id === p.id)!)}
+          />
+        )}
       </main>
       <Footer />
       <WhatsAppButton variant="floating" />

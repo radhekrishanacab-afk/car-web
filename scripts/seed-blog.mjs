@@ -137,10 +137,89 @@ const posts = [
     seoDescription: '3-day Gujarat pilgrimage tour guide covering Somnath, Dwarka and Ambaji with cab booking from Ahmedabad.',
     publishedAt: new Date(),
   },
+  {
+    title: 'Ahmedabad to Vadodara Cab — NH-48 Express Highway Guide',
+    slug: 'ahmedabad-to-vadodara-cab-guide',
+    excerpt: 'Book an Ahmedabad to Vadodara cab and travel 110 km in under 2 hours via NH-48 expressway. Best fares, tips & route info.',
+    content: `<h2>Ahmedabad to Vadodara Taxi Service</h2>
+<p>Vadodara (Baroda) is just 110 km from Ahmedabad via the NH-48 expressway — one of India's finest 6-lane highways. The drive takes roughly 1.5 to 2 hours.</p>
+<h2>Route & Road Conditions</h2>
+<p>The Ahmedabad–Vadodara Expressway is toll-based, well-maintained, and extremely fast. Expect minimal traffic except during peak morning or evening hours.</p>
+<h2>Fare Estimate</h2>
+<p>• Sedan: ₹1,400 – ₹1,700<br/>• SUV Ertiga: ₹1,900 – ₹2,200<br/>• Innova Crysta: ₹2,500 – ₹2,900</p>
+<h2>Top Places to Visit in Vadodara</h2>
+<p>• Laxmi Vilas Palace<br/>• Sayaji Baug<br/>• Vadodara Museum<br/>• EME Temple</p>
+<h2>Book Your Cab</h2>
+<p>Call Radhe Krishna Cab at +91 97230 97832 for instant confirmation.</p>`,
+    featuredImage: 'https://images.unsplash.com/photo-1555993539-1732b0258235?w=800&q=80',
+    category: 'Travel Guide',
+    tags: 'Ahmedabad, Vadodara, Baroda, taxi, NH-48',
+    status: 'PUBLISHED',
+    isFeatured: false,
+    readingMinutes: 3,
+    authorName: 'Radhe Krishna Cab',
+    seoTitle: 'Ahmedabad to Vadodara Cab | NH-48 Express Route & Fare',
+    seoDescription: 'Book Ahmedabad to Vadodara cab from ₹1400. 110 km, 2 hrs via expressway. AC taxi, verified drivers. Call +91 97230 97832.',
+    publishedAt: new Date(),
+  },
+  {
+    title: 'Rann of Kutch Travel Guide — Best Time, Routes & Cab Tips',
+    slug: 'rann-of-kutch-travel-guide',
+    excerpt: 'Explore the magical white desert of Rann of Kutch. Plan your trip from Ahmedabad with timing tips, Rann Utsav info, and cab booking guide.',
+    content: `<h2>Rann of Kutch — The White Desert of Gujarat</h2>
+<p>The Rann of Kutch is one of India's most unique natural wonders — a vast salt flat that stretches across the horizon. It transforms into a breathtaking white desert during winter months.</p>
+<h2>Best Time to Visit</h2>
+<p>October to February is ideal. The famous Rann Utsav festival runs from November to February each year, drawing visitors from across the globe.</p>
+<h2>Distance from Ahmedabad</h2>
+<p>Bhuj (gateway to Rann): ~330 km from Ahmedabad (~5 hours by car). The Rann itself is another 80 km from Bhuj.</p>
+<h2>Recommended Itinerary</h2>
+<p>Day 1: Ahmedabad → Bhuj (visit city monuments)<br/>Day 2: Full day at Rann Utsav & White Desert<br/>Day 3: Return to Ahmedabad</p>
+<h2>Cab Tips</h2>
+<p>Hire a round-trip cab for 2-3 days. This gives you flexibility to explore Bhuj, Dholavira, and the Rann at your own pace without worrying about return transport.</p>`,
+    featuredImage: 'https://images.unsplash.com/photo-1568454537842-d933259bb258?w=800&q=80',
+    category: 'Tourism',
+    tags: 'Rann of Kutch, Kutch, Bhuj, Rann Utsav, Gujarat tourism',
+    status: 'PUBLISHED',
+    isFeatured: false,
+    readingMinutes: 5,
+    authorName: 'Radhe Krishna Cab',
+    seoTitle: 'Rann of Kutch Travel Guide | Cab from Ahmedabad to Kutch',
+    seoDescription: 'Complete guide to visiting Rann of Kutch from Ahmedabad. Best time, Rann Utsav tips, 3-day itinerary and cab booking.',
+    publishedAt: new Date(),
+  },
+  {
+    title: 'Family Road Trip from Ahmedabad — 5 Perfect Weekend Drives',
+    slug: 'family-road-trip-ahmedabad-weekend-drives',
+    excerpt: 'Planning a family road trip from Ahmedabad? These 5 weekend drive destinations are perfect for families, with distances, routes, and cab tips.',
+    content: `<h2>5 Perfect Family Road Trips from Ahmedabad</h2>
+<p>Ahmedabad is a fantastic base for weekend road trips with family. Here are five routes that offer the perfect blend of nature, culture, and comfort.</p>
+<h2>1. Polo Forest (160 km)</h2>
+<p>A stunning forested area with ancient temples and lush greenery. Great for a one-day picnic with kids.</p>
+<h2>2. Saputara Hill Station (165 km)</h2>
+<p>Gujarat's only hill station with a lake, gardens, and cool weather. Ideal for families seeking a break from the heat.</p>
+<h2>3. Nal Sarovar Bird Sanctuary (65 km)</h2>
+<p>A wetland sanctuary with over 200 bird species. The boat ride is a hit with children.</p>
+<h2>4. Patan & Modhera (120 km)</h2>
+<p>Combine Rani ki Vav (UNESCO stepwell) with the Modhera Sun Temple in a single day trip.</p>
+<h2>5. Champaner-Pavagadh (140 km)</h2>
+<p>A UNESCO World Heritage Site with a hilltop temple, ancient mosque ruins, and scenic views.</p>
+<h2>Book a Cab for Your Family Trip</h2>
+<p>Radhe Krishna Cab offers 7-seater Ertiga and 8-seater Innova for family trips. Call +91 97230 97832.</p>`,
+    featuredImage: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=800&q=80',
+    category: 'Travel Tips',
+    tags: 'family road trip, Ahmedabad, weekend drive, Gujarat, outstation',
+    status: 'PUBLISHED',
+    isFeatured: false,
+    readingMinutes: 5,
+    authorName: 'Radhe Krishna Cab',
+    seoTitle: '5 Best Family Road Trips from Ahmedabad | Weekend Drive Guide',
+    seoDescription: 'Top 5 weekend road trips for families from Ahmedabad. Polo Forest, Saputara, Nal Sarovar, Patan & Champaner. Book cab today.',
+    publishedAt: new Date(),
+  },
 ]
 
 async function main() {
-  console.log('Adding 5 blog posts...')
+  console.log('Adding 8 blog posts...')
   for (const post of posts) {
     await prisma.blogPost.upsert({
       where: { slug: post.slug },
@@ -149,7 +228,7 @@ async function main() {
     })
     console.log('✓', post.title.substring(0, 55))
   }
-  console.log('\n✅ Done! 5 posts added to blog.')
+  console.log('\n✅ Done! 8 posts added to blog.')
 }
 
 main()

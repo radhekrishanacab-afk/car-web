@@ -13,6 +13,99 @@
   --blog-border: #e1e8f0;
 }
 
+/* ═══════════════════════
+   HERO ENTRY ANIMATIONS
+═══════════════════════ */
+.heroAnimate {
+  opacity: 1;
+}
+
+.slideUp {
+  opacity: 0;
+  transform: translateY(32px);
+  animation: blogSlideUp 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes blogSlideUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ═══════════════════════
+   CARD REVEAL ANIMATIONS
+═══════════════════════ */
+.featuredReveal {
+  opacity: 0;
+  transform: translateY(36px);
+  transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.featuredRevealVisible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.postReveal {
+  opacity: 0;
+  transform: translateY(28px) scale(0.98);
+  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.postRevealVisible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* ═══════════════════════
+   CATEGORY FILTER
+═══════════════════════ */
+.categoryFilter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 28px;
+  align-items: center;
+}
+
+.catBtn {
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 18px;
+  border-radius: 999px;
+  border: 1.5px solid var(--blog-border);
+  background: #ffffff;
+  color: var(--blog-muted);
+  font-size: 0.82rem;
+  font-weight: 650;
+  cursor: pointer;
+  transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease,
+              transform 0.18s ease, box-shadow 0.18s ease;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+.catBtn:hover {
+  border-color: var(--blog-cyan);
+  color: var(--blog-cyan);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(8, 169, 238, 0.15);
+}
+
+.catBtnActive {
+  background: var(--blog-cyan);
+  border-color: var(--blog-cyan);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(8, 169, 238, 0.3);
+}
+
+.catBtnActive:hover {
+  background: var(--blog-cyan-hover);
+  border-color: var(--blog-cyan-hover);
+  color: #ffffff;
+}
+
 .listHero {
   padding: 64px 24px 58px;
   color: #fff;
@@ -752,7 +845,17 @@
   }
 
   .listContent {
-    padding: 28px 0 54px;
+    padding: 24px 0 54px;
+  }
+
+  .categoryFilter {
+    gap: 6px;
+    margin-bottom: 20px;
+  }
+
+  .catBtn {
+    padding: 6px 14px;
+    font-size: 0.78rem;
   }
 
   .featuredLink {
@@ -888,5 +991,18 @@
   .allPostsLink svg,
   .whatsappButton {
     transition: none;
+  }
+
+  .slideUp {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .featuredReveal,
+  .postReveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
   }
 }
