@@ -3,6 +3,7 @@ import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import WhatsAppButton from '@/components/ui/WhatsAppButton'
 import AboutFleetSection from '@/components/about/AboutFleetSection'
+import ScrollReveal from '@/components/ui/ScrollReveal'
 import styles from '@/components/about/AboutContent.module.css'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -70,15 +71,18 @@ export default function AboutPage() {
   return (
     <>
       <Header />
+      <ScrollReveal />
       <main>
 
         {/* ── Page Hero ── */}
-        <section style={{
-          background: 'linear-gradient(135deg, #0f1e3d 0%, #1a3a6b 55%, #0d1f3c 100%)',
-          padding: '4.5rem 0 5rem',
-          position: 'relative',
-          overflow: 'hidden',
-        }}>
+        <section
+          data-reveal="fade"
+          style={{
+            background: 'linear-gradient(135deg, #0f1e3d 0%, #1a3a6b 55%, #0d1f3c 100%)',
+            padding: '4.5rem 0 5rem',
+            position: 'relative',
+            overflow: 'hidden',
+          }}>
           <div style={{
             position: 'absolute', top: 0, right: 0, pointerEvents: 'none',
             width: '500px', height: '500px',
@@ -90,12 +94,16 @@ export default function AboutPage() {
               <span style={{ margin: '0 0.5rem' }}>/</span>
               <span style={{ color: '#ffffff' }}>About Us</span>
             </nav>
-            <span className="section-overline">WHO WE ARE</span>
-            <h1 style={{ color: '#ffffff', marginTop: '0.5rem', marginBottom: '1rem', lineHeight: 1.2,
-              fontSize: 'clamp(1.75rem, 4vw, 2.75rem)' }}>
+            <span data-reveal="up" className="section-overline">WHO WE ARE</span>
+            <h1 data-reveal="up" style={{ color: '#ffffff', marginTop: '0.5rem', marginBottom: '1rem', lineHeight: 1.2,
+              fontSize: 'clamp(1.75rem, 4vw, 2.75rem)',
+              transitionDelay: '0.1s',
+            }}>
               About <span style={{ color: '#08A9EE' }}>Radhe Krishna Cab</span>
             </h1>
-            <p style={{ color: 'rgba(255,255,255,0.62)', fontSize: '1rem', lineHeight: 1.8, maxWidth: '36rem' }}>
+            <p data-reveal="up" style={{ color: 'rgba(255,255,255,0.62)', fontSize: '1rem', lineHeight: 1.8, maxWidth: '36rem',
+              transitionDelay: '0.2s',
+            }}>
               Your trusted partner for outstation cab service across Gujarat & India —
               operating since 2020 with 100% verified drivers and transparent pricing.
             </p>
@@ -103,12 +111,15 @@ export default function AboutPage() {
         </section>
 
         {/* ── Main About ── */}
-        <section className="py-12 sm:py-16 lg:py-24 bg-white">
+        <section className="py-12 sm:py-16 lg:py-24 bg-white" style={{ overflow: 'hidden' }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-center">
 
-              {/* Image */}
-              <div className="relative max-w-xl mx-auto lg:max-w-none w-full">
+              {/* Image — slides in from LEFT */}
+              <div
+                data-reveal="left"
+                className="relative max-w-xl mx-auto lg:max-w-none w-full"
+              >
                 <div style={{
                   borderRadius: '1.375rem', overflow: 'hidden',
                   boxShadow: '0 20px 60px rgba(0,0,0,0.12)',
@@ -125,8 +136,12 @@ export default function AboutPage() {
                 </div>
               </div>
 
-              {/* Content */}
-              <div className={styles.copyBlock}>
+              {/* Content — slides in from RIGHT */}
+              <div
+                data-reveal="right"
+                className={styles.copyBlock}
+                style={{ transitionDelay: '0.1s' }}
+              >
                 <span className="section-overline">OUR STORY</span>
                 <h2 style={{ color: '#10264A', marginTop: '0.5rem', marginBottom: '1.125rem', lineHeight: 1.25 }}>
                   Your Trusted Travel<br />
@@ -191,7 +206,7 @@ export default function AboutPage() {
 
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" style={{ position: 'relative' }}>
 
-            <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
+            <div data-reveal="up" style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
               <span className="section-overline">OUR PROMISE</span>
               <h2 style={{ color: '#ffffff', marginTop: '0.5rem', marginBottom: '1rem' }}>
                 What We Stand For
@@ -204,7 +219,7 @@ export default function AboutPage() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            <div data-reveal-stagger className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
               {values.map((v) => (
                 <div key={v.title} style={{
                   background: 'rgba(255,255,255,0.04)',
