@@ -131,8 +131,16 @@ export default function RoutesClient({ cities, popularCities, total, page, pages
     <div style={{ background: '#ffffff', minHeight: '100vh' }}>
 
       {/* ── HERO ─────────────────────────────────────────────────────────── */}
-      <div style={{ background: '#0a1628' }}>
-        <div style={{ maxWidth: 960, margin: '0 auto', padding: '48px 16px 40px', textAlign: 'center' }}>
+      <div style={{
+        background: 'linear-gradient(135deg, #0f1e3d 0%, #1a3a6b 55%, #0d1f3c 100%)',
+        position: 'relative', overflow: 'hidden',
+      }}>
+        <div style={{
+          position: 'absolute', top: 0, right: 0, pointerEvents: 'none',
+          width: 480, height: 480,
+          background: 'radial-gradient(circle at 80% 20%, rgba(8,169,238,0.13), transparent 60%)',
+        }} />
+        <div style={{ maxWidth: 960, margin: '0 auto', padding: '54px 16px 48px', textAlign: 'center', position: 'relative' }}>
 
           <h1 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.25rem)', fontWeight: 800, color: '#ffffff', margin: '0 0 12px', lineHeight: 1.25 }}>
             Find Your <span style={{ color: '#08a9ee' }}>One-Way Taxi</span> Route

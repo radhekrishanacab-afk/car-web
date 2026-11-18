@@ -31,7 +31,7 @@ export default function ScrollReveal() {
 
     // Auto-assign an alternating reveal direction to every <section> that
     // does not already declare one. Mix of slide + zoom keeps it lively.
-    const sections = document.querySelectorAll('section:not([data-reveal])')
+    const sections = document.querySelectorAll('section:not([data-reveal]):not([data-no-reveal])')
     const directions = ['up', 'left', 'right', 'zoom', 'up', 'left', 'right', 'zoom']
     sections.forEach((el, i) => {
       el.setAttribute('data-reveal', directions[i % directions.length])

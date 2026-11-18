@@ -14,15 +14,17 @@ type PostItem = {
   category: string | null
   showCategory: boolean | null
   isFeatured: boolean
-  city: string | null
   state: string | null
+  district: string | null
+  showState: boolean
+  showDistrict: boolean
 }
 
 function locationLabel(post: PostItem): string | null {
-  if (post.city && post.state) return `${post.city}, ${post.state}`
-  if (post.city) return post.city
-  if (post.state) return post.state
-  return null
+  const parts: string[] = []
+  if (post.showDistrict && post.district) parts.push(post.district)
+  if (post.showState && post.state) parts.push(post.state)
+  return parts.length ? parts.join(', ') : null
 }
 
 function useReveal() {
@@ -62,9 +64,17 @@ function FeaturedCard({ post }: { post: PostItem }) {
           {/* Image — left panel */}
           <div className={styles.featuredImage}>
             {post.featuredImage
-              // eslint-disable-next-line @next/next/no-img-element
-              ? <img src={post.featuredImage} alt={post.title} />
-              : <div className={styles.imageFallback}>✍️</div>
+              ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={post.featuredImage}
+                  alt={post.title}
+                  className={styles.lazyImg}
+                  loading="lazy"
+                  onLoad={e => (e.currentTarget as HTMLImageElement).classList.add(styles.lazyImgLoaded)}
+                />
+              )
+              : <div className={styles.imgBlank} />
             }
             <span className={styles.featuredBadge}>Featured</span>
           </div>
@@ -104,9 +114,17 @@ function PostCard({ post, index }: { post: PostItem; index: number }) {
         <article className={styles.postCard}>
           <div className={styles.postImage}>
             {post.featuredImage
-              // eslint-disable-next-line @next/next/no-img-element
-              ? <img src={post.featuredImage} alt={post.title} />
-              : <div className={styles.imageFallback}>✍️</div>
+              ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={post.featuredImage}
+                  alt={post.title}
+                  className={styles.lazyImg}
+                  loading="lazy"
+                  onLoad={e => (e.currentTarget as HTMLImageElement).classList.add(styles.lazyImgLoaded)}
+                />
+              )
+              : <div className={styles.imgBlank} />
             }
             {post.showCategory && post.category && (
               <span className={styles.categoryBadge}>{post.category}</span>

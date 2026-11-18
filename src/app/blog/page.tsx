@@ -12,22 +12,27 @@ export const metadata: Metadata = {
 }
 
 export default async function BlogPage() {
-  const allPosts = await prisma.blogPost.findMany({
-    where: { status: 'PUBLISHED' },
-    orderBy: [{ isFeatured: 'desc' }, { publishedAt: 'desc' }],
-  }).catch(() => [])
+  const [allPosts, dbCategories] = await Promise.all([
+    prisma.blogPost.findMany({
+      where: { status: 'PUBLISHED' },
+      orderBy: [{ isFeatured: 'desc' }, { publishedAt: 'desc' }],
+    }).catch(() => []),
+    prisma.blogCategory.findMany({
+      where: { isActive: true },
+      orderBy: { displayOrder: 'asc' },
+      select: { name: true },
+    }).catch(() => [] as { name: string }[]),
+  ])
 
-  // Collect unique categories
-  const categories = Array.from(
-    new Set(
-      allPosts
-        .filter(p => p.showCategory && p.category)
-        .map(p => p.category as string)
-    )
-  ).sort()
+  // Show only admin categories that have at least one published post
+  const postCategorySet = new Set(
+    allPosts.filter(p => p.category).map(p => p.category as string)
+  )
+  const categories = dbCategories
+    .map(c => c.name)
+    .filter(name => postCategorySet.has(name))
 
-  const featured = allPosts.find(p => p.isFeatured) ?? allPosts[0]
-  // Max 8 posts total on homepage (1 featured + 7 in grid, or 8 in grid if no featured)
+  const featured = allPosts.find(p => p.isFeatured) ?? allPosts[0] ?? null
   const rest = allPosts.filter(p => p.id !== featured?.id).slice(0, 7)
 
   const postsForClient = allPosts.map(p => ({
@@ -39,8 +44,10 @@ export default async function BlogPage() {
     category: p.category,
     showCategory: p.showCategory,
     isFeatured: p.isFeatured,
-    city: (p as Record<string, unknown>).city as string | null ?? null,
-    state: (p as Record<string, unknown>).state as string | null ?? null,
+    state: p.state ?? null,
+    district: p.district ?? null,
+    showState: p.showState,
+    showDistrict: p.showDistrict,
   }))
 
   return (
@@ -48,8 +55,8 @@ export default async function BlogPage() {
       <Header />
       <main className={styles.listPage}>
         {/* ── Hero ── */}
-        <section className={styles.listHero}>
-          <div className={`${styles.listHeroInner} ${styles.heroAnimate}`}>
+        <section className={styles.listHero} data-no-reveal>
+          <div className={styles.listHeroInner}>
             <p className={`${styles.eyebrow} ${styles.slideUp}`}>Radhe Krishna Cab</p>
             <h1 className={styles.slideUp} style={{ animationDelay: '0.1s' }}>
               Travel Blog &amp; Cab Guides

@@ -131,7 +131,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                       <div className={styles.relatedImage}>
                         {r.featuredImage
                           // eslint-disable-next-line @next/next/no-img-element
-                          ? <img src={r.featuredImage} alt={r.title} />
+                          ? <img src={r.featuredImage} alt={r.title} loading="lazy" />
                           : <div className={styles.imageFallback} />}
                       </div>
                       <div className={styles.relatedBody}>
