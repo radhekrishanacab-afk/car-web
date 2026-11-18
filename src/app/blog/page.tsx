@@ -24,13 +24,9 @@ export default async function BlogPage() {
     }).catch(() => [] as { name: string }[]),
   ])
 
-  // Show only admin categories that have at least one published post
-  const postCategorySet = new Set(
-    allPosts.filter(p => p.category).map(p => p.category as string)
-  )
-  const categories = dbCategories
-    .map(c => c.name)
-    .filter(name => postCategorySet.has(name))
+  // Show ALL active admin categories (regardless of post count)
+  // Empty categories show with empty state when clicked
+  const categories = dbCategories.map(c => c.name)
 
   const featured = allPosts.find(p => p.isFeatured) ?? allPosts[0] ?? null
   const rest = allPosts.filter(p => p.id !== featured?.id).slice(0, 7)

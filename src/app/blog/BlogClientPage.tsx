@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
-import { ArrowRight, MapPin } from 'lucide-react'
+import { ArrowRight, MapPin, LayoutGrid } from 'lucide-react'
 import styles from './BlogPages.module.css'
 
 type PostItem = {
@@ -36,12 +36,9 @@ function useReveal() {
     if (!el) return
     const obs = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisible(true)
-          obs.disconnect()
-        }
+        if (entry.isIntersecting) { setVisible(true); obs.disconnect() }
       },
-      { threshold: 0.08, rootMargin: '0px 0px -40px 0px' }
+      { threshold: 0.06, rootMargin: '0px 0px -30px 0px' }
     )
     obs.observe(el)
     return () => obs.disconnect()
@@ -55,40 +52,24 @@ function FeaturedCard({ post }: { post: PostItem }) {
   const loc = locationLabel(post)
 
   return (
-    <div
-      ref={ref}
-      className={`${styles.featuredReveal} ${visible ? styles.featuredRevealVisible : ''}`}
-    >
+    <div ref={ref} className={`${styles.featuredReveal} ${visible ? styles.featuredRevealVisible : ''}`}>
       <Link href={`/blog/${post.slug}`} className={styles.featuredLink}>
         <article className={styles.featuredCard}>
-          {/* Image — left panel */}
           <div className={styles.featuredImage}>
             {post.featuredImage
               ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={post.featuredImage}
-                  alt={post.title}
-                  className={styles.lazyImg}
-                  loading="lazy"
-                  onLoad={e => (e.currentTarget as HTMLImageElement).classList.add(styles.lazyImgLoaded)}
-                />
+                <img src={post.featuredImage} alt={post.title}
+                  className={styles.lazyImg} loading="lazy"
+                  onLoad={e => (e.currentTarget as HTMLImageElement).classList.add(styles.lazyImgLoaded)} />
               )
               : <div className={styles.imgBlank} />
             }
             <span className={styles.featuredBadge}>Featured</span>
           </div>
-
-          {/* Body — right panel */}
           <div className={styles.featuredBody}>
-            {post.showCategory && post.category && (
-              <p className={styles.cardCategory}>{post.category}</p>
-            )}
-            {loc && (
-              <p className={styles.cardLocation}>
-                <MapPin size={13} aria-hidden="true" />{loc}
-              </p>
-            )}
+            {post.showCategory && post.category && <p className={styles.cardCategory}>{post.category}</p>}
+            {loc && <p className={styles.cardLocation}><MapPin size={13} aria-hidden="true" />{loc}</p>}
             <h2>{post.title}</h2>
             {post.excerpt && <p className={styles.featuredExcerpt}>{post.excerpt}</p>}
             <span className={styles.readMore}>Read the guide <ArrowRight size={17} /></span>
@@ -102,27 +83,20 @@ function FeaturedCard({ post }: { post: PostItem }) {
 function PostCard({ post, index }: { post: PostItem; index: number }) {
   const { ref, visible } = useReveal()
   const loc = locationLabel(post)
-  const delay = `${index * 0.07}s`
 
   return (
-    <div
-      ref={ref}
+    <div ref={ref}
       className={`${styles.postReveal} ${visible ? styles.postRevealVisible : ''}`}
-      style={{ transitionDelay: visible ? delay : '0s' }}
-    >
+      style={{ transitionDelay: visible ? `${index * 0.06}s` : '0s' }}>
       <Link href={`/blog/${post.slug}`} className={styles.postLink}>
         <article className={styles.postCard}>
           <div className={styles.postImage}>
             {post.featuredImage
               ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={post.featuredImage}
-                  alt={post.title}
-                  className={styles.lazyImg}
-                  loading="lazy"
-                  onLoad={e => (e.currentTarget as HTMLImageElement).classList.add(styles.lazyImgLoaded)}
-                />
+                <img src={post.featuredImage} alt={post.title}
+                  className={styles.lazyImg} loading="lazy"
+                  onLoad={e => (e.currentTarget as HTMLImageElement).classList.add(styles.lazyImgLoaded)} />
               )
               : <div className={styles.imgBlank} />
             }
@@ -131,15 +105,9 @@ function PostCard({ post, index }: { post: PostItem; index: number }) {
             )}
           </div>
           <div className={styles.postBody}>
-            {loc && (
-              <p className={styles.cardLocation}>
-                <MapPin size={13} aria-hidden="true" />{loc}
-              </p>
-            )}
+            {loc && <p className={styles.cardLocation}><MapPin size={13} aria-hidden="true" />{loc}</p>}
             <h2>{post.title}</h2>
-            {post.excerpt && (
-              <p className={styles.postExcerpt}>{post.excerpt}</p>
-            )}
+            {post.excerpt && <p className={styles.postExcerpt}>{post.excerpt}</p>}
             <span className={styles.readMore}>Read the guide <ArrowRight size={16} /></span>
           </div>
         </article>
@@ -161,64 +129,76 @@ export default function BlogClientPage({
 }) {
   const [activeCategory, setActiveCategory] = useState<string | null>(null)
 
-  // When a category is selected, filter from all posts (excluding featured if shown)
   const isFiltering = activeCategory !== null
-
-  const filteredPosts = isFiltering
-    ? posts.filter(p => p.category === activeCategory)
-    : null
-
+  const filteredPosts = isFiltering ? posts.filter(p => p.category === activeCategory) : null
   const filteredFeatured = isFiltering
     ? (filteredPosts!.find(p => p.isFeatured) ?? filteredPosts![0] ?? null)
     : featured
-
   const filteredRest = isFiltering
-    ? filteredPosts!.filter(p => p.id !== filteredFeatured?.id).slice(0, 7)
+    ? filteredPosts!.filter(p => p.id !== filteredFeatured?.id).slice(0, 11)
     : rest
+
+  const isEmpty = isFiltering && !filteredFeatured && filteredRest.length === 0
 
   return (
     <div className={styles.listContent}>
-      {/* ── Category Filter ── */}
+
+      {/* ── Category Filter Bar ── */}
       {categories.length > 0 && (
-        <div className={styles.categoryFilter}>
-          <button
-            className={`${styles.catBtn} ${!activeCategory ? styles.catBtnActive : ''}`}
-            onClick={() => setActiveCategory(null)}
-          >
-            All
-          </button>
-          {categories.map(cat => (
+        <div className={styles.catSection}>
+          <div className={styles.catScrollArea}>
+            {/* All button */}
             <button
-              key={cat}
-              className={`${styles.catBtn} ${activeCategory === cat ? styles.catBtnActive : ''}`}
-              onClick={() => setActiveCategory(cat === activeCategory ? null : cat)}
+              className={`${styles.catBtn} ${!activeCategory ? styles.catBtnActive : ''}`}
+              onClick={() => setActiveCategory(null)}
             >
-              {cat}
+              <LayoutGrid size={13} />
+              All
             </button>
-          ))}
+
+            {/* Category buttons */}
+            {categories.map(cat => {
+              const count = posts.filter(p => p.category === cat).length
+              return (
+                <button
+                  key={cat}
+                  className={`${styles.catBtn} ${activeCategory === cat ? styles.catBtnActive : ''}`}
+                  onClick={() => setActiveCategory(cat === activeCategory ? null : cat)}
+                >
+                  {cat}
+                  {count > 0 && (
+                    <span className={`${styles.catCount} ${activeCategory === cat ? styles.catCountActive : ''}`}>
+                      {count}
+                    </span>
+                  )}
+                </button>
+              )
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* ── Empty category state ── */}
+      {isEmpty && (
+        <div className={styles.emptyCategory}>
+          <div className={styles.emptyCategoryIcon}>📂</div>
+          <h3>No posts in &ldquo;{activeCategory}&rdquo; yet</h3>
+          <p>Articles for this category are coming soon.</p>
+          <button className={styles.catClearBtn} onClick={() => setActiveCategory(null)}>
+            View all posts
+          </button>
         </div>
       )}
 
       {/* ── Featured Post ── */}
-      {filteredFeatured && (
-        <FeaturedCard post={filteredFeatured} />
-      )}
+      {!isEmpty && filteredFeatured && <FeaturedCard post={filteredFeatured} />}
 
       {/* ── Post Grid ── */}
-      {filteredRest.length > 0 && (
+      {!isEmpty && filteredRest.length > 0 && (
         <div className={styles.postGrid}>
           {filteredRest.map((post, i) => (
             <PostCard key={post.id} post={post} index={i} />
           ))}
-        </div>
-      )}
-
-      {/* Empty filter state */}
-      {isFiltering && !filteredFeatured && filteredRest.length === 0 && (
-        <div className={styles.emptyState}>
-          <p className={styles.emptyIcon}>🔍</p>
-          <h2>No posts in this category</h2>
-          <p>Try a different category or view all posts.</p>
         </div>
       )}
     </div>
