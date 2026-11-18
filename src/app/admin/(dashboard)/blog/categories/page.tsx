@@ -11,7 +11,18 @@ export default async function BlogCategoriesPage() {
     orderBy: [{ displayOrder: 'asc' }, { name: 'asc' }],
   })
 
-  // Legacy categories from posts that aren't in BlogCategory table
+  // Post count per category name
+  const postCounts: Record<string, number> = {}
+  const postsByCat = await prisma.blogPost.groupBy({
+    by: ['category'],
+    where: { status: 'PUBLISHED', category: { not: null } },
+    _count: { _all: true },
+  })
+  for (const row of postsByCat) {
+    if (row.category) postCounts[row.category] = row._count._all
+  }
+
+  // Legacy categories from posts not in BlogCategory table
   const legacyPosts = await prisma.blogPost.findMany({
     select: { category: true },
     where: { AND: [{ category: { not: null } }, { category: { not: '' } }] },
@@ -33,10 +44,14 @@ export default async function BlogCategoriesPage() {
 
       <p className="text-gray-500 text-sm mb-6 flex items-center gap-2">
         <Tags className="w-4 h-4" />
-        Manage blog categories. Assign an order number to control their sequence.
+        Manage blog categories. Set order and visibility on the public blog page.
       </p>
 
-      <BlogCategoryManager initialCategories={categories} legacyCategories={legacy} />
+      <BlogCategoryManager
+        initialCategories={categories}
+        legacyCategories={legacy}
+        postCounts={postCounts}
+      />
     </div>
   )
 }
