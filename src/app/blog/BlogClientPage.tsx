@@ -135,7 +135,7 @@ export default function BlogClientPage({
     ? (filteredPosts!.find(p => p.isFeatured) ?? filteredPosts![0] ?? null)
     : featured
   const filteredRest = isFiltering
-    ? filteredPosts!.filter(p => p.id !== filteredFeatured?.id).slice(0, 11)
+    ? filteredPosts!.filter(p => p.id !== filteredFeatured?.id).slice(0, 9)
     : rest
 
   const isEmpty = isFiltering && !filteredFeatured && filteredRest.length === 0
@@ -157,23 +157,15 @@ export default function BlogClientPage({
             </button>
 
             {/* Category buttons */}
-            {categories.map(cat => {
-              const count = posts.filter(p => p.category === cat).length
-              return (
+              {categories.map(cat => (
                 <button
                   key={cat}
                   className={`${styles.catBtn} ${activeCategory === cat ? styles.catBtnActive : ''}`}
                   onClick={() => setActiveCategory(cat === activeCategory ? null : cat)}
                 >
                   {cat}
-                  {count > 0 && (
-                    <span className={`${styles.catCount} ${activeCategory === cat ? styles.catCountActive : ''}`}>
-                      {count}
-                    </span>
-                  )}
                 </button>
-              )
-            })}
+              ))}
           </div>
         </div>
       )}

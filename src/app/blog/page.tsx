@@ -29,7 +29,7 @@ export default async function BlogPage() {
   const categories = dbCategories.map(c => c.name)
 
   const featured = allPosts.find(p => p.isFeatured) ?? allPosts[0] ?? null
-  const rest = allPosts.filter(p => p.id !== featured?.id).slice(0, 7)
+  const rest = allPosts.filter(p => p.id !== featured?.id).slice(0, 9)
 
   const postsForClient = allPosts.map(p => ({
     id: p.id,
