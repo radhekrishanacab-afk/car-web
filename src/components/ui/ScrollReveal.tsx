@@ -5,18 +5,17 @@ import { useEffect } from 'react'
 /**
  * ScrollReveal
  * ------------
- * Professional scroll-triggered entrance animations.
+ * Scroll-triggered entrance animations for elements that explicitly declare
+ * a data-reveal attribute. Sections are NOT auto-animated — this keeps
+ * images and links visible immediately and prevents any load-time flicker.
  *
  * Supported directions via data-reveal attribute:
  *   data-reveal="left"   → slide in from the left
  *   data-reveal="right"  → slide in from the right
  *   data-reveal="up"     → slide up from below
  *   data-reveal="down"   → slide down from above
- *   data-reveal="zoom"   → zoom + fade in (0.92 → 1)
+ *   data-reveal="zoom"   → zoom + fade in
  *   data-reveal="fade"   → fade only
- *
- * Every <section> without an explicit data-reveal automatically gets an
- * alternating direction (up → left → right → zoom …) for a dynamic flow.
  *
  * Children of a [data-reveal-stagger] container animate one after another.
  *
@@ -29,14 +28,10 @@ export default function ScrollReveal() {
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     if (prefersReduced) return
 
-    // Auto-assign an alternating reveal direction to every <section> that
-    // does not already declare one. Mix of slide + zoom keeps it lively.
-    const sections = document.querySelectorAll('section:not([data-reveal]):not([data-no-reveal])')
-    const directions = ['up', 'left', 'right', 'zoom', 'up', 'left', 'right', 'zoom']
-    sections.forEach((el, i) => {
-      el.setAttribute('data-reveal', directions[i % directions.length])
-    })
-
+    // Only animate elements that explicitly opt-in via data-reveal or
+    // data-reveal-stagger. We do NOT auto-annotate <section> elements —
+    // that caused entire sections (and their images) to be hidden until
+    // scrolled into view, making the page feel slow.
     const targets = document.querySelectorAll<HTMLElement>(
       '[data-reveal], [data-reveal-stagger]'
     )
@@ -55,7 +50,7 @@ export default function ScrollReveal() {
           }
         })
       },
-      { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
+      { threshold: 0.08, rootMargin: '0px 0px -30px 0px' }
     )
 
     targets.forEach((el) => observer.observe(el))

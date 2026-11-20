@@ -422,24 +422,26 @@ p {
 
 /* ═══════════════════════════════════════════
    SCROLL REVEAL ANIMATIONS
-   Professional slide + zoom + fade entrance.
+   Lightweight entrance animations — only on
+   elements that explicitly declare data-reveal.
+   Sections are NOT auto-animated to keep images
+   and links instantly visible and clickable.
    data-reveal="left|right|up|down|zoom|fade"
-   Sections auto-animate with alternating directions.
 ═══════════════════════════════════════════ */
 
-/* Initial hidden state — premium easing (expo-out feel) */
+/* Initial hidden state — fast, snappy easing */
 [data-reveal] {
   opacity: 0;
   will-change: opacity, transform;
-  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-[data-reveal="left"]  { transform: translateX(-56px); }
-[data-reveal="right"] { transform: translateX(56px); }
-[data-reveal="up"]    { transform: translateY(44px); }
-[data-reveal="down"]  { transform: translateY(-44px); }
-[data-reveal="zoom"]  { transform: scale(0.92); }
+[data-reveal="left"]  { transform: translateX(-32px); }
+[data-reveal="right"] { transform: translateX(32px); }
+[data-reveal="up"]    { transform: translateY(24px); }
+[data-reveal="down"]  { transform: translateY(-24px); }
+[data-reveal="zoom"]  { transform: scale(0.95); }
 [data-reveal="fade"]  { transform: none; }
 
 /* Visible state — triggered by IntersectionObserver */
@@ -448,25 +450,32 @@ p {
   transform: translate(0, 0) scale(1);
 }
 
-/* Stagger children inside a revealed container */
+/* Stagger children — small delays so cards appear quickly */
 [data-reveal-stagger] > * {
   opacity: 0;
-  transform: translateY(28px) scale(0.97);
-  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateY(16px);
+  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 [data-reveal-stagger].reveal-visible > * {
   opacity: 1;
-  transform: translateY(0) scale(1);
+  transform: translateY(0);
 }
-[data-reveal-stagger].reveal-visible > *:nth-child(1) { transition-delay: 0.05s; }
-[data-reveal-stagger].reveal-visible > *:nth-child(2) { transition-delay: 0.12s; }
-[data-reveal-stagger].reveal-visible > *:nth-child(3) { transition-delay: 0.19s; }
-[data-reveal-stagger].reveal-visible > *:nth-child(4) { transition-delay: 0.26s; }
-[data-reveal-stagger].reveal-visible > *:nth-child(5) { transition-delay: 0.33s; }
-[data-reveal-stagger].reveal-visible > *:nth-child(6) { transition-delay: 0.40s; }
-[data-reveal-stagger].reveal-visible > *:nth-child(7) { transition-delay: 0.47s; }
-[data-reveal-stagger].reveal-visible > *:nth-child(8) { transition-delay: 0.54s; }
+[data-reveal-stagger].reveal-visible > *:nth-child(1) { transition-delay: 0.03s; }
+[data-reveal-stagger].reveal-visible > *:nth-child(2) { transition-delay: 0.08s; }
+[data-reveal-stagger].reveal-visible > *:nth-child(3) { transition-delay: 0.13s; }
+[data-reveal-stagger].reveal-visible > *:nth-child(4) { transition-delay: 0.18s; }
+[data-reveal-stagger].reveal-visible > *:nth-child(5) { transition-delay: 0.23s; }
+[data-reveal-stagger].reveal-visible > *:nth-child(6) { transition-delay: 0.28s; }
+[data-reveal-stagger].reveal-visible > *:nth-child(7) { transition-delay: 0.33s; }
+[data-reveal-stagger].reveal-visible > *:nth-child(8) { transition-delay: 0.38s; }
+
+/* Touch-action: manipulation removes the 300ms tap delay on mobile
+   for all interactive elements across the site */
+a, button, [role="button"], input[type="submit"], input[type="button"],
+label, .btn, [data-reveal-stagger] > * {
+  touch-action: manipulation;
+}
 
 /* Image zoom-on-hover for a premium interactive feel */
 .zoom-hover {

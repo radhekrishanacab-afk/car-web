@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { ArrowRight, MapPin, MessageCircle } from 'lucide-react'
 import { blogLocationLabel } from '@/lib/blog-location'
 import { prisma } from '@/lib/prisma'
@@ -64,24 +65,35 @@ export default async function BlogSection() {
                 display: 'flex', flexDirection: 'column', height: '100%',
                 transition: 'transform 0.2s, box-shadow 0.2s',
               }}>
-                {/* Image */}
-                <div className="zoom-hover" style={{ position: 'relative', height: 200, background: '#e8edf5', flexShrink: 0 }}>
-                  {image
-                    // eslint-disable-next-line @next/next/no-img-element
-                    ? <img src={image} alt={title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-                    : <div style={{ width: '100%', height: '100%', background: '#e2e8f0' }} />
-                  }
+                {/* Image — wrapped in Link so the whole image area is tappable */}
+                <Link
+                  href={`/blog/${post.slug}`}
+                  className="zoom-hover"
+                  style={{ display: 'block', position: 'relative', height: 200, background: '#e8edf5', flexShrink: 0, overflow: 'hidden', touchAction: 'manipulation' }}
+                >
+                  {image ? (
+                    <Image
+                      src={image}
+                      alt={title}
+                      fill
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 300px"
+                      style={{ objectFit: 'cover' }}
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div style={{ width: '100%', height: '100%', background: '#e2e8f0' }} />
+                  )}
                   {post.isFeatured && (
-                    <div style={{ position: 'absolute', top: 12, left: 12, background: SITE_CYAN, color: '#fff', fontSize: 10, fontWeight: 700, padding: '3px 10px', borderRadius: 50 }}>
+                    <div style={{ position: 'absolute', top: 12, left: 12, zIndex: 1, background: SITE_CYAN, color: '#fff', fontSize: 10, fontWeight: 700, padding: '3px 10px', borderRadius: 50 }}>
                       FEATURED
                     </div>
                   )}
                   {post.showCategory && post.category && (
-                    <div style={{ position: 'absolute', top: 12, right: 12, background: 'rgba(16,38,74,0.88)', color: '#fff', fontSize: 10, fontWeight: 600, padding: '3px 10px', borderRadius: 50 }}>
+                    <div style={{ position: 'absolute', top: 12, right: 12, zIndex: 1, background: 'rgba(16,38,74,0.88)', color: '#fff', fontSize: 10, fontWeight: 600, padding: '3px 10px', borderRadius: 50 }}>
                       {post.category}
                     </div>
                   )}
-                </div>
+                </Link>
 
                 {/* Content */}
                 <div style={{ padding: '20px 22px', flex: 1, display: 'flex', flexDirection: 'column' }}>
@@ -102,12 +114,12 @@ export default async function BlogSection() {
                     <Link
                       href={`/blog/${post.slug}`}
                       className="text-[#08A9EE] hover:text-[#0284c7] transition-colors"
-                      style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontWeight: 700, textDecoration: 'none' }}>
+                      style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontWeight: 700, textDecoration: 'none', touchAction: 'manipulation' }}>
                       Read More <ArrowRight size={11} />
                     </Link>
                   </div>
                   <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="btn btn-primary"
-                    style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginTop: 16, padding: '10px 12px', borderRadius: 8, fontSize: 13, fontWeight: 700, textDecoration: 'none' }}>
+                    style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginTop: 16, padding: '10px 12px', borderRadius: 8, fontSize: 13, fontWeight: 700, textDecoration: 'none', touchAction: 'manipulation' }}>
                     <MessageCircle size={15} /> Enquire on WhatsApp
                   </a>
                 </div>
