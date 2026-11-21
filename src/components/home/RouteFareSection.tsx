@@ -1,5 +1,6 @@
 'use client'
 
+import { buildHomepageRouteMsg, buildWAUrl } from '@/lib/whatsapp'
 import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import { ArrowLeftRight, Search, MapPin, Navigation, ArrowRight, IndianRupee } from 'lucide-react'
@@ -83,10 +84,13 @@ export default function RouteFareSection({ initialRoutes, allCities }: Props) {
   }
 
   const buildBookingUrl = (route: RouteResult) => {
-    const msg = encodeURIComponent(
-      `🚖 *TAXI ENQUIRY*\n📍 From: ${route.originCity.name}\n🏁 To: ${route.destinationCity.name}\n\nPlease share fare details.`
-    )
-    return `https://wa.me/919723097832?text=${msg}`
+    const wa = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '919723097832'
+    const msg = buildHomepageRouteMsg({
+      pickup: route.originCity.name,
+      drop: route.destinationCity.name,
+      distanceKm: route.distanceKm ?? undefined,
+    })
+    return buildWAUrl(msg, wa)
   }
 
   return (

@@ -11,6 +11,8 @@ interface Props {
   vehicles?: { name: string }[]
 }
 
+import { buildHomepageBookingMsg, buildHomepageCtaMsg, buildWAUrl } from '@/lib/whatsapp'
+
 const WA    = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '919723097832'
 const PHONE = process.env.NEXT_PUBLIC_BUSINESS_PHONE ?? '+91 97230 97832'
 
@@ -120,21 +122,17 @@ export default function HeroSection({ vehicles: _vehicles }: Props) {
     }
 
     // Open WhatsApp with formatted booking message
-    const waLines = [
-      'Radhe Krishna Cab - New Booking Enquiry',
-      '',
-      `Name: ${form.name}`,
-      `Phone: +91 ${form.phone}`,
-      `Pickup: ${form.pickup}`,
-      `Drop: ${form.drop}`,
-      `Date: ${formatDate(form.date)}`,
-      `Pickup Time: ${form.time ? formatTime(form.time) : 'Anytime'}`,
-      `Vehicle: ${form.vehicle}`,
-      '',
-      'Sent from radhekrishanacab.com',
-    ]
+    const waLines = buildHomepageBookingMsg({
+      name: form.name,
+      phone: form.phone,
+      pickup: form.pickup,
+      drop: form.drop,
+      date: form.date,
+      time: form.time || undefined,
+      vehicle: form.vehicle,
+    })
 
-    const waUrl = `https://wa.me/${WA}?text=${encodeURIComponent(waLines.join('\n'))}`
+    const waUrl = buildWAUrl(waLines, WA)
     const a = document.createElement('a')
     a.href = waUrl
     a.target = '_blank'
@@ -147,9 +145,7 @@ export default function HeroSection({ vehicles: _vehicles }: Props) {
     setSubmitted(true)
   }
 
-  const waMsg = encodeURIComponent(
-    'Hello! I want to book a taxi from Radhe Krishna Cab. Please share available options and fares.'
-  )
+  const waMsg = encodeURIComponent(buildHomepageCtaMsg())
 
   const rawPhone = PHONE.replace(/[^0-9+]/g, '')
   const today = new Date().toISOString().split('T')[0]

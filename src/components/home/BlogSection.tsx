@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { ArrowRight, MapPin, MessageCircle } from 'lucide-react'
 import { blogLocationLabel } from '@/lib/blog-location'
 import { prisma } from '@/lib/prisma'
+import { buildBlogInquiryMsg, buildWAUrl, DEFAULT_WA_NUMBER } from '@/lib/whatsapp'
 
 const SITE_NAVY = '#10264A'
 const SITE_CYAN = '#08A9EE'
