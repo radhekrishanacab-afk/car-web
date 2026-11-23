@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { Search, MapPin, MessageCircle, ArrowRight, X, ChevronRight } from 'lucide-react'
+import { buildWAUrl, buildTouristPlaceMessage, buildGeneralEnquiryMessage } from '@/lib/whatsapp'
 
 interface PlaceCard {
   id: number; name: string; slug: string
@@ -28,6 +29,20 @@ const WA = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '919723097832'
 
 function buildHref(place: PlaceCard) {
   return `/explore-india/${place.state.slug}/${place.district?.slug ?? '_'}/${place.slug}`
+}
+
+function placeWhatsAppUrl(place: PlaceCard): string {
+  const placeName = place.cityName || place.name
+  return buildWAUrl(
+    buildTouristPlaceMessage({
+      placeName,
+      attraction: place.name !== placeName ? place.name : null,
+      state: place.state.name,
+      district: place.district?.name ?? null,
+      source: 'Tourist Places Page',
+    }),
+    WA,
+  )
 }
 
 export default function ExploreIndiaClient({ places, total, page, pages, states, categories, initialState, initialCategory, initialSearch }: Props) {
@@ -173,7 +188,7 @@ export default function ExploreIndiaClient({ places, total, page, pages, states,
                         style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4, background: '#f1f5f9', color: '#0a1628', fontSize: 12, fontWeight: 600, padding: '8px 10px', borderRadius: 8, textDecoration: 'none', border: '1px solid #e2e8f0' }}>
                         <ArrowRight size={12} /> View Details
                       </Link>
-                      <a href={`https://wa.me/${WA}?text=${encodeURIComponent(`Hello! I want to visit ${place.name}${place.cityName ? ` in ${place.cityName}` : ''}, ${place.state.name}. Please share taxi options and fares.`)}`}
+                      <a href={placeWhatsAppUrl(place)}
                         target="_blank" rel="noopener noreferrer"
                         style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5, background: '#22c55e', color: '#ffffff', fontSize: 12, fontWeight: 700, padding: '8px 10px', borderRadius: 8, textDecoration: 'none', boxShadow: '0 2px 8px rgba(34,197,94,0.25)' }}>
                         <MessageCircle size={12} /> Book Taxi
@@ -204,7 +219,10 @@ export default function ExploreIndiaClient({ places, total, page, pages, states,
             <h3 style={{ fontSize: 17, fontWeight: 700, color: '#ffffff', margin: '0 0 5px' }}>Plan Your Trip with Radhe Krishna Cab</h3>
             <p style={{ fontSize: 13, color: '#94a3b8', margin: 0 }}>Get taxi quotes for any tourist destination. Available 24/7.</p>
           </div>
-          <a href={`https://wa.me/${WA}?text=${encodeURIComponent('Hello Radhe Krishna Cabs! I want to plan a tourist trip. Please share taxi options and fares.')}`}
+          <a href={buildWAUrl(buildGeneralEnquiryMessage({
+            sourcePage: 'Explore India — Tourist Places',
+            pageUrl: 'https://radhekrishanacab.com/explore-india',
+          }), WA)}
             target="_blank" rel="noopener noreferrer"
             style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: '#22c55e', color: '#fff', fontWeight: 700, fontSize: 13, padding: '12px 22px', borderRadius: 50, textDecoration: 'none' }}>
             <MessageCircle size={15} /> WhatsApp for Taxi Quotes

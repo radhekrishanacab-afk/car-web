@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { EnquirySchema, buildWhatsAppMessage, type EnquiryFormData } from '@/lib/validation/enquiry'
+import { buildWAUrl } from '@/lib/whatsapp'
 import {
   MessageCircle, User, Phone, MapPin, Calendar, Clock, Car,
   ChevronDown, AlertCircle,
@@ -51,7 +52,7 @@ export default function EnquiryForm({ whatsappNumber = process.env.NEXT_PUBLIC_W
       return
     }
     const msg = buildWhatsAppMessage(result.data)
-    const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(msg)}`
+    const url = buildWAUrl(msg, whatsappNumber)
     const opened = window.open(url, '_blank', 'noopener,noreferrer')
     if (!opened) {
       alert('Could not open WhatsApp. Please contact us at +91 97230 97832.')

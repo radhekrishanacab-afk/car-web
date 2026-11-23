@@ -8,6 +8,7 @@ import {
   Briefcase, CheckCircle, Smartphone, Clock, Settings,
   ArrowRight, Phone, MessageCircle,
 } from 'lucide-react'
+import { buildWAUrl, buildGeneralEnquiryMessage } from '@/lib/whatsapp'
 
 export const metadata: Metadata = {
   title: 'Our Services — Radhe Krishna Cab | Taxi & Cab Services',
@@ -16,6 +17,10 @@ export const metadata: Metadata = {
 }
 
 const WA = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '919723097832'
+const WA_URL = buildWAUrl(
+  buildGeneralEnquiryMessage({ sourcePage: 'Services Page', pageUrl: 'https://radhekrishanacab.com/services' }),
+  WA,
+)
 
 const services = [
   {
@@ -269,7 +274,7 @@ export default function ServicesPage() {
                 <Link href="/routes" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: '#08a9ee', color: '#ffffff', fontWeight: 700, fontSize: '0.9375rem', padding: '0.875rem 1.75rem', borderRadius: '50px', textDecoration: 'none' }}>
                   <MapPin size={16} /> Explore All Routes
                 </Link>
-                <a href={`https://wa.me/${WA}?text=${encodeURIComponent('Hello! I want to plan a tourist trip across India. Please share taxi options.')}`}
+                <a href={WA_URL}
                   target="_blank" rel="noopener noreferrer"
                   style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: '#22c55e', color: '#ffffff', fontWeight: 700, fontSize: '0.9375rem', padding: '0.875rem 1.75rem', borderRadius: '50px', textDecoration: 'none' }}>
                   <MessageCircle size={16} /> WhatsApp Us
@@ -305,7 +310,7 @@ export default function ServicesPage() {
                 <Phone size={16} /> Call Now
               </a>
               <a
-                href={`https://wa.me/${WA}`}
+                href={WA_URL}
                 target="_blank" rel="noopener noreferrer"
                 className="btn btn-outline-white"
                 style={{ padding: '0.875rem 2rem' }}

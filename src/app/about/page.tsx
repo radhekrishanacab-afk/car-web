@@ -12,6 +12,7 @@ import {
   CheckCircle2, Car, IndianRupee, HeadphonesIcon,
   Star, CalendarCheck,
 } from 'lucide-react'
+import { buildWAUrl, buildGeneralEnquiryMessage } from '@/lib/whatsapp'
 
 export const metadata: Metadata = {
   title: 'About Us — Radhe Krishna Cab | Trusted Taxi Service in Gujarat',
@@ -21,6 +22,10 @@ export const metadata: Metadata = {
 
 const WA    = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '919723097832'
 const PHONE = process.env.NEXT_PUBLIC_BUSINESS_PHONE ?? '+91 97230 97832'
+const WA_URL = buildWAUrl(
+  buildGeneralEnquiryMessage({ sourcePage: 'About Us Page', pageUrl: 'https://radhekrishanacab.com/about' }),
+  WA,
+)
 
 const stats = [
   { value: '1,200+', label: 'Happy Customers',   icon: Users },
@@ -174,7 +179,7 @@ export default function AboutPage() {
                     <Phone size={15} /> Call Now: {PHONE}
                   </a>
                   <a
-                    href={`https://wa.me/${WA}`}
+                    href={WA_URL}
                     target="_blank" rel="noopener noreferrer"
                     className="btn btn-outline"
                   >
@@ -316,7 +321,7 @@ export default function AboutPage() {
                 <CalendarCheck size={16} /> Book Your Cab
               </Link>
               <a
-                href={`https://wa.me/${WA}`}
+                href={WA_URL}
                 target="_blank" rel="noopener noreferrer"
                 className="btn btn-outline-white"
                 style={{ padding: '0.875rem 2rem' }}

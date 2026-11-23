@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { buildHomeBookingMessage } from '@/lib/whatsapp'
 
 export const EnquirySchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters').max(100),
@@ -16,16 +17,15 @@ export const EnquirySchema = z.object({
 export type EnquiryFormData = z.infer<typeof EnquirySchema>
 
 export function buildWhatsAppMessage(data: EnquiryFormData): string {
-  return `🚖 *NEW TAXI ENQUIRY*
-*Radhe Krishna Cab*
-
-👤 *Customer Name:* ${data.name}
-📞 *Customer Phone:* ${data.mobile}
-📍 *Pickup Location:* ${data.pickup}
-🏁 *Drop Location:* ${data.destination}
-📅 *Travel Date:* ${data.date}
-⏰ *Travel Time:* ${data.time}
-🚗 *Selected Car:* ${data.vehicle}${data.message ? `\n💬 *Customer Message:* ${data.message}` : ''}
-
-_Please contact this customer regarding the enquiry._`
+  return buildHomeBookingMessage({
+    name: data.name,
+    mobile: data.mobile,
+    pickup: data.pickup,
+    drop: data.destination,
+    date: data.date,
+    time: data.time,
+    vehicle: data.vehicle,
+    notes: data.message,
+    source: 'Enquiry Form',
+  })
 }

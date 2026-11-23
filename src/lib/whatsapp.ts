@@ -140,7 +140,7 @@ export interface RouteFareItem {
 
 export interface RouteBookingData {
   pickupCity: string
-  dropCity: string
+  dropCity?: string | null
   distanceKm?: number | null
   fares?: RouteFareItem[]
   selectedVehicle?: string | null

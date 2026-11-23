@@ -1,6 +1,11 @@
 import { Phone, MessageCircle } from 'lucide-react'
+import { buildWAUrl, buildGeneralEnquiryMessage } from '@/lib/whatsapp'
 
 const WA = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '919723097832'
+const WA_URL = buildWAUrl(
+  buildGeneralEnquiryMessage({ sourcePage: 'Homepage — Contact CTA', pageUrl: 'https://radhekrishanacab.com/' }),
+  WA,
+)
 
 export default function ContactCTA() {
   return (
@@ -31,7 +36,7 @@ export default function ContactCTA() {
             <Phone size={16} /> Call Now
           </a>
           <a
-            href={`https://wa.me/${WA}?text=${encodeURIComponent('Hello! I want to book a cab from Radhe Krishna Cab.')}`}
+            href={WA_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="btn btn-outline-white w-full sm:w-auto"

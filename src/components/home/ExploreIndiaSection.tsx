@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { MapPin, ArrowRight, MessageCircle, Compass } from 'lucide-react'
+import { buildWAUrl, buildGeneralEnquiryMessage } from '@/lib/whatsapp'
 
 interface Place {
   id: number
@@ -115,7 +116,13 @@ function PlaceCard({ place }: { place: Place }) {
 }
 
 export default function ExploreIndiaSection({ featuredPlaces, categories }: Props) {
-  const waMsg = encodeURIComponent('Hello Radhe Krishna Cabs! I want to plan a tourist trip across India. Please share taxi options and fares.')
+  const waMsg = buildWAUrl(
+    buildGeneralEnquiryMessage({
+      sourcePage: 'Homepage — Explore India Section',
+      pageUrl: 'https://radhekrishanacab.com/',
+    }),
+    WA,
+  )
 
   return (
     <section style={{ background: '#f8fafc', padding: '72px 0' }}>
@@ -249,7 +256,7 @@ export default function ExploreIndiaSection({ featuredPlaces, categories }: Prop
             }}>
             <Compass size={16} /> Explore All Destinations
           </Link>
-          <a href={`https://wa.me/${WA}?text=${waMsg}`}
+          <a href={waMsg}
             target="_blank" rel="noopener noreferrer"
             style={{
               display: 'inline-flex', alignItems: 'center', gap: 8,

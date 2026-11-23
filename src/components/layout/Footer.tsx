@@ -2,8 +2,13 @@
 
 import Link from 'next/link'
 import { Phone, Mail, MapPin, MessageCircle } from 'lucide-react'
+import { buildWAUrl, buildGeneralEnquiryMessage } from '@/lib/whatsapp'
 
 const WA = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '919723097832'
+const WA_URL = buildWAUrl(
+  buildGeneralEnquiryMessage({ sourcePage: 'Website Footer', pageUrl: 'https://radhekrishanacab.com/' }),
+  WA,
+)
 
 const quickLinks = [
   { href: '/', label: 'Home' },
@@ -88,7 +93,7 @@ export default function Footer() {
               </a>
               {/* WhatsApp */}
               <a
-                href={`https://wa.me/${WA}`}
+                href={WA_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="WhatsApp"
@@ -190,7 +195,7 @@ export default function Footer() {
                 </a>
               </div>
               <a
-                href={`https://wa.me/${WA}`}
+                href={WA_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 text-sm text-gray-400 hover:text-green-400 transition-colors"

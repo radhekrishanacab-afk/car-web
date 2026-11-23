@@ -5,6 +5,7 @@ import WhatsAppButton from '@/components/ui/WhatsAppButton'
 import FAQSection from '@/components/home/FAQSection'
 import Link from 'next/link'
 import { MessageCircle } from 'lucide-react'
+import { buildWAUrl, buildGeneralEnquiryMessage } from '@/lib/whatsapp'
 
 export const metadata: Metadata = {
   title: 'Frequently Asked Questions — Radhe Krishna Cab',
@@ -13,6 +14,10 @@ export const metadata: Metadata = {
 }
 
 const WA = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '919723097832'
+const WA_URL = buildWAUrl(
+  buildGeneralEnquiryMessage({ sourcePage: 'FAQ Page', pageUrl: 'https://radhekrishanacab.com/faq' }),
+  WA,
+)
 
 export default function FAQPage() {
   return (
@@ -45,7 +50,7 @@ export default function FAQPage() {
               Contact Us
             </Link>
             <a
-              href={`https://wa.me/${WA}?text=${encodeURIComponent('Hello! I have a question about Radhe Krishna Cab.')}`}
+              href={WA_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-semibold transition-all hover:scale-105 shadow-md shadow-green-500/25"

@@ -8,6 +8,7 @@ import { ChevronRight, Phone, MessageCircle, MapPin, Search } from 'lucide-react
 import { getCityBySlug } from '@/lib/services/city-service'
 import { prisma } from '@/lib/prisma'
 import CityRoutesClient from '@/components/routes/CityRoutesClient'
+import { buildWAUrl, buildRouteBookingMessage } from '@/lib/whatsapp'
 
 interface PageProps {
   params: Promise<{ citySlug: string }>
@@ -35,6 +36,14 @@ export default async function CityRoutesPage({ params, searchParams }: PageProps
 
   const city = await getCityBySlug(citySlug).catch(() => null)
   if (!city) notFound()
+
+  const waMsg = buildWAUrl(
+    buildRouteBookingMessage({
+      pickupCity: city.name,
+      source: `Routes — Taxi from ${city.name}`,
+    }),
+    WA,
+  )
 
   const where = {
     isActive: true,
@@ -179,7 +188,7 @@ export default async function CityRoutesPage({ params, searchParams }: PageProps
                       All {city.name} Routes
                     </Link>
                   )}
-                  <a href={`https://wa.me/${WA}?text=${encodeURIComponent(`Hello! I need a taxi from ${city.name}.`)}`}
+                  <a href={waMsg}
                     target="_blank" rel="noopener noreferrer"
                     style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: '#22c55e', color: '#ffffff', fontWeight: 600, fontSize: 13, padding: '10px 20px', borderRadius: 8, textDecoration: 'none' }}>
                     <MessageCircle size={14} /> WhatsApp Us
@@ -248,7 +257,7 @@ export default async function CityRoutesPage({ params, searchParams }: PageProps
                   style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: '#ffffff', color: '#0a1628', fontWeight: 700, fontSize: 13, padding: '10px 18px', borderRadius: 8, textDecoration: 'none' }}>
                   <Phone size={14} /> Call Now
                 </a>
-                <a href={`https://wa.me/${WA}?text=${encodeURIComponent(`Hello! I need a taxi from ${city.name}.`)}`}
+                <a href={waMsg}
                   target="_blank" rel="noopener noreferrer"
                   style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: '#22c55e', color: '#ffffff', fontWeight: 700, fontSize: 13, padding: '10px 18px', borderRadius: 8, textDecoration: 'none' }}>
                   <MessageCircle size={14} /> WhatsApp

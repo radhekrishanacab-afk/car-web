@@ -3,6 +3,7 @@
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { MapPin, Clock, IndianRupee, Calendar, ChevronRight, Phone, MessageCircle, ArrowLeft, Navigation } from 'lucide-react'
+import { buildWAUrl, buildTouristPlaceMessage } from '@/lib/whatsapp'
 
 const SinglePlaceMap = dynamic(() => import('./SinglePlaceMap'), { ssr: false, loading: () => <div style={{ height: 260, background: '#f0f4f8', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, color: '#94a3b8' }}>Loading map…</div> })
 
@@ -23,8 +24,16 @@ interface Place {
 }
 
 export default function PlaceDetailClient({ place, stateSlug }: { place: Place; stateSlug: string }) {
-  const waMsg = encodeURIComponent(
-    `Hello Radhe Krishna Cabs & Taxi Service,\n\nI would like to enquire about a taxi for visiting:\n\nDestination: ${place.name}\nCity/Area: ${place.cityName ?? 'N/A'}\nDistrict: ${place.district?.name ?? 'N/A'}\nState: ${place.state.name}\n\nPlease share available taxi options and fares.\n\nThank you.`
+  const placeName = place.cityName || place.name
+  const waMsg = buildWAUrl(
+    buildTouristPlaceMessage({
+      placeName,
+      attraction: place.name !== placeName ? place.name : null,
+      state: place.state.name,
+      district: place.district?.name ?? null,
+      source: 'Tourist Places Page',
+    }),
+    WA,
   )
   const mapsLink = place.latitude && place.longitude
     ? `https://www.google.com/maps/dir/?api=1&destination=${place.latitude},${place.longitude}`
@@ -111,7 +120,7 @@ export default function PlaceDetailClient({ place, stateSlug }: { place: Place; 
           <h2 style={{ fontSize: 15, fontWeight: 700, color: '#fff', margin: '0 0 5px' }}>Plan Your Visit to {place.name}</h2>
           <p style={{ fontSize: 13, color: '#94a3b8', margin: '0 0 18px' }}>Book a taxi from anywhere in India with Radhe Krishna Cabs.</p>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
-            <a href={`https://wa.me/${WA}?text=${waMsg}`} target="_blank" rel="noopener noreferrer"
+            <a href={waMsg} target="_blank" rel="noopener noreferrer"
               style={{ flex: 1, minWidth: 160, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7, background: '#22c55e', color: '#fff', fontWeight: 700, fontSize: 13, padding: '12px 16px', borderRadius: 50, textDecoration: 'none' }}>
               <MessageCircle size={14} /> Enquire on WhatsApp
             </a>

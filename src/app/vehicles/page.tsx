@@ -5,6 +5,11 @@ import WhatsAppButton from '@/components/ui/WhatsAppButton'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Phone, MessageCircle, Users, Settings2, Star } from 'lucide-react'
+import {
+  buildWAUrl,
+  buildVehicleBookingMessage,
+  buildGeneralEnquiryMessage,
+} from '@/lib/whatsapp'
 
 export const metadata: Metadata = {
   title: 'Our Fleet — Radhe Krishna Cab | Cabs for Every Journey',
@@ -273,7 +278,15 @@ export default function VehiclesPage() {
                         Call
                       </a>
                       <a
-                        href={`https://wa.me/${WA}?text=${encodeURIComponent(`Hello! I want to book a ${v.name} (${v.seats}). Please share availability and pricing.`)}`}
+                        href={buildWAUrl(
+                          buildVehicleBookingMessage({
+                            vehicleName: v.name,
+                            seating: v.seats,
+                            category: v.type,
+                            source: 'Our Cars Page',
+                          }),
+                          WA,
+                        )}
                         target="_blank"
                         rel="noopener noreferrer"
                         style={{
@@ -329,7 +342,13 @@ export default function VehiclesPage() {
                     <Phone size={16} /> Call Now: {PHONE}
                   </a>
                   <a
-                    href={`https://wa.me/${WA}?text=Hello!%20I%20need%20help%20choosing%20a%20vehicle%20for%20my%20trip.`}
+                    href={buildWAUrl(
+                      buildGeneralEnquiryMessage({
+                        sourcePage: 'Our Cars Page',
+                        pageUrl: 'https://radhekrishanacab.com/vehicles',
+                      }),
+                      WA,
+                    )}
                     target="_blank" rel="noopener noreferrer"
                     className="btn btn-outline-white"
                     style={{ padding: '0.875rem 2rem' }}

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Search, MapPin, ArrowRight, Phone, MessageCircle, Route as RouteIcon, LoaderCircle } from 'lucide-react'
+import { buildWAUrl, buildGeneralEnquiryMessage } from '@/lib/whatsapp'
 
 interface City {
   id: number
@@ -30,6 +31,10 @@ interface SearchSuggestion {
 }
 
 const WA = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '919723097832'
+const WA_URL = buildWAUrl(
+  buildGeneralEnquiryMessage({ sourcePage: 'Routes Page', pageUrl: 'https://radhekrishanacab.com/routes' }),
+  WA,
+)
 
 export default function RoutesClient({ cities, popularCities, total, page, pages, initialSearch = '' }: Props) {
   const router = useRouter()
@@ -439,7 +444,7 @@ export default function RoutesClient({ cities, popularCities, total, page, pages
                 style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: '#ffffff', color: '#0a1628', fontWeight: 700, fontSize: 13, padding: '10px 18px', borderRadius: 8, textDecoration: 'none' }}>
                 <Phone size={14} /> +91 97230 97832
               </a>
-              <a href={`https://wa.me/${WA}`} target="_blank" rel="noopener noreferrer"
+              <a href={WA_URL} target="_blank" rel="noopener noreferrer"
                 style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: '#22c55e', color: '#ffffff', fontWeight: 700, fontSize: 13, padding: '10px 18px', borderRadius: 8, textDecoration: 'none' }}>
                 <MessageCircle size={14} /> WhatsApp
               </a>

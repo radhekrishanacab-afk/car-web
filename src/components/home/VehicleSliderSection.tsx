@@ -7,6 +7,7 @@ import {
   Users, Phone, MessageCircle,
   ArrowRight, ChevronLeft, ChevronRight, Luggage, CheckCircle2, Sparkles
 } from 'lucide-react'
+import { buildWAUrl, buildVehicleBookingMessage } from '@/lib/whatsapp'
 
 const WA    = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '919723097832'
 const PHONE = process.env.NEXT_PUBLIC_BUSINESS_PHONE ?? '+91 97230 97832'
@@ -350,7 +351,15 @@ export default function VehicleSliderSection() {
                 </a>
 
                 <a
-                  href={`https://wa.me/${WA}?text=${encodeURIComponent(`Hello! I would like to book the ${activeCar.name} (${activeCar.seats}). Please share fare quote and availability.`)}`}
+                  href={buildWAUrl(
+                    buildVehicleBookingMessage({
+                      vehicleName: activeCar.name,
+                      seating: activeCar.seats,
+                      category: activeCar.categoryLabel,
+                      source: 'Homepage Fleet Section',
+                    }),
+                    WA,
+                  )}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-[#08A9EE] to-[#0284c7] hover:brightness-105 text-white font-extrabold text-xs sm:text-sm py-3 px-4 rounded-xl shadow-lg shadow-[#08A9EE]/30 transition-all"

@@ -7,6 +7,7 @@ import {
   CheckCircle2, AlertCircle,
   MapPin, Calendar, Clock, Car, ChevronDown,
 } from 'lucide-react'
+import { buildWAUrl, buildHomeBookingMessage } from '@/lib/whatsapp'
 
 export const VEHICLE_OPTIONS = [
   'Swift Dzire (4+1 Seater)',
@@ -44,13 +45,6 @@ const empty: FormData = {
   vehicle: VEHICLE_OPTIONS[0], message: '',
 }
 
-/* ── Format date DD-MM-YYYY ── */
-function formatDate(iso: string): string {
-  if (!iso) return ''
-  const [y, m, d] = iso.split('-')
-  return `${d}-${m}-${y}`
-}
-
 /* ── Format time 12-hour ── */
 function formatTime(isoTime?: string): string {
   if (!isoTime) return ''
@@ -59,28 +53,6 @@ function formatTime(isoTime?: string): string {
   const ampm = hour >= 12 ? 'PM' : 'AM'
   const h12 = hour % 12 || 12
   return `${h12}:${m} ${ampm}`
-}
-
-/* ── WhatsApp message — clean, readable ── */
-function buildWAMessage(d: FormData): string {
-  const lines = [
-    'Radhe Krishna Cab - New Booking Enquiry',
-    '',
-    `Name: ${d.name}`,
-    `Phone: +91 ${d.phone}`,
-  ]
-  if (d.email) lines.push(`Email: ${d.email}`)
-  lines.push(
-    '',
-    `Pickup: ${d.pickup}`,
-    `Drop: ${d.drop}`,
-    `Date: ${formatDate(d.date)}`,
-    `Pickup Time: ${d.time ? formatTime(d.time) : 'Anytime'}`,
-    `Vehicle: ${d.vehicle || VEHICLE_OPTIONS[0]}`,
-  )
-  if (d.message) lines.push('', `Notes: ${d.message}`)
-  lines.push('', 'Sent from radhekrishanacab.com')
-  return lines.join('\n')
 }
 
 export default function ContactForm() {
@@ -131,7 +103,21 @@ export default function ContactForm() {
       })
     } catch { /* non-blocking */ }
 
-    const url = `https://wa.me/${WA}?text=${encodeURIComponent(buildWAMessage(result.data))}`
+    const url = buildWAUrl(
+      buildHomeBookingMessage({
+        name: result.data.name,
+        mobile: result.data.phone,
+        email: result.data.email,
+        pickup: result.data.pickup,
+        drop: result.data.drop,
+        date: result.data.date,
+        time: result.data.time,
+        vehicle: result.data.vehicle || VEHICLE_OPTIONS[0],
+        notes: result.data.message,
+        source: 'Contact Us Page',
+      }),
+      WA,
+    )
     const a = document.createElement('a')
     a.href = url
     a.target = '_blank'

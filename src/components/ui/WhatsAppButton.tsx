@@ -1,6 +1,7 @@
 'use client'
 
 import { MessageCircle } from 'lucide-react'
+import { buildWAUrl, buildGeneralEnquiryMessage } from '@/lib/whatsapp'
 
 interface Props {
   whatsappNumber?: string
@@ -12,13 +13,21 @@ interface Props {
 
 export default function WhatsAppButton({
   whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '919723097832',
-  message = 'Hello! I would like to enquire about taxi services from Radhe Krishna Cabs.',
+  message,
   label = 'WhatsApp Enquiry',
   className = '',
   variant = 'inline',
 }: Props) {
   const handleClick = () => {
-    const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`
+    // When no explicit message is provided, build a general enquiry that
+    // reflects the exact page the customer is currently on.
+    const msg =
+      message ??
+      buildGeneralEnquiryMessage({
+        sourcePage: typeof document !== 'undefined' ? document.title : null,
+        pageUrl: typeof window !== 'undefined' ? window.location.href : null,
+      })
+    const url = buildWAUrl(msg, whatsappNumber)
     const opened = window.open(url, '_blank', 'noopener,noreferrer')
     if (!opened) {
       alert('Could not open WhatsApp automatically. Please contact us at +91 97230 97832.')

@@ -1,6 +1,11 @@
 'use client'
 
 import { Phone, MessageCircle, Mail, MapPin, Clock, ArrowUpRight } from 'lucide-react'
+import { buildWAUrl, buildGeneralEnquiryMessage } from '@/lib/whatsapp'
+
+const whatsappUrl = buildWAUrl(
+  buildGeneralEnquiryMessage({ sourcePage: 'Contact Us Page', pageUrl: 'https://radhekrishanacab.com/contact' }),
+)
 
 const contactItems = [
   {
@@ -19,7 +24,7 @@ const contactItems = [
     label: 'WhatsApp',
     value: '+91 97230 97832',
     sub: 'Tap to chat instantly',
-    href: 'https://wa.me/919723097832',
+    href: whatsappUrl,
     gradient: 'linear-gradient(135deg, #EAF6FF 0%, #dbeeff 100%)',
     iconColor: '#08A9EE',
     glowColor: 'rgba(8,169,238,0.12)',

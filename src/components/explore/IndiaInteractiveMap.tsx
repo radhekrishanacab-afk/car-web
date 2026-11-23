@@ -18,6 +18,7 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import { MapContainer, TileLayer, GeoJSON, Marker, Popup, useMap } from 'react-leaflet'
 import Link from 'next/link'
 import { Search, MapPin, ChevronRight, X, MessageCircle, Navigation } from 'lucide-react'
+import { buildWAUrl, buildTouristPlaceMessage } from '@/lib/whatsapp'
 import type { Layer, LeafletMouseEvent, Map as LeafletMap } from 'leaflet'
 
 /* ── Types ────────────────────────────────────────────────────────────────── */
@@ -606,7 +607,13 @@ export default function IndiaInteractiveMap({ places, states, selectedStateSlug,
                       style={{ fontSize: 12, fontWeight: 700, background: '#0a1628', color: '#fff', padding: '6px 14px', borderRadius: 8, textDecoration: 'none' }}>
                       View Details
                     </Link>
-                    <a href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '919723097832'}?text=${encodeURIComponent(`Hello! I want to visit ${selPlace.name} in ${selPlace.state.name}. Please share taxi options.`)}`}
+                    <a href={buildWAUrl(buildTouristPlaceMessage({
+                      placeName: selPlace.cityName || selPlace.name,
+                      attraction: selPlace.name !== (selPlace.cityName || selPlace.name) ? selPlace.name : null,
+                      state: selPlace.state.name,
+                      district: selPlace.district?.name ?? null,
+                      source: 'Tourist Places Page',
+                    }))}
                       target="_blank" rel="noopener noreferrer"
                       style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 12, fontWeight: 700, background: '#22c55e', color: '#fff', padding: '6px 14px', borderRadius: 8, textDecoration: 'none' }}>
                       <MessageCircle size={12} /> Book Taxi

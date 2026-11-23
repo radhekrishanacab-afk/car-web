@@ -7,6 +7,7 @@ import WhatsAppButton from '@/components/ui/WhatsAppButton'
 import { prisma } from '@/lib/prisma'
 import { ArrowLeft, ArrowRight, MapPin, MessageCircle, Tag } from 'lucide-react'
 import { blogLocationLabel } from '@/lib/blog-location'
+import { buildWAUrl, buildBlogInquiryMessage } from '@/lib/whatsapp'
 import styles from '../BlogPages.module.css'
 
 interface PageProps { params: Promise<{ slug: string }> }
@@ -24,13 +25,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 const WA = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '919723097832'
 
-function buildWhatsAppMsg(post: { title: string; state?: string | null; district?: string | null; showState?: boolean; showDistrict?: boolean; category?: string | null }): string {
-  const loc = blogLocationLabel(post as Parameters<typeof blogLocationLabel>[0])
-  const parts: string[] = ['Hello! 👋 I read your blog post on Radhe Krishna Cab website.']
-  parts.push(`\n📖 *${post.title}*`)
-  if (loc) parts.push(`📍 Location: ${loc}`)
-  parts.push('\nI would like to book a cab for this trip. Please share availability and fare details.')
-  return parts.join('\n')
+function buildWhatsAppMsg(post: { title: string; category?: string | null; showCategory?: boolean }): string {
+  return buildBlogInquiryMessage({
+    title: post.title,
+    category: post.showCategory ? post.category : null,
+    source: 'Blog Page',
+  })
 }
 
 export default async function BlogPostPage({ params }: PageProps) {
@@ -109,7 +109,7 @@ export default async function BlogPostPage({ params }: PageProps) {
               <h2>Plan your trip with Radhe Krishna Cab</h2>
               <p>Comfortable AC vehicles, verified drivers and 24/7 support.</p>
             </div>
-            <a href={`https://wa.me/${WA}?text=${encodeURIComponent(buildWhatsAppMsg(post))}`}
+            <a href={buildWAUrl(buildWhatsAppMsg(post), WA)}
               target="_blank" rel="noopener noreferrer" className={styles.whatsappButton}>
               <MessageCircle size={18} /> Book on WhatsApp
             </a>

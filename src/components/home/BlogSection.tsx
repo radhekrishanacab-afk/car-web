@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { ArrowRight, MapPin, MessageCircle } from 'lucide-react'
 import { blogLocationLabel } from '@/lib/blog-location'
 import { prisma } from '@/lib/prisma'
+import { buildWAUrl, buildBlogInquiryMessage } from '@/lib/whatsapp'
 
 const SITE_NAVY = '#10264A'
 const SITE_CYAN = '#08A9EE'
@@ -48,14 +49,14 @@ export default async function BlogSection() {
             const cardDescription = post.excerpt
             const image = post.featuredImage
             const loc = blogLocationLabel(post)
-            const msgParts = [
-              `Hello! 👋 I read your blog post on Radhe Krishna Cab website.`,
-              `\n📖 *${title}*`,
-            ]
-            if (loc) msgParts.push(`📍 Location: ${loc}`)
-            msgParts.push('\nI would like to book a cab for this trip. Please share fare details.')
-            const message = msgParts.join('\n')
-            const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`
+            const whatsappUrl = buildWAUrl(
+              buildBlogInquiryMessage({
+                title,
+                category: post.showCategory ? post.category : null,
+                source: 'Homepage Blog Section',
+              }),
+              whatsappNumber,
+            )
             const location = loc
 
             return (

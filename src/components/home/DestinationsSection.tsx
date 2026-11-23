@@ -3,6 +3,9 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { MapPin, ArrowRight, ExternalLink } from 'lucide-react'
+import { buildWAUrl, buildTouristPlaceMessage } from '@/lib/whatsapp'
+
+const WA = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '919723097832'
 
 interface Destination {
   id: number
@@ -230,7 +233,13 @@ export default function DestinationsSection({ destinations }: { destinations?: D
                     Explore
                   </Link>
                   <a
-                    href={`https://wa.me/919723097832?text=${encodeURIComponent(`🚖 I'd like to book a cab to ${dest.name}. Please share fare details.`)}`}
+                    href={buildWAUrl(
+                      buildTouristPlaceMessage({
+                        placeName: dest.name,
+                        source: 'Homepage Destinations Section',
+                      }),
+                      WA,
+                    )}
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{
