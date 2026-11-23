@@ -361,7 +361,7 @@ export default async function RouteDetailPage({ params }: PageProps) {
                     style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'rgba(255,255,255,0.08)', color: '#ffffff', fontWeight: 500, fontSize: 13, padding: '10px 16px', borderRadius: 8, textDecoration: 'none', border: '1px solid rgba(255,255,255,0.1)' }}>
                     <Phone size={13} /> {PHONE}
                   </a>
-                  <a href={`https://wa.me/${WA}?text=${waMsg}`} target="_blank" rel="noopener noreferrer"
+                  <a href={waMsg} target="_blank" rel="noopener noreferrer"
                     style={{ display: 'flex', alignItems: 'center', gap: 6, background: '#22c55e', color: '#ffffff', fontWeight: 500, fontSize: 13, padding: '10px 16px', borderRadius: 8, textDecoration: 'none' }}>
                     <MessageCircle size={13} /> WhatsApp
                   </a>
