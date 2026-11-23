@@ -1,9 +1,6 @@
 'use client'
 
 import { Phone, MessageCircle, Mail, MapPin, Clock, ArrowUpRight } from 'lucide-react'
-import { buildContactPageMsg, buildWAUrl, DEFAULT_WA_NUMBER } from '@/lib/whatsapp'
-
-const WA = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? DEFAULT_WA_NUMBER
 
 const contactItems = [
   {
@@ -22,7 +19,7 @@ const contactItems = [
     label: 'WhatsApp',
     value: '+91 97230 97832',
     sub: 'Tap to chat instantly',
-    href: buildWAUrl(buildContactPageMsg(), WA),
+    href: 'https://wa.me/919723097832',
     gradient: 'linear-gradient(135deg, #EAF6FF 0%, #dbeeff 100%)',
     iconColor: '#08A9EE',
     glowColor: 'rgba(8,169,238,0.12)',

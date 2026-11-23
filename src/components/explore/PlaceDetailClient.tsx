@@ -6,9 +6,7 @@ import { MapPin, Clock, IndianRupee, Calendar, ChevronRight, Phone, MessageCircl
 
 const SinglePlaceMap = dynamic(() => import('./SinglePlaceMap'), { ssr: false, loading: () => <div style={{ height: 260, background: '#f0f4f8', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, color: '#94a3b8' }}>Loading map…</div> })
 
-import { buildTouristPlaceMsg, buildWAUrl, DEFAULT_WA_NUMBER } from '@/lib/whatsapp'
-
-const WA = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? DEFAULT_WA_NUMBER
+const WA = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '919723097832'
 const PHONE = '+91 97230 97832'
 
 interface Place {
@@ -25,13 +23,9 @@ interface Place {
 }
 
 export default function PlaceDetailClient({ place, stateSlug }: { place: Place; stateSlug: string }) {
-  const waMsg = encodeURIComponent(buildTouristPlaceMsg({
-    name: place.name,
-    cityName: place.cityName,
-    districtName: place.district?.name,
-    stateName: place.state.name,
-    source: 'Tourist Place Page',
-  }))
+  const waMsg = encodeURIComponent(
+    `Hello Radhe Krishna Cabs & Taxi Service,\n\nI would like to enquire about a taxi for visiting:\n\nDestination: ${place.name}\nCity/Area: ${place.cityName ?? 'N/A'}\nDistrict: ${place.district?.name ?? 'N/A'}\nState: ${place.state.name}\n\nPlease share available taxi options and fares.\n\nThank you.`
+  )
   const mapsLink = place.latitude && place.longitude
     ? `https://www.google.com/maps/dir/?api=1&destination=${place.latitude},${place.longitude}`
     : `https://www.google.com/maps/search/${encodeURIComponent(`${place.name} ${place.cityName ?? ''} ${place.state.name}`)}`

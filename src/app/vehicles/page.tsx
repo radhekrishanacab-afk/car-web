@@ -12,9 +12,7 @@ export const metadata: Metadata = {
     'Explore our fleet — Swift Dzire, Hyundai Aura, Maruti Suzuki Ertiga, Kia Carens, Toyota Innova Cresta, Tata Winger, Tempo Traveller (14 & 17 Seater) and Urbania Traveller. Vehicles for every group size. Book now.',
 }
 
-import { buildVehicleInquiryMsg, buildVehicleCtaMsg, buildWAUrl, DEFAULT_WA_NUMBER } from '@/lib/whatsapp'
-
-const WA    = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? DEFAULT_WA_NUMBER
+const WA    = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '919723097832'
 const PHONE = process.env.NEXT_PUBLIC_BUSINESS_PHONE ?? '+91 97230 97832'
 
 interface Vehicle {
@@ -275,7 +273,7 @@ export default function VehiclesPage() {
                         Call
                       </a>
                       <a
-                        href={buildWAUrl(buildVehicleInquiryMsg({ name: v.name, seats: v.seats, type: v.type, source: 'Our Cars Page' }), WA)}
+                        href={`https://wa.me/${WA}?text=${encodeURIComponent(`Hello! I want to book a ${v.name} (${v.seats}). Please share availability and pricing.`)}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         style={{
@@ -331,7 +329,7 @@ export default function VehiclesPage() {
                     <Phone size={16} /> Call Now: {PHONE}
                   </a>
                   <a
-                    href={buildWAUrl(buildVehicleCtaMsg(), WA)}
+                    href={`https://wa.me/${WA}?text=Hello!%20I%20need%20help%20choosing%20a%20vehicle%20for%20my%20trip.`}
                     target="_blank" rel="noopener noreferrer"
                     className="btn btn-outline-white"
                     style={{ padding: '0.875rem 2rem' }}

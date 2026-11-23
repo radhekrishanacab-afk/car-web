@@ -29,9 +29,7 @@ interface Props {
   categories: Category[]
 }
 
-import { buildExploreIndiaCtaMsg, buildWAUrl, DEFAULT_WA_NUMBER } from '@/lib/whatsapp'
-
-const WA = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? DEFAULT_WA_NUMBER
+const WA = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '919723097832'
 
 const REGION_STATES = [
   { label: 'Gujarat', slug: 'gujarat', places: 'Statue of Unity, Dwarka, Rann of Kutch' },
@@ -117,7 +115,7 @@ function PlaceCard({ place }: { place: Place }) {
 }
 
 export default function ExploreIndiaSection({ featuredPlaces, categories }: Props) {
-  const waMsg = encodeURIComponent(buildExploreIndiaCtaMsg())
+  const waMsg = encodeURIComponent('Hello Radhe Krishna Cabs! I want to plan a tourist trip across India. Please share taxi options and fares.')
 
   return (
     <section style={{ background: '#f8fafc', padding: '72px 0' }}>

@@ -1,7 +1,6 @@
 'use client'
 
 import { MessageCircle } from 'lucide-react'
-import { buildFloatingButtonMsg, buildWAUrl, DEFAULT_WA_NUMBER } from '@/lib/whatsapp'
 
 interface Props {
   whatsappNumber?: string
@@ -12,15 +11,14 @@ interface Props {
 }
 
 export default function WhatsAppButton({
-  whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? DEFAULT_WA_NUMBER,
-  message,
+  whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '919723097832',
+  message = 'Hello! I would like to enquire about taxi services from Radhe Krishna Cabs.',
   label = 'WhatsApp Enquiry',
   className = '',
   variant = 'inline',
 }: Props) {
   const handleClick = () => {
-    const text = message ?? buildFloatingButtonMsg()
-    const url = buildWAUrl(text, whatsappNumber)
+    const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`
     const opened = window.open(url, '_blank', 'noopener,noreferrer')
     if (!opened) {
       alert('Could not open WhatsApp automatically. Please contact us at +91 97230 97832.')

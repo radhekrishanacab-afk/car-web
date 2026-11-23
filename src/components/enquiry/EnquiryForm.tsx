@@ -1,8 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { EnquirySchema, type EnquiryFormData } from '@/lib/validation/enquiry'
-import { buildEnquiryFormMsg, buildWAUrl, DEFAULT_WA_NUMBER } from '@/lib/whatsapp'
+import { EnquirySchema, buildWhatsAppMessage, type EnquiryFormData } from '@/lib/validation/enquiry'
 import {
   MessageCircle, User, Phone, MapPin, Calendar, Clock, Car,
   ChevronDown, AlertCircle,
@@ -23,7 +22,7 @@ interface Props {
   vehicles?: { name: string }[]
 }
 
-export default function EnquiryForm({ whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? DEFAULT_WA_NUMBER, vehicles }: Props) {
+export default function EnquiryForm({ whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '919723097832', vehicles }: Props) {
   const vehicleList = vehicles?.map((v) => v.name) ?? defaultVehicles
 
   const empty: EnquiryFormData = {
@@ -51,8 +50,8 @@ export default function EnquiryForm({ whatsappNumber = process.env.NEXT_PUBLIC_W
       setErrors(fe)
       return
     }
-    const msg = buildEnquiryFormMsg(result.data)
-    const url = buildWAUrl(msg, whatsappNumber)
+    const msg = buildWhatsAppMessage(result.data)
+    const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(msg)}`
     const opened = window.open(url, '_blank', 'noopener,noreferrer')
     if (!opened) {
       alert('Could not open WhatsApp. Please contact us at +91 97230 97832.')

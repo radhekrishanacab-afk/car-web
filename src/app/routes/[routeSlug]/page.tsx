@@ -11,6 +11,7 @@ import {
 import { getRouteBySlug, getRoutesByOriginCity } from '@/lib/services/route-service'
 import { getFareEstimates } from '@/lib/pricing'
 import { generateRouteContent } from '@/lib/content-generator'
+import { buildWAUrl, buildRouteBookingMessage } from '@/lib/whatsapp'
 
 interface PageProps {
   params: Promise<{ routeSlug: string }>
@@ -39,8 +40,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     openGraph: { title, description, type: 'website', url: canonical },
   }
 }
-
-import { buildRouteDetailMsg, buildWAUrl } from '@/lib/whatsapp'
 
 const WA = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '919723097832'
 const PHONE = process.env.NEXT_PUBLIC_BUSINESS_PHONE ?? '+91 97230 97832'
@@ -76,13 +75,20 @@ export default async function RouteDetailPage({ params }: PageProps) {
   })
 
   const routeDesc = route.description || content.routeDescription
-  const routeDetailMsg = buildRouteDetailMsg({
-    pickup: o.name,
-    drop: d.name,
-    distanceKm: distanceKm ?? undefined,
-    estimatedHours: estimatedHours ?? undefined,
-  })
-  const routeDetailUrl = buildWAUrl(routeDetailMsg, WA)
+  const routeFares = fares.map((f) => ({
+    vehicleName: f.vehicleName,
+    oneWayFare: f.oneWayFare != null ? Number(f.oneWayFare) : null,
+  }))
+  const waMsg = buildWAUrl(
+    buildRouteBookingMessage({
+      pickupCity: o.name,
+      dropCity: d.name,
+      distanceKm,
+      fares: routeFares,
+      source: 'Routes Page',
+    }),
+    WA,
+  )
   const allOriginRoutes = await getRoutesByOriginCity(o.slug).catch(() => [])
   const relatedRoutes = allOriginRoutes.filter(r => r.id !== route.id).slice(0, 8)
 
@@ -145,7 +151,7 @@ export default async function RouteDetailPage({ params }: PageProps) {
                       style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, background: '#ffffff', color: '#0a1628', fontWeight: 600, fontSize: 13, padding: '10px 18px', borderRadius: 8, textDecoration: 'none' }}>
                       <Phone size={14} /> Call
                     </a>
-                    <a href={routeDetailUrl} target="_blank" rel="noopener noreferrer"
+                    <a href={waMsg} target="_blank" rel="noopener noreferrer"
                       style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, background: '#22c55e', color: '#ffffff', fontWeight: 600, fontSize: 13, padding: '10px 18px', borderRadius: 8, textDecoration: 'none' }}>
                       <MessageCircle size={14} /> WhatsApp
                     </a>
@@ -191,7 +197,15 @@ export default async function RouteDetailPage({ params }: PageProps) {
                               : <span style={{ color: '#94a3b8', fontSize: 12 }}>Call for fare</span>}
                           </td>
                           <td style={{ padding: '16px 20px', textAlign: 'right' }}>
-                            <a href={buildWAUrl(buildRouteDetailMsg({ pickup: o.name, drop: d.name, distanceKm: distanceKm ?? undefined, estimatedHours: estimatedHours ?? undefined, vehicleName: fare.vehicleName, fare: fare.oneWayFare ?? undefined }), WA)}
+                            <a href={buildWAUrl(buildRouteBookingMessage({
+                              pickupCity: o.name,
+                              dropCity: d.name,
+                              distanceKm,
+                              fares: routeFares,
+                              selectedVehicle: fare.vehicleName,
+                              selectedFare: fare.oneWayFare != null ? Number(fare.oneWayFare) : null,
+                              source: 'Routes Page',
+                            }), WA)}
                               target="_blank" rel="noopener noreferrer"
                               style={{ display: 'inline-block', background: '#f0fdf4', color: '#16a34a', border: '1px solid #bbf7d0', fontWeight: 600, fontSize: 12, padding: '6px 14px', borderRadius: 8, textDecoration: 'none', whiteSpace: 'nowrap' }}>
                               Book

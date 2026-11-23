@@ -6,12 +6,15 @@ import {
   Phone, MessageCircle, Shield, User, IndianRupee, Headphones,
   MapPin, Calendar, Clock, Car, CheckCircle2, ChevronDown,
 } from 'lucide-react'
+import {
+  buildWAUrl,
+  buildHomeBookingMessage,
+  buildGeneralEnquiryMessage,
+} from '@/lib/whatsapp'
 
 interface Props {
   vehicles?: { name: string }[]
 }
-
-import { buildHomepageBookingMsg, buildHomepageCtaMsg, buildWAUrl } from '@/lib/whatsapp'
 
 const WA    = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '919723097832'
 const PHONE = process.env.NEXT_PUBLIC_BUSINESS_PHONE ?? '+91 97230 97832'
@@ -34,12 +37,6 @@ export const VEHICLE_OPTIONS = [
   'Tempo Traveller (17 Seater)',
   'Urbania Traveller (17 Seater)',
 ]
-
-function formatDate(iso: string): string {
-  if (!iso) return ''
-  const [y, m, d] = iso.split('-')
-  return `${d}-${m}-${y}`
-}
 
 function formatTime(isoTime?: string): string {
   if (!isoTime) return ''
@@ -122,17 +119,19 @@ export default function HeroSection({ vehicles: _vehicles }: Props) {
     }
 
     // Open WhatsApp with formatted booking message
-    const waLines = buildHomepageBookingMsg({
-      name: form.name,
-      phone: form.phone,
-      pickup: form.pickup,
-      drop: form.drop,
-      date: form.date,
-      time: form.time || undefined,
-      vehicle: form.vehicle,
-    })
-
-    const waUrl = buildWAUrl(waLines, WA)
+    const waUrl = buildWAUrl(
+      buildHomeBookingMessage({
+        name: form.name,
+        mobile: form.phone,
+        pickup: form.pickup,
+        drop: form.drop,
+        date: form.date,
+        time: form.time,
+        vehicle: form.vehicle,
+        source: 'Homepage Booking Form',
+      }),
+      WA,
+    )
     const a = document.createElement('a')
     a.href = waUrl
     a.target = '_blank'
@@ -145,7 +144,13 @@ export default function HeroSection({ vehicles: _vehicles }: Props) {
     setSubmitted(true)
   }
 
-  const waMsg = encodeURIComponent(buildHomepageCtaMsg())
+  const waMsg = buildWAUrl(
+    buildGeneralEnquiryMessage({
+      sourcePage: 'Homepage',
+      pageUrl: 'https://radhekrishanacab.com/',
+    }),
+    WA,
+  )
 
   const rawPhone = PHONE.replace(/[^0-9+]/g, '')
   const today = new Date().toISOString().split('T')[0]
@@ -388,7 +393,7 @@ export default function HeroSection({ vehicles: _vehicles }: Props) {
                 <Phone size={15} /> Call Now: {PHONE}
               </a>
               <a
-                href={`https://wa.me/${WA}?text=${waMsg}`}
+                href={waMsg}
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{

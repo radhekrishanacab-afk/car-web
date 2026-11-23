@@ -24,8 +24,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
-import { buildCityRouteMsg, buildWAUrl } from '@/lib/whatsapp'
-
 const WA = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '919723097832'
 const PER_PAGE = 20
 
@@ -181,7 +179,7 @@ export default async function CityRoutesPage({ params, searchParams }: PageProps
                       All {city.name} Routes
                     </Link>
                   )}
-                  <a href={buildWAUrl(buildCityRouteMsg(city.name), WA)}
+                  <a href={`https://wa.me/${WA}?text=${encodeURIComponent(`Hello! I need a taxi from ${city.name}.`)}`}
                     target="_blank" rel="noopener noreferrer"
                     style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: '#22c55e', color: '#ffffff', fontWeight: 600, fontSize: 13, padding: '10px 20px', borderRadius: 8, textDecoration: 'none' }}>
                     <MessageCircle size={14} /> WhatsApp Us
@@ -250,7 +248,7 @@ export default async function CityRoutesPage({ params, searchParams }: PageProps
                   style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: '#ffffff', color: '#0a1628', fontWeight: 700, fontSize: 13, padding: '10px 18px', borderRadius: 8, textDecoration: 'none' }}>
                   <Phone size={14} /> Call Now
                 </a>
-                <a href={buildWAUrl(buildCityRouteMsg(city.name), WA)}
+                <a href={`https://wa.me/${WA}?text=${encodeURIComponent(`Hello! I need a taxi from ${city.name}.`)}`}
                   target="_blank" rel="noopener noreferrer"
                   style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: '#22c55e', color: '#ffffff', fontWeight: 700, fontSize: 13, padding: '10px 18px', borderRadius: 8, textDecoration: 'none' }}>
                   <MessageCircle size={14} /> WhatsApp

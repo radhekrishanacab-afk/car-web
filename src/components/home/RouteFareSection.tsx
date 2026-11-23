@@ -1,9 +1,9 @@
 'use client'
 
-import { buildHomepageRouteMsg, buildWAUrl } from '@/lib/whatsapp'
 import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import { ArrowLeftRight, Search, MapPin, Navigation, ArrowRight, IndianRupee } from 'lucide-react'
+import { buildWAUrl, buildRouteBookingMessage } from '@/lib/whatsapp'
 
 interface City {
   id: number
@@ -83,15 +83,19 @@ export default function RouteFareSection({ initialRoutes, allCities }: Props) {
     return Number(match.oneWayFare)
   }
 
-  const buildBookingUrl = (route: RouteResult) => {
-    const wa = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '919723097832'
-    const msg = buildHomepageRouteMsg({
-      pickup: route.originCity.name,
-      drop: route.destinationCity.name,
-      distanceKm: route.distanceKm ?? undefined,
-    })
-    return buildWAUrl(msg, wa)
-  }
+  const buildBookingUrl = (route: RouteResult) =>
+    buildWAUrl(
+      buildRouteBookingMessage({
+        pickupCity: route.originCity.name,
+        dropCity: route.destinationCity.name,
+        distanceKm: route.distanceKm != null ? Number(route.distanceKm) : null,
+        fares: route.priceOverrides.map((p) => ({
+          vehicleName: p.vehicle.name,
+          oneWayFare: p.oneWayFare != null ? Number(p.oneWayFare) : null,
+        })),
+        source: 'Homepage Route & Fare Search',
+      }),
+    )
 
   return (
     <section className="py-16 lg:py-24 bg-[#EAF6FF]">
