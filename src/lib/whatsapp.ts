@@ -106,27 +106,26 @@ export interface HomeBookingData {
 
 export function buildHomeBookingMessage(d: HomeBookingData): string {
   return join([
-    '*WEBSITE INQUIRY – NEW CAB BOOKING*',
-    'Hello! I am interested in booking a taxi from your website.',
+    '*WEBSITE INQUIRY*',
+    '*New Cab Booking Request*',
     section('CUSTOMER DETAILS', [
       bullet('Name', d.name),
       bullet('Mobile', fmtMobile(d.mobile)),
       bullet('Email', d.email),
     ]),
     section('JOURNEY DETAILS', [
-      bullet('Pickup', d.pickup),
-      bullet('Drop', d.drop),
-      bullet('Distance', d.distanceKm != null ? `${d.distanceKm} KM` : null),
-      bullet('Date', fmtDate(d.date)),
+      bullet('Pickup Location', d.pickup),
+      bullet('Drop Location', d.drop),
+      bullet('Travel Date', fmtDate(d.date)),
       bullet('Pickup Time', d.time ? fmtTime(d.time) : 'Anytime'),
     ]),
     section('VEHICLE DETAILS', [
       bullet('Vehicle', d.vehicle),
-      bullet('Seating', d.seating),
+      bullet('Seating Capacity', d.seating),
       bullet('Fare', fmtRupees(d.fare)),
     ]),
-    section('ADDITIONAL NOTES', [bullet('Notes', d.notes)]),
-    `Source: ${d.source || 'Website Booking Form'}`,
+    section('ADDITIONAL NOTES', [bullet('Customer Message', d.notes)]),
+    `Inquiry Source: ${d.source || 'Website Booking Form'}`,
     WEBSITE_LINE,
   ])
 }
@@ -164,7 +163,8 @@ export function buildRouteBookingMessage(d: RouteBookingData): string {
   )
 
   return join([
-    '*WEBSITE INQUIRY – ROUTE BOOKING*',
+    '*WEBSITE INQUIRY*',
+    '*Route Booking Request*',
     'Hello! I want to book a taxi for this route.',
     section('ROUTE DETAILS', [
       bullet('Pickup City', d.pickupCity),
@@ -177,7 +177,7 @@ export function buildRouteBookingMessage(d: RouteBookingData): string {
       bullet('Selected Fare', hasSelection ? fmtRupees(d.selectedFare) ?? 'Not Selected' : 'Not Selected'),
     ]),
     'Please confirm availability and booking details.',
-    `Source: ${d.source || 'Routes Page'}`,
+    `Inquiry Source: ${d.source || 'Routes Page'}`,
     WEBSITE_LINE,
   ])
 }
@@ -194,14 +194,15 @@ export interface VehicleBookingData {
 
 export function buildVehicleBookingMessage(d: VehicleBookingData): string {
   return join([
-    '*WEBSITE INQUIRY – VEHICLE BOOKING*',
+    '*WEBSITE INQUIRY*',
+    '*Vehicle Booking Request*',
     'Hello! I am interested in booking a vehicle.',
     section('VEHICLE DETAILS', [
       bullet('Vehicle', d.vehicleName),
       bullet('Seating Capacity', d.seating),
       bullet('Category', d.category),
       bullet('Price', fmtRupees(d.price)),
-      bullet('Source', d.source || 'Our Cars Page'),
+      bullet('Inquiry Source', d.source || 'Our Cars Page'),
     ]),
     'Please share availability, pricing and booking details.',
     WEBSITE_LINE,
@@ -220,14 +221,15 @@ export interface TouristPlaceData {
 
 export function buildTouristPlaceMessage(d: TouristPlaceData): string {
   return join([
-    '*WEBSITE INQUIRY – TOURIST PLACE*',
+    '*WEBSITE INQUIRY*',
+    '*Tourist Place Inquiry*',
     'Hello! I am interested in visiting this destination.',
     section('DESTINATION DETAILS', [
       bullet('Place Name', d.placeName),
       bullet('Attraction', d.attraction),
       bullet('State', d.state),
       bullet('District', d.district),
-      bullet('Source', d.source || 'Tourist Places Page'),
+      bullet('Inquiry Source', d.source || 'Tourist Places Page'),
     ]),
     section('TRAVEL REQUEST', [
       'Please share taxi availability, travel charges and booking details.',
@@ -246,11 +248,12 @@ export interface BlogInquiryData {
 
 export function buildBlogInquiryMessage(d: BlogInquiryData): string {
   return join([
-    '*WEBSITE INQUIRY – BLOG POST*',
+    '*WEBSITE INQUIRY*',
+    '*Blog Post Inquiry*',
     section('BLOG DETAILS', [
       bullet('Blog Title', d.title),
       bullet('Category', d.category),
-      bullet('Source', d.source || 'Blog Page'),
+      bullet('Inquiry Source', d.source || 'Blog Page'),
     ]),
     section('CUSTOMER REQUEST', [
       'I read your blog and would like to know about taxi services related to this destination.',
@@ -272,7 +275,8 @@ export interface ContactInquiryData {
 
 export function buildContactInquiryMessage(d: ContactInquiryData): string {
   return join([
-    '*WEBSITE INQUIRY – CONTACT US*',
+    '*WEBSITE INQUIRY*',
+    '*Contact Inquiry*',
     section('CUSTOMER DETAILS', [
       bullet('Name', d.name),
       bullet('Mobile', fmtMobile(d.mobile)),
@@ -280,7 +284,7 @@ export function buildContactInquiryMessage(d: ContactInquiryData): string {
     ]),
     section('MESSAGE DETAILS', [
       bullet('Inquiry', d.message),
-      bullet('Source', d.source || 'Contact Us Page'),
+      bullet('Inquiry Source', d.source || 'Contact Us Page'),
     ]),
     'Please contact me regarding my inquiry.',
     WEBSITE_LINE,
@@ -296,7 +300,8 @@ export interface GeneralEnquiryData {
 
 export function buildGeneralEnquiryMessage(d: GeneralEnquiryData = {}): string {
   return join([
-    '*WEBSITE INQUIRY – GENERAL ENQUIRY*',
+    '*WEBSITE INQUIRY*',
+    '*General Enquiry*',
     'Hello! I visited your website and I am interested in your taxi services.',
     section('INQUIRY DETAILS', [
       bullet('Source Page', d.sourcePage),
