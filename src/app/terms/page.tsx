@@ -2,11 +2,13 @@ import type { Metadata } from 'next'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import Link from 'next/link'
+import { pageMetadata, jsonLdHtml, breadcrumbJsonLd } from '@/lib/site'
 
-export const metadata: Metadata = {
-  title: 'Terms & Conditions — Radhe Krishna Cab',
+export const metadata: Metadata = pageMetadata({
+  title: 'Terms & Conditions',
   description: 'Terms and conditions for using Radhe Krishna Cab taxi service.',
-}
+  path: '/terms',
+})
 
 export default function TermsPage() {
   return (
@@ -79,6 +81,17 @@ export default function TermsPage() {
         </div>
       </main>
       <Footer />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: jsonLdHtml(
+            breadcrumbJsonLd([
+              { name: 'Home', url: '/' },
+              { name: 'Terms & Conditions', url: '/terms' },
+            ]),
+          ),
+        }}
+      />
     </>
   )
 }

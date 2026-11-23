@@ -3,17 +3,9 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import { ChevronDown } from 'lucide-react'
+import { HOME_FAQS } from '@/lib/site'
 
-const faqs = [
-  { q: 'How do I book a cab?', a: "Fill the booking form on our website or WhatsApp us at +91 97230 97832 with your pickup location, destination, and travel date. We'll confirm availability and share fare details." },
-  { q: 'Are your taxi prices fixed or do they change over time?', a: 'We believe in full pricing transparency. Our taxi fares are fixed at the time of booking based on your route and vehicle type. No surge pricing or hidden charges.' },
-  { q: 'Is Radhe Krishna Cabs available for airport transfer?', a: 'Yes, we provide reliable airport pickup and drop services in Surat, Ahmedabad, Vadodara, and Rajkot with an on-time guarantee.' },
-  { q: 'Are your drivers trained and professional?', a: 'All our chauffeurs are experienced, background-verified, and professionally trained to ensure a safe and comfortable journey.' },
-  { q: 'Can I book a cab for the whole day?', a: 'Yes, we offer full-day cab services at affordable pricing. Contact us on WhatsApp or call to know custom day package rates.' },
-  { q: 'What safety measures do you follow?', a: 'Our vehicles are regularly sanitized, GPS-enabled, and drivers follow all safety protocols for every trip.' },
-  { q: 'Do you provide one-way taxi service?', a: 'Yes, we specialise in one-way intercity taxi across India. You only pay for the one-way distance — no return fare charges.' },
-  { q: 'How is the fare calculated?', a: 'Fare depends on the vehicle type, distance, and trip type (one-way or round trip). Tolls and parking are transparently detailed upfront.' },
-]
+const faqs = HOME_FAQS
 
 export default function FAQSection() {
   const [open, setOpen] = useState<number | null>(0)
@@ -108,16 +100,15 @@ export default function FAQSection() {
                       />
                     </button>
 
-                    {isOpen && (
-                      <div style={{
-                        padding: '0 18px 16px',
-                        fontSize: 13.5,
-                        color: '#475569',
-                        lineHeight: 1.7,
-                      }}>
-                        {faq.a}
-                      </div>
-                    )}
+                    <div style={{
+                      padding: '0 18px 16px',
+                      fontSize: 13.5,
+                      color: '#475569',
+                      lineHeight: 1.7,
+                      display: isOpen ? 'block' : 'none',
+                    }}>
+                      {faq.a}
+                    </div>
                   </div>
                 )
               })}

@@ -5,6 +5,7 @@ import Footer from '@/components/layout/Footer'
 import WhatsAppButton from '@/components/ui/WhatsAppButton'
 import { getPlaceBySlug } from '@/lib/services/explore-service'
 import PlaceDetailClient from '@/components/explore/PlaceDetailClient'
+import { pageMetadata, jsonLdHtml, breadcrumbJsonLd, touristAttractionJsonLd } from '@/lib/site'
 
 interface PageProps {
   params: Promise<{ stateSlug: string; districtSlug: string; placeSlug: string }>
@@ -14,13 +15,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { placeSlug } = await params
   const place = await getPlaceBySlug(placeSlug).catch(() => null)
   if (!place) return {}
-  const title = place.seoTitle || `${place.name} — ${place.state.name} | Radhe Krishna Cabs`
-  const description = place.seoDescription || place.shortDescription || `Visit ${place.name} in ${place.state.name}. Book taxi with Radhe Krishna Cabs.`
-  return {
-    title, description,
-    openGraph: { title, description, type: 'website' },
-    alternates: { canonical: `https://radhekrishanacab.com/explore-india/${place.state.slug}/${place.district?.slug ?? '_'}/${place.slug}` },
-  }
+  const title = place.seoTitle || `${place.name} — ${place.state.name} | Radhe Krishna Cab`
+  const description = place.seoDescription || place.shortDescription || `Visit ${place.name} in ${place.state.name}. Book taxi with Radhe Krishna Cab.`
+  return pageMetadata({
+    title,
+    description,
+    path: `/explore-india/${place.state.slug}/${place.district?.slug ?? '_'}/${place.slug}`,
+    image: place.featuredImage,
+    keywords: place.seoKeywords ? place.seoKeywords.split(',').map((k) => k.trim()).filter(Boolean) : undefined,
+    absoluteTitle: true,
+  })
 }
 
 export default async function PlaceDetailPage({ params }: PageProps) {
@@ -59,6 +63,34 @@ export default async function PlaceDetailPage({ params }: PageProps) {
       </main>
       <Footer />
       <WhatsAppButton variant="floating" />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: jsonLdHtml(
+            breadcrumbJsonLd([
+              { name: 'Home', url: '/' },
+              { name: `${place.name}, ${place.state.name}`, url: `/explore-india/${place.state.slug}/${place.district?.slug ?? '_'}/${place.slug}` },
+            ]),
+          ),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: jsonLdHtml(
+            touristAttractionJsonLd({
+              name: place.name,
+              description: place.description || place.shortDescription || `${place.name}, ${place.state.name}`,
+              url: `/explore-india/${place.state.slug}/${place.district?.slug ?? '_'}/${place.slug}`,
+              image: place.featuredImage,
+              addressLocality: place.cityName ?? place.district?.name ?? null,
+              region: place.state.name,
+              latitude: place.latitude,
+              longitude: place.longitude,
+            }),
+          ),
+        }}
+      />
     </>
   )
 }

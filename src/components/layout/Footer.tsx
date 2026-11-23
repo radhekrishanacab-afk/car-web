@@ -16,6 +16,8 @@ const quickLinks = [
   { href: '/vehicles', label: 'Our Cars' },
   { href: '/services', label: 'Services' },
   { href: '/routes', label: 'Routes' },
+  { href: '/explore-india', label: 'Tourist Places' },
+  { href: '/blog', label: 'Travel Blog' },
   { href: '/contact', label: 'Contact Us' },
 ]
 
@@ -43,7 +45,7 @@ export default function Footer() {
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/images/radhe-krishana-logo.png"
-              alt="Radhe Krishna Cabs & Taxi Service"
+              alt="Radhe Krishna Cab — Taxi & Outstation Cab Service in India"
               width={200}
               height={54}
               className="h-16 w-auto object-contain mb-6"
@@ -223,7 +225,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="mt-12 pt-8 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center gap-3">
           <p className="text-sm text-gray-500">
-            © 2026 Radhe Krishna Cabs &amp; Taxi Service. All rights reserved.
+            © 2026 Radhe Krishna Cab. All rights reserved.
           </p>
           <div className="flex gap-4">
             <Link href="/privacy-policy" className="text-xs text-gray-600 hover:text-gray-400 transition-colors">

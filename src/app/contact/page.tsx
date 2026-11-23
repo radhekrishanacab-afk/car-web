@@ -7,11 +7,13 @@ import ContactForm from '@/components/contact/ContactForm'
 import ContactCards from '@/components/contact/ContactCards'
 import Link from 'next/link'
 import { MessageCircle, Zap } from 'lucide-react'
+import { jsonLdHtml, breadcrumbJsonLd, localBusinessJsonLd, PAGE_SEO_DEFAULTS } from '@/lib/site'
+import { buildPageMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: 'Contact Us — Radhe Krishna Cab | +91 97230 97832',
-  description:
-    'Contact Radhe Krishna Cab for taxi booking enquiries. Call or WhatsApp +91 97230 97832. Serving all major cities in Gujarat.',
+export const revalidate = 3600
+
+export async function generateMetadata(): Promise<Metadata> {
+  return buildPageMetadata('contact', PAGE_SEO_DEFAULTS.contact)
 }
 
 export default function ContactPage() {
@@ -187,6 +189,21 @@ export default function ContactPage() {
       </main>
       <Footer />
       <WhatsAppButton variant="floating" />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: jsonLdHtml(
+            breadcrumbJsonLd([
+              { name: 'Home', url: '/' },
+              { name: 'Contact Us', url: '/contact' },
+            ]),
+          ),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLdHtml(localBusinessJsonLd()) }}
+      />
     </>
   )
 }

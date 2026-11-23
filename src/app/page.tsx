@@ -13,21 +13,13 @@ import BlogSection from '@/components/home/BlogSection'
 import { getRoutesWithFares } from '@/lib/services/route-service'
 import { getAllActiveCities } from '@/lib/services/city-service'
 import { getActiveVehicles } from '@/lib/services/vehicle-service'
+import { jsonLdHtml, faqJsonLd, HOME_FAQS, PAGE_SEO_DEFAULTS } from '@/lib/site'
+import { buildPageMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: 'Radhe Krishna Cab — Taxi Service in India | One Way & Outstation Cabs',
-  description:
-    'Book reliable taxi and outstation cab service across India. One-way taxi, round trip, airport transfers from Ahmedabad, Surat, Vadodara, Rajkot and all major cities. Call +91 97230 97832.',
-  keywords: [
-    'taxi India', 'one way taxi', 'outstation cab',
-    'Ahmedabad taxi', 'airport taxi India', 'Radhe Krishna Cab', 'cab service India',
-  ],
-  openGraph: {
-    title: 'Radhe Krishna Cab — Taxi & cab service India',
-    description: 'Reliable one-way and outstation taxi service across India.',
-    type: 'website',
-    url: 'https://radhekrishanacab.com',
-  },
+export const revalidate = 3600
+
+export async function generateMetadata(): Promise<Metadata> {
+  return buildPageMetadata('home', PAGE_SEO_DEFAULTS.home)
 }
 
 export default async function HomePage() {
@@ -67,6 +59,10 @@ export default async function HomePage() {
       </main>
       <Footer />
       <WhatsAppButton variant="floating" />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLdHtml(faqJsonLd(HOME_FAQS)) }}
+      />
     </>
   )
 }

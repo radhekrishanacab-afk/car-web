@@ -12,6 +12,7 @@ import { getRouteBySlug, getRoutesByOriginCity } from '@/lib/services/route-serv
 import { getFareEstimates } from '@/lib/pricing'
 import { generateRouteContent } from '@/lib/content-generator'
 import { buildWAUrl, buildRouteBookingMessage } from '@/lib/whatsapp'
+import { pageMetadata, jsonLdHtml, breadcrumbJsonLd, serviceJsonLd, faqJsonLd } from '@/lib/site'
 
 interface PageProps {
   params: Promise<{ routeSlug: string }>
@@ -32,13 +33,22 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const title = route.seoTitle || gen.seoTitle
   const description = route.seoDescription || gen.seoDescription
   const keywords = route.seoKeywords || gen.seoKeywords
-  const canonical = `https://radhekrishanacab.com/routes/${route.slug}`
-  return {
-    title, description,
-    keywords: keywords.split(',').map(k => k.trim()),
-    alternates: { canonical },
-    openGraph: { title, description, type: 'website', url: canonical },
-  }
+
+  // Route classification: a route page is treated as "thin" (index, noindex) only
+  // when it carries no real data — no distance, no fare for any vehicle and no
+  // admin-written description. Such pages still render and stay crawlable
+  // (noindex, follow) but are kept out of Google's index to avoid index bloat.
+  const hasFare = fares.some((f) => f.oneWayFare != null)
+  const isThin = !route.distanceKm && !hasFare && !route.description?.trim()
+
+  return pageMetadata({
+    title,
+    description,
+    path: `/routes/${route.slug}`,
+    keywords: keywords.split(',').map(k => k.trim()).filter(Boolean),
+    absoluteTitle: true,
+    noindex: isThin,
+  })
 }
 
 const WA = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '919723097832'
@@ -301,6 +311,23 @@ export default async function RouteDetailPage({ params }: PageProps) {
               </div>
             </section>
 
+            {/* ── FAQ ───────────────────────────────────────────────────────── */}
+            {content.faqItems.length > 0 && (
+              <section style={{ background: '#ffffff', borderRadius: 12, border: '1px solid #e2e8f0', padding: 28, marginBottom: 28 }}>
+                <h2 style={{ fontSize: 16, fontWeight: 600, color: '#0f172a', margin: '0 0 18px' }}>
+                  {o.name} to {d.name} Taxi — FAQs
+                </h2>
+                <div style={{ display: 'grid', gap: 14 }}>
+                  {content.faqItems.map((f) => (
+                    <div key={f.q} style={{ background: '#f8fafc', borderRadius: 10, padding: 18, border: '1px solid #f1f5f9' }}>
+                      <h3 style={{ fontSize: 14, fontWeight: 600, color: '#0f172a', margin: '0 0 6px' }}>{f.q}</h3>
+                      <p style={{ fontSize: 13, color: '#475569', lineHeight: 1.7, margin: 0 }}>{f.a}</p>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
+
             {/* ── MORE ROUTES ───────────────────────────────────────────────── */}
             {relatedRoutes.length > 0 && (
               <section style={{ background: '#ffffff', borderRadius: 12, border: '1px solid #e2e8f0', padding: 28, marginBottom: 28 }}>
@@ -380,6 +407,41 @@ export default async function RouteDetailPage({ params }: PageProps) {
       </main>
       <Footer />
       <WhatsAppButton variant="floating" />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: jsonLdHtml(
+            breadcrumbJsonLd([
+              { name: 'Home', url: '/' },
+              { name: 'Taxi Routes', url: '/routes' },
+              { name: `Taxi from ${o.name}`, url: `/routes/city/${o.slug}` },
+              { name: `${o.name} to ${d.name}`, url: `/routes/${route.slug}` },
+            ]),
+          ),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: jsonLdHtml(
+            serviceJsonLd({
+              name: `${o.name} to ${d.name} Taxi Service`,
+              description: routeDesc,
+              url: `/routes/${route.slug}`,
+              areaServed: [o.name, d.name],
+              offers: routeFares
+                .filter((f) => f.oneWayFare != null)
+                .map((f) => ({ name: `${f.vehicleName} — one way`, price: f.oneWayFare })),
+            }),
+          ),
+        }}
+      />
+      {content.faqItems.length > 0 && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: jsonLdHtml(faqJsonLd(content.faqItems)) }}
+        />
+      )}
     </>
   )
 }

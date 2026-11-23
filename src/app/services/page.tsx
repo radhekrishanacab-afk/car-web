@@ -9,11 +9,13 @@ import {
   ArrowRight, Phone, MessageCircle,
 } from 'lucide-react'
 import { buildWAUrl, buildGeneralEnquiryMessage } from '@/lib/whatsapp'
+import { jsonLdHtml, serviceJsonLd, breadcrumbJsonLd, PAGE_SEO_DEFAULTS } from '@/lib/site'
+import { buildPageMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: 'Our Services — Radhe Krishna Cab | Taxi & Cab Services',
-  description:
-    'Radhe Krishna Cab offers a wide range of taxi services — airport transfers, city rides, outstation trips, corporate travel, family transport and more across Gujarat & India.',
+export const revalidate = 3600
+
+export async function generateMetadata(): Promise<Metadata> {
+  return buildPageMetadata('services', PAGE_SEO_DEFAULTS.services)
 }
 
 const WA = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '919723097832'
@@ -327,6 +329,30 @@ export default function ServicesPage() {
       </main>
       <Footer />
       <WhatsAppButton variant="floating" />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: jsonLdHtml(
+            serviceJsonLd({
+              name: 'Taxi & Cab Services',
+              description:
+                'Airport transfers, city rides, outstation trips, corporate travel and family transport across Gujarat & India.',
+              url: '/services',
+            }),
+          ),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: jsonLdHtml(
+            breadcrumbJsonLd([
+              { name: 'Home', url: '/' },
+              { name: 'Services', url: '/services' },
+            ]),
+          ),
+        }}
+      />
     </>
   )
 }

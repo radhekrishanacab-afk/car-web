@@ -2,11 +2,13 @@ import type { Metadata } from 'next'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import Link from 'next/link'
+import { pageMetadata, jsonLdHtml, breadcrumbJsonLd } from '@/lib/site'
 
-export const metadata: Metadata = {
-  title: 'Privacy Policy — Radhe Krishna Cab',
-  description: 'Privacy policy for Radhe Krishna Cab taxi service.',
-}
+export const metadata: Metadata = pageMetadata({
+  title: 'Privacy Policy',
+  description: 'Privacy policy for Radhe Krishna Cab taxi service — how we collect, use and protect your data.',
+  path: '/privacy-policy',
+})
 
 export default function PrivacyPolicyPage() {
   return (
@@ -88,6 +90,17 @@ export default function PrivacyPolicyPage() {
         </div>
       </main>
       <Footer />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: jsonLdHtml(
+            breadcrumbJsonLd([
+              { name: 'Home', url: '/' },
+              { name: 'Privacy Policy', url: '/privacy-policy' },
+            ]),
+          ),
+        }}
+      />
     </>
   )
 }

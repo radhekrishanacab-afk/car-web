@@ -8,6 +8,7 @@ import { prisma } from '@/lib/prisma'
 import { ArrowLeft, ArrowRight, MapPin, MessageCircle, Tag } from 'lucide-react'
 import { blogLocationLabel } from '@/lib/blog-location'
 import { buildWAUrl, buildBlogInquiryMessage } from '@/lib/whatsapp'
+import { pageMetadata, jsonLdHtml, articleJsonLd, breadcrumbJsonLd } from '@/lib/site'
 import styles from '../BlogPages.module.css'
 
 interface PageProps { params: Promise<{ slug: string }> }
@@ -16,11 +17,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { slug } = await params
   const post = await prisma.blogPost.findUnique({ where: { slug } }).catch(() => null)
   if (!post) return {}
-  return {
+  return pageMetadata({
     title: post.seoTitle || post.title,
-    description: post.seoDescription || post.excerpt || undefined,
-    openGraph: { title: post.seoTitle || post.title, description: post.seoDescription || post.excerpt || undefined, images: post.featuredImage ? [post.featuredImage] : [] },
-  }
+    description: post.seoDescription || post.excerpt || `Read "${post.title}" on the Radhe Krishna Cab travel blog.`,
+    path: `/blog/${post.slug}`,
+    image: post.featuredImage,
+    ogType: 'article',
+    keywords: post.tags ? post.tags.split(',').map((t) => t.trim()).filter(Boolean) : undefined,
+    noindex: post.status !== 'PUBLISHED',
+  })
 }
 
 const WA = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '919723097832'
@@ -154,6 +159,34 @@ export default async function BlogPostPage({ params }: PageProps) {
       </main>
       <Footer />
       <WhatsAppButton variant="floating" />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: jsonLdHtml(
+            articleJsonLd({
+              headline: post.title,
+              description: post.seoDescription || post.excerpt || post.title,
+              url: `/blog/${post.slug}`,
+              image: post.featuredImage,
+              datePublished: post.publishedAt,
+              dateModified: post.updatedAt,
+              authorName: post.authorName,
+            }),
+          ),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: jsonLdHtml(
+            breadcrumbJsonLd([
+              { name: 'Home', url: '/' },
+              { name: 'Blog', url: '/blog' },
+              { name: post.title, url: `/blog/${post.slug}` },
+            ]),
+          ),
+        }}
+      />
     </>
   )
 }

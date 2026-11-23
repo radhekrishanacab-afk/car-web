@@ -2,7 +2,7 @@ import { prisma } from '../prisma'
 
 const defaultSettings = {
   id: 0,
-  businessName: 'Radhe Krishana Cabs & Taxi Service',
+  businessName: 'Radhe Krishna Cab',
   phone: '+91 97230 97832',
   whatsappNumber: '919723097832',
   email: 'info@radhekrishanacab.com',

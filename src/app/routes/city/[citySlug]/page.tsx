@@ -9,6 +9,7 @@ import { getCityBySlug } from '@/lib/services/city-service'
 import { prisma } from '@/lib/prisma'
 import CityRoutesClient from '@/components/routes/CityRoutesClient'
 import { buildWAUrl, buildRouteBookingMessage } from '@/lib/whatsapp'
+import { pageMetadata, jsonLdHtml, breadcrumbJsonLd, serviceJsonLd } from '@/lib/site'
 
 interface PageProps {
   params: Promise<{ citySlug: string }>
@@ -19,10 +20,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { citySlug } = await params
   const city = await getCityBySlug(citySlug).catch(() => null)
   if (!city) return {}
-  return {
+  return pageMetadata({
     title: `Taxi from ${city.name} — All One-Way Routes & Fares | Radhe Krishna Cab`,
     description: `Browse all one-way taxi routes from ${city.name}. Fixed fares, AC vehicles, verified drivers. Book your outstation cab from ${city.name} now.`,
-  }
+    path: `/routes/city/${city.slug}`,
+    keywords: [`taxi from ${city.name}`, `${city.name} cab service`, `${city.name} outstation taxi`, `one way cab ${city.name}`],
+    absoluteTitle: true,
+  })
 }
 
 const WA = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '919723097832'
@@ -276,6 +280,31 @@ export default async function CityRoutesPage({ params, searchParams }: PageProps
       </main>
       <Footer />
       <WhatsAppButton variant="floating" />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: jsonLdHtml(
+            breadcrumbJsonLd([
+              { name: 'Home', url: '/' },
+              { name: 'Taxi Routes', url: '/routes' },
+              { name: `Taxi from ${city.name}`, url: `/routes/city/${city.slug}` },
+            ]),
+          ),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: jsonLdHtml(
+            serviceJsonLd({
+              name: `Taxi Service from ${city.name}`,
+              description: `One-way and outstation taxi service from ${city.name} with fixed fares, AC vehicles and verified drivers.`,
+              url: `/routes/city/${city.slug}`,
+              areaServed: [city.name],
+            }),
+          ),
+        }}
+      />
     </>
   )
 }

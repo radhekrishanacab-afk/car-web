@@ -199,7 +199,10 @@ export default function SeoManager({ initialPages }: { initialPages: SeoPage[] }
 
               {/* Google Preview */}
               <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-                <p className="text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide">Google Preview</p>
+                <div className="flex items-center justify-between mb-2">
+                  <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Google Preview</p>
+                  <span className="text-xs text-gray-400">Canonical: radhekrishanacab.com/{page.pageKey === 'home' ? '' : page.pageKey} (auto)</span>
+                </div>
                 <div className="text-[#1a0dab] text-base font-medium truncate">{page.title || 'Page Title'}</div>
                 <div className="text-[#006621] text-xs">radhekrishanacab.com/{page.pageKey === 'home' ? '' : page.pageKey}</div>
                 <div className="text-gray-600 text-sm mt-0.5 line-clamp-2">{page.description || 'Page description...'}</div>

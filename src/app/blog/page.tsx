@@ -5,11 +5,16 @@ import WhatsAppButton from '@/components/ui/WhatsAppButton'
 import { prisma } from '@/lib/prisma'
 import styles from './BlogPages.module.css'
 import BlogClientPage from './BlogClientPage'
+import { pageMetadata } from '@/lib/site'
 
-export const metadata: Metadata = {
-  title: 'Blog — Travel Tips & Cab Guides | Radhe Krishna Cab',
+export const revalidate = 3600
+
+export const metadata: Metadata = pageMetadata({
+  title: 'Blog — Travel Tips & Cab Guides',
   description: 'Travel tips, cab booking guides, and destination stories from Radhe Krishna Cab. Plan your trip better.',
-}
+  path: '/blog',
+  keywords: ['travel blog Gujarat', 'cab booking guide', 'road trip tips India'],
+})
 
 export default async function BlogPage() {
   const [allPosts, dbCategories] = await Promise.all([

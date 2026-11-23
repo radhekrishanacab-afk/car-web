@@ -13,11 +13,13 @@ import {
   Star, CalendarCheck,
 } from 'lucide-react'
 import { buildWAUrl, buildGeneralEnquiryMessage } from '@/lib/whatsapp'
+import { jsonLdHtml, breadcrumbJsonLd, PAGE_SEO_DEFAULTS } from '@/lib/site'
+import { buildPageMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: 'About Us — Radhe Krishna Cab | Trusted Taxi Service in Gujarat',
-  description:
-    'Radhe Krishna Cab is a trusted taxi & outstation cab service since 2020. Professional drivers, well-maintained vehicles, transparent pricing across 250+ cities in Gujarat & India.',
+export const revalidate = 3600
+
+export async function generateMetadata(): Promise<Metadata> {
+  return buildPageMetadata('about', PAGE_SEO_DEFAULTS.about)
 }
 
 const WA    = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '919723097832'
@@ -335,6 +337,17 @@ export default function AboutPage() {
       </main>
       <Footer />
       <WhatsAppButton variant="floating" />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: jsonLdHtml(
+            breadcrumbJsonLd([
+              { name: 'Home', url: '/' },
+              { name: 'About Us', url: '/about' },
+            ]),
+          ),
+        }}
+      />
     </>
   )
 }

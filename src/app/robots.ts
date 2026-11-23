@@ -1,4 +1,5 @@
 import type { MetadataRoute } from 'next'
+import { SITE_URL } from '@/lib/site'
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -6,9 +7,15 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/admin/', '/api/'],
+        disallow: ['/admin', '/admin/', '/api/'],
       },
     ],
-    sitemap: 'https://radhekrishanacab.com/sitemap.xml',
+    sitemap: [
+      `${SITE_URL}/sitemap.xml`,
+      `${SITE_URL}/routes/sitemap.xml`,
+      `${SITE_URL}/blog/sitemap.xml`,
+      `${SITE_URL}/explore-india/sitemap.xml`,
+    ],
+    host: SITE_URL,
   }
 }

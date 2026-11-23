@@ -10,11 +10,13 @@ import {
   buildVehicleBookingMessage,
   buildGeneralEnquiryMessage,
 } from '@/lib/whatsapp'
+import { jsonLdHtml, breadcrumbJsonLd, PAGE_SEO_DEFAULTS } from '@/lib/site'
+import { buildPageMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: 'Our Fleet — Radhe Krishna Cab | Cabs for Every Journey',
-  description:
-    'Explore our fleet — Swift Dzire, Hyundai Aura, Maruti Suzuki Ertiga, Kia Carens, Toyota Innova Cresta, Tata Winger, Tempo Traveller (14 & 17 Seater) and Urbania Traveller. Vehicles for every group size. Book now.',
+export const revalidate = 3600
+
+export async function generateMetadata(): Promise<Metadata> {
+  return buildPageMetadata('vehicles', PAGE_SEO_DEFAULTS.vehicles)
 }
 
 const WA    = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '919723097832'
@@ -365,6 +367,17 @@ export default function VehiclesPage() {
       </main>
       <Footer />
       <WhatsAppButton variant="floating" />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: jsonLdHtml(
+            breadcrumbJsonLd([
+              { name: 'Home', url: '/' },
+              { name: 'Our Fleet', url: '/vehicles' },
+            ]),
+          ),
+        }}
+      />
     </>
   )
 }

@@ -6,16 +6,11 @@ import RoutesClient from '@/components/routes/RoutesClient'
 import { getPopularCities } from '@/lib/services/city-service'
 import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
+import { jsonLdHtml, breadcrumbJsonLd, PAGE_SEO_DEFAULTS } from '@/lib/site'
+import { buildPageMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: 'All Taxi Routes — One Way & Outstation Cabs | Radhe Krishna Cab',
-  description:
-    'Browse all intercity taxi routes across Gujarat and India. Select your pickup city to see available one-way cab routes with fixed fares. Radhe Krishna Cab.',
-  openGraph: {
-    title: 'Taxi Routes — One Way Cabs | Radhe Krishna Cab',
-    description: 'Find one-way taxi routes between all major cities. Fixed prices, verified drivers.',
-    type: 'website',
-  },
+export async function generateMetadata(): Promise<Metadata> {
+  return buildPageMetadata('routes', PAGE_SEO_DEFAULTS.routes)
 }
 
 const PER_PAGE = 12
@@ -95,6 +90,17 @@ export default async function RoutesPage({ searchParams }: PageProps) {
       </main>
       <Footer />
       <WhatsAppButton variant="floating" />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: jsonLdHtml(
+            breadcrumbJsonLd([
+              { name: 'Home', url: '/' },
+              { name: 'Taxi Routes', url: '/routes' },
+            ]),
+          ),
+        }}
+      />
     </>
   )
 }

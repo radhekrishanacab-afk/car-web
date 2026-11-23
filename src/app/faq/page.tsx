@@ -6,11 +6,13 @@ import FAQSection from '@/components/home/FAQSection'
 import Link from 'next/link'
 import { MessageCircle } from 'lucide-react'
 import { buildWAUrl, buildGeneralEnquiryMessage } from '@/lib/whatsapp'
+import { jsonLdHtml, faqJsonLd, breadcrumbJsonLd, HOME_FAQS, PAGE_SEO_DEFAULTS } from '@/lib/site'
+import { buildPageMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: 'Frequently Asked Questions — Radhe Krishna Cab',
-  description:
-    'Answers to common questions about Radhe Krishna Cab — booking, pricing, vehicles, payment, and more.',
+export const revalidate = 3600
+
+export async function generateMetadata(): Promise<Metadata> {
+  return buildPageMetadata('faq', PAGE_SEO_DEFAULTS.faq)
 }
 
 const WA = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '919723097832'
@@ -63,6 +65,21 @@ export default function FAQPage() {
       </main>
       <Footer />
       <WhatsAppButton variant="floating" />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLdHtml(faqJsonLd(HOME_FAQS)) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: jsonLdHtml(
+            breadcrumbJsonLd([
+              { name: 'Home', url: '/' },
+              { name: 'FAQ', url: '/faq' },
+            ]),
+          ),
+        }}
+      />
     </>
   )
 }

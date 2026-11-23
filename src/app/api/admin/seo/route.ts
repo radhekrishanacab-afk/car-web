@@ -1,16 +1,28 @@
 import { NextRequest } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { getSession } from '@/lib/auth'
+import { PAGE_SEO_DEFAULTS } from '@/lib/site'
 
-const DEFAULT_PAGES = [
-  { pageKey: 'home',     pageLabel: 'Home Page',     title: 'Radhe Krishna Cab — Taxi Service in India', description: 'Book reliable taxi and outstation cab service across India.', keywords: 'taxi India, cab service, outstation taxi, one way taxi' },
-  { pageKey: 'about',    pageLabel: 'About Us',      title: 'About Us — Radhe Krishna Cab', description: 'Learn about Radhe Krishna Cab — trusted taxi service since 2020.', keywords: 'about Radhe Krishna Cab, trusted taxi service, cab since 2020' },
-  { pageKey: 'vehicles', pageLabel: 'Our Fleet',     title: 'Our Fleet — Radhe Krishna Cab', description: 'Explore our fleet of AC cabs — Sedan, SUV, Innova Crysta and more.', keywords: 'cab fleet, Innova Crysta taxi, SUV cab, sedan taxi Gujarat' },
-  { pageKey: 'services', pageLabel: 'Services',      title: 'Our Services — Radhe Krishna Cab', description: 'Airport transfer, city rides, outstation trips and corporate travel.', keywords: 'airport taxi, city cab, outstation service, corporate travel' },
-  { pageKey: 'routes',   pageLabel: 'Routes',        title: 'Taxi Routes in Gujarat — Radhe Krishna Cab', description: 'Browse all intercity taxi routes across Gujarat.', keywords: 'Gujarat taxi routes, Ahmedabad to Surat cab, one way routes' },
-  { pageKey: 'faq',      pageLabel: 'FAQ',           title: 'FAQ — Radhe Krishna Cab', description: 'Frequently asked questions about our cab service.', keywords: 'cab FAQ, taxi questions, booking help' },
-  { pageKey: 'contact',  pageLabel: 'Contact Us',    title: 'Contact Us — Radhe Krishna Cab', description: 'Get in touch with Radhe Krishna Cab for bookings and enquiries.', keywords: 'contact cab service, book taxi, taxi enquiry Gujarat' },
-]
+const PAGE_LABELS: Record<string, string> = {
+  home: 'Home Page',
+  about: 'About Us',
+  vehicles: 'Our Fleet',
+  services: 'Services',
+  routes: 'Routes',
+  faq: 'FAQ',
+  contact: 'Contact Us',
+}
+
+const DEFAULT_PAGES = Object.entries(PAGE_LABELS).map(([pageKey, pageLabel]) => {
+  const seo = PAGE_SEO_DEFAULTS[pageKey]
+  return {
+    pageKey,
+    pageLabel,
+    title: seo.title,
+    description: seo.description,
+    keywords: seo.keywords.join(', '),
+  }
+})
 
 async function requireAdmin() {
   const session = await getSession()
