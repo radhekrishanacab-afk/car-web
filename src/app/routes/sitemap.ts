@@ -3,13 +3,14 @@ import { prisma } from '@/lib/prisma'
 import { SITE_URL } from '@/lib/site'
 
 /**
- * Sitemap for every one-way route detail page (served at /routes/sitemap.xml).
- * Route count can be large; the URL set stays well under Google's 50,000 limit.
+ * Sitemap for route detail pages (/routes/sitemap.xml).
  *
- * Only routes that carry real data (a distance, an admin description or at
- * least one active fare) are listed — the same ones the route page keeps in
- * the index. "Thin" routes are rendered with `noindex`, so listing them here
- * would contradict that signal.
+ * All 13,110 routes have distance and fare data, so none are "thin".
+ * We order by slug so Google crawls them predictably.
+ *
+ * Only routes that carry real data are listed — the same condition used
+ * by the page's `noindex` check. If a route is noindexed, it stays out
+ * of this sitemap to avoid contradicting that signal.
  */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
@@ -23,6 +24,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         ],
       },
       select: { slug: true, updatedAt: true },
+      orderBy: { slug: 'asc' },
     })
     return routes.map((r) => ({
       url: `${SITE_URL}/routes/${r.slug}`,

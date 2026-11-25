@@ -11,6 +11,9 @@ import CityRoutesClient from '@/components/routes/CityRoutesClient'
 import { buildWAUrl, buildRouteBookingMessage } from '@/lib/whatsapp'
 import { pageMetadata, jsonLdHtml, breadcrumbJsonLd, serviceJsonLd } from '@/lib/site'
 
+/** Re-generate at most once per 24 h. */
+export const revalidate = 86400
+
 interface PageProps {
   params: Promise<{ citySlug: string }>
   searchParams: Promise<{ search?: string; page?: string }>

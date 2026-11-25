@@ -14,6 +14,9 @@ import { generateRouteContent } from '@/lib/content-generator'
 import { buildWAUrl, buildRouteBookingMessage } from '@/lib/whatsapp'
 import { pageMetadata, jsonLdHtml, breadcrumbJsonLd, serviceJsonLd, faqJsonLd } from '@/lib/site'
 
+/** Re-generate at most once per 24 h — route data changes infrequently. */
+export const revalidate = 86400
+
 interface PageProps {
   params: Promise<{ routeSlug: string }>
 }

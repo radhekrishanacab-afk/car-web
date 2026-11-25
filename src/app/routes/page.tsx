@@ -9,6 +9,8 @@ import { Prisma } from '@prisma/client'
 import { jsonLdHtml, breadcrumbJsonLd, PAGE_SEO_DEFAULTS } from '@/lib/site'
 import { buildPageMetadata } from '@/lib/seo'
 
+export const revalidate = 3600
+
 export async function generateMetadata(): Promise<Metadata> {
   return buildPageMetadata('routes', PAGE_SEO_DEFAULTS.routes)
 }
